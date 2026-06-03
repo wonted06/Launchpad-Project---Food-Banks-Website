@@ -21,7 +21,7 @@ app.set('view engine', 'pug');
 // ─── Public pages ────────────────────────────────────────────
 
 app.get('/', (_req, res) => {
-    res.render('index');
+    res.render('dashboard'); // suppose to be index, change back to index after log in fixed
 });
 
 // Legacy EJS dashboard (Nike-styled)
