@@ -1,0 +1,74 @@
+//- --------------------------------------------------------
+//- overview.pug - Overview/Summary Section
+//- --------------------------------------------------------
+//- This is the first tab users see when they open the dashboard
+//- It shows a summary of their activity: calories burned/consumed,
+//- total sessions, active goals, and recent workouts/meals
+//- Data is loaded dynamically by dashboard.js
+//- --------------------------------------------------------
+
+section#section-overview.dash-section.active(aria-label='Overview')
+  .overview-header
+    h2.section-heading#overview-greeting Welcome back!
+    p.motivation-quote#overview-motivation Every workout counts towards your goals!
+
+    .stats-grid
+      article.stat-card(aria-label='Calories burned all time')
+        p.stat-label Calories Burned
+        p.stat-value#overview-cal-burned= caloriesBurned || 0
+        p.stat-unit kcal
+
+      article.stat-card(aria-label='Calories consumed all time')
+        p.stat-label Calories Consumed
+        p.stat-value#overview-cal-consumed= caloriesConsumed || 0
+        p.stat-unit kcal
+
+      article.stat-card(aria-label='Exercise sessions all time')
+        p.stat-label Total Sessions
+        p.stat-value#overview-sessions= totalSessions || 0
+        p.stat-unit logged
+
+      article.stat-card.accent(aria-label='Active goals')
+        p.stat-label Active Goals
+        p.stat-value#overview-goals= activeGoals || 0
+        p.stat-unit in progress
+
+  .overview-content-grid
+    .dashboard-card
+      h3.card-heading Your Workouts
+      #exercise-filter-buttons.filter-buttons-container
+      ul#overview-exercise-list.activity-list(aria-label='Exercise history')
+        if exercises && exercises.length
+          each exercise in exercises
+            li.history-item
+              .history-main
+                strong.history-title= exercise.activity_name
+                span.history-type= exercise.activity_type
+
+              .history-meta
+                if exercise.duration_mins
+                  span #{exercise.duration_mins} mins
+                if exercise.distance_km
+                  span #{exercise.distance_km} km
+                if exercise.calories_burned
+                  span #{exercise.calories_burned} kcal
+        else
+          li.empty-state No exercise logged yet — get moving!
+
+    .dashboard-card
+      h3.card-heading Your Meals
+      #meal-filter-buttons.filter-buttons-container
+      ul#overview-meal-list.activity-list(aria-label='Meal history')
+        if meals && meals.length
+          each meal in meals
+            li.history-item
+              .history-main
+                strong.history-title= meal.food_name
+                span.history-type= meal.meal_type
+
+              .history-meta
+                span #{meal.calories} kcal
+                if meal.quantity
+                  span x#{meal.quantity}
+        else
+          li.empty-state No meals logged yet.

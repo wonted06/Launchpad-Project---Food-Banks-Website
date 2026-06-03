@@ -1,0 +1,100 @@
+//- --------------------------------------------------------
+//- social.pug - Social Feed & Communities Section
+//- --------------------------------------------------------
+//- This section handles social features:
+//- - Feed: View workout posts from friends/following
+//- - Communities: Join fitness communities and groups
+//- - Share workouts and get motivation from others
+//- - Create and manage fitness communities
+//- -------------------------------------------------------
+
+section#section-social.dash-section(aria-label='Social Feed', hidden)
+  h2.section-heading Social
+
+  //- Social tabs
+  nav.social-tabs(role='tablist', aria-label='Social options')
+    button.social-tab-btn.active#tab-social-feed(type='button' role='tab' aria-selected='true' aria-controls='panel-social-feed' data-tab='social-feed') Feed
+    button.social-tab-btn#tab-communities(type='button' role='tab' aria-selected='false' aria-controls='panel-communities' data-tab='communities') Communities
+
+  //- Social Feed Panel
+  #panel-social-feed.social-panel.active(role='tabpanel', aria-labelledby='tab-social-feed')
+    .dashboard-card
+      .social-controls
+        button.btn.btn-primary#create-post-btn(type='button') Share Workout
+
+        form#share-workout-form.dashboard-form(style='display: none;' action='/social/add' method = 'POST')
+          // Add text for a social post, should update in social_posts table
+          .form-group
+            label(for='post-content') Share your workout
+            textarea#post-content(
+              name='content'
+              rows='3'
+              placeholder='e.g. Completed a 5km run today!'
+              required
+            )
+
+          // Optionally attatch image to user post, should update in social_posts table
+          .form-group
+            label(for='post-image') Image URL (optional)
+            input#post-image(
+              type='text'
+              name='image_url'
+              placeholder='https://...'
+            )
+
+          button.btn.btn-primary(type='submit') Post
+
+      // Filter buttons for viewing specific posts
+      .feed-filters
+        button.feed-filter.active(type='button', data-filter='all') All Posts
+        button.feed-filter(type='button', data-filter='following') Following
+        button.feed-filter(type='button', data-filter='mine') My Posts
+
+      // If there are any posts that have been created, list them here
+      ul#social-feed.social-feed.activity-list
+        if posts && posts.length
+          each post in posts
+            li.social-post
+              .post-header
+                strong= post.username
+                span.post-date= new Date(post.created_at).toLocaleString()
+
+              p.post-content= post.content
+
+              if post.image_url
+                img.post-image(src=post.image_url)
+
+        else
+          li.empty-state No social posts yet. Share a workout to start your feed.
+
+  //- Communities Panel
+  #panel-communities.social-panel(role='tabpanel', aria-labelledby='tab-communities', style='display: none;')
+    .dashboard-card
+      h3.card-heading Communities
+      p.section-description Join fitness communities to connect with like-minded people and share your progress.
+
+      .community-controls
+        button.btn.active#create-community-btn(type='button') Create Community
+        button.btn#join-community-btn(type='button') Join Community
+
+      //- Create Community Form
+      form#create-community-form.form-card.dashboard-form(style='display: none;')
+        h4 Create New Community
+        .form-group
+          label(for='community-name') Community Name
+          input#community-name(type='text', name='name', required)
+        button.btn.btn-primary(type='submit') Create Community
+        #create-community-message.message(hidden)
+        #community-invite-code-display.invite-code(hidden)
+
+      //- Join Community Form
+      form#join-community-form.form-card.dashboard-form(style='display: none;')
+        h4 Join Community
+        .form-group
+          label(for='community-invite-code') Invite Code
+          input#community-invite-code(type='text', name='invite_code', required)
+        button.btn.btn-primary(type='submit') Join Community
+        #join-community-message.message(hidden)
+
+      #communities-list.communities-list
+        .empty-state No communities yet.

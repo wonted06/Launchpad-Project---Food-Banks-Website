@@ -1,0 +1,97 @@
+//- --------------------------------------------------------
+//- stats.pug - Performance Dashboard Section
+//- ---------------------------------------------------------
+//- Comprehensive stats page showing:
+//- 1) Time period switching (day/week/month/year and all time)
+//- 2) Responsive KPI cards (workouts, time, calories, etc)
+//- 3) Goals section with visual progress gauges
+//- 4) Trend charts for deeper insights (workouts & calories)
+//- 5) Responsive layout: mobile first, desktop grid
+//- ----------------------------------------------------------
+
+section#section-stats.dash-section(aria-label='Performance Dashboard', hidden)
+  
+  //- HEADER: Title and time period Toggle
+  .stats-header
+    h2.section-heading Performance Dashboard
+    
+    //- Time period selector buttons
+    .period-toggle
+      button.period-btn.active(data-period-btn='day', aria-label='View daily stats')
+        span Day
+      button.period-btn(data-period-btn='week', aria-label='View weekly stats')
+        span Week
+      button.period-btn(data-period-btn='month', aria-label='View monthly stats')
+        span Month
+      button.period-btn(data-period-btn='year', aria-label='View yearly stats')
+        span Year
+      button.period-btn(data-period-btn='allTime', aria-label='View all-time stats')
+        span All-Time
+
+  //- Error message display
+  #stats-error-message.alert.alert-error(style='display: none;', role='alert', aria-live='polite')
+  
+  //- Loading indicator
+  #stats-loading-spinner.stats-spinner(style='display: none;')
+    div.spinner-ring
+  
+  //- KPI CARDS SECTION (Responsive Grid)
+  .stats-section
+    h3.subsection-heading Key Metrics
+    #kpi-cards-container.kpi-cards-grid
+      //- Cards render here via JavaScript
+
+  //- TWO-COLUMN LAYOUT: Goals and Charts (Responsive)
+  .stats-two-column
+    
+    //- Left column: Goal setup and progress
+    .stats-column.goals-column
+      h3.subsection-heading Track goals
+      form#stats-goal-form.stats-goal-form.dashboard-form(novalidate)
+        .form-row
+          .form-group
+            label(for='stats-goal-type') Goal type
+            select#stats-goal-type(name='goal_type', required)
+              option(value='') Select goal type
+              option(value='workout_sessions') 6 workouts per week
+              option(value='calories_burned') 2,000 kcal burned per week
+              option(value='run_distance') 20 km running per week
+              option(value='weight') Reach target weight
+              option(value='steps') 10,000 steps per day
+        .form-row
+          .form-group
+            label(for='stats-goal-target') Target value
+            input#stats-goal-target(type='number', name='target_value', min='0', step='0.1', placeholder='Target value', required)
+          .form-group
+            label(for='stats-goal-date') Target date
+            input#stats-goal-date(type='date', name='target_date', required)
+        .form-row
+          .form-group(style='flex: 1;')
+            label(for='stats-goal-description') Description
+            input#stats-goal-description(type='text', name='description', placeholder='e.g. 6 workouts this week')
+        p#stats-goal-message.form-message(aria-live='polite')
+        button.btn.btn-primary(type='submit') Save goal
+
+      h3.subsection-heading Active Goals
+      #goals-section-container.goals-container
+        //- Goals render here via JavaScript
+
+    //- Right column: Strength insights and trends
+    .stats-column.charts-column
+      .strength-highlights-panel
+        h3.subsection-heading Strength Highlights
+        #strength-highlights-container
+          .empty-state No strength highlights available. Log a strength workout to populate this panel.
+
+      //- BMI chart
+      .chart-section
+        h4.chart-title BMI Chart
+        .chart-container
+          canvas#chart-bmi(role='img', aria-label='BMI chart showing underweight, healthy, overweight, and your BMI')
+      
+      //- Calories trend chart
+      .chart-section
+        h4.chart-title Calories Trend
+        .chart-container
+          canvas#chart-calories-trend(role='img', aria-label='Calories burned vs consumed trend')
+

@@ -4,25 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | Health Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Bebas Neue', 'sans-serif'],
+            sans: ['Barlow', 'sans-serif'],
+          },
+          colors: {
+            nike: {
+              black:  '#111111',
+              orange: '#FA5400',
+              gray:   '#757575',
+              light:  '#F5F5F5',
+            }
+          }
+        }
+      }
+    }
+  </script>
   <script src="./js/dashboard.js" defer></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-nike-light font-sans">
   <!-- Navigation -->
-  <nav class="bg-white border-b border-gray-200 shadow-sm">
+  <nav class="bg-nike-black border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <a href="/" class="flex items-center gap-2 text-2xl font-bold text-blue-600 hover:text-blue-700">
+        <a href="/" class="flex items-center gap-2 text-2xl font-display uppercase tracking-widest text-white hover:text-nike-orange">
           Health Tracker
         </a>
         <div class="flex items-center gap-6">
-          <a href="/health" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Health Entries</a>
-          <a href="/suggestions" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">AI Suggestions</a>
-          <a href="/analytics" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Analytics</a>
-          <a href="/community" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition">Community</a>
-          <div class="flex items-center gap-4 pl-4 border-l border-gray-200">
-           
-            <a href="/logout" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded transition">
+          <a href="/health" class="text-sm font-medium text-white hover:text-nike-orange transition">Health Entries</a>
+          <a href="/suggestions" class="text-sm font-medium text-white hover:text-nike-orange transition">AI Suggestions</a>
+          <a href="/analytics" class="text-sm font-medium text-white hover:text-nike-orange transition">Analytics</a>
+          <a href="/community" class="text-sm font-medium text-white hover:text-nike-orange transition">Community</a>
+          <div class="flex items-center gap-4 pl-4 border-l border-gray-700">
+
+            <a href="/logout" class="px-3 py-1 bg-nike-orange hover:bg-orange-600 text-white text-sm font-medium rounded transition">
               Logout
             </a>
           </div>
@@ -35,28 +56,28 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Welcome Section -->
     <div class="mb-12">
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">Welcome to Your Health Dashboard</h1>
-      <p class="text-lg text-gray-600">Track your health, get AI-powered insights, and connect with others</p>
+      <h1 class="text-5xl font-display uppercase tracking-widest text-nike-black mb-2">Welcome to Your Health Dashboard</h1>
+      <p class="text-base text-nike-gray font-sans">Track your health, get AI-powered insights, and connect with others</p>
     </div>
 
     <!-- Quick Stats -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-        <h3 class="text-gray-600 text-sm font-medium mb-2">Total Entries</h3>
-        <p class="text-3xl font-bold text-blue-600" id="totalEntriesCounter">0</p>
-        <p class="text-xs text-gray-500 mt-2">Health Logs created</p>
+      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-nike-orange">
+        <h3 class="text-nike-gray text-sm font-medium mb-2">Total Entries</h3>
+        <p class="text-3xl font-display text-nike-black" id="totalEntriesCounter">0</p>
+        <p class="text-xs text-nike-gray mt-2">Health Logs created</p>
       </div>
 
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-        <h3 class="text-gray-600 text-sm font-medium mb-2">This Week</h3>
-        <p class="text-3xl font-bold text-green-600" id="thisWeekCounter">0</p>
-        <p class="text-xs text-gray-500 mt-2">Health logs tracked</p>
+      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-nike-orange">
+        <h3 class="text-nike-gray text-sm font-medium mb-2">This Week</h3>
+        <p class="text-3xl font-display text-nike-black" id="thisWeekCounter">0</p>
+        <p class="text-xs text-nike-gray mt-2">Health logs tracked</p>
       </div>
 
-      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
-        <h3 class="text-gray-600 text-sm font-medium mb-2">AI Suggestions</h3>
-        <p class="text-3xl font-bold text-purple-600">0</p>
-        <p class="text-xs text-gray-500 mt-2">diet recommendations</p>
+      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-nike-orange">
+        <h3 class="text-nike-gray text-sm font-medium mb-2">AI Suggestions</h3>
+        <p class="text-3xl font-display text-nike-black">0</p>
+        <p class="text-xs text-nike-gray mt-2">diet recommendations</p>
       </div>
     </div>
 
@@ -66,13 +87,13 @@
       <a href="/health" class="group">
         <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 cursor-pointer">
           <div class="flex items-center mb-4">
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">
+            <div class="w-12 h-12 bg-nike-light rounded-lg flex items-center justify-center text-2xl">
               +
             </div>
-            <h3 class="ml-4 text-xl font-semibold text-gray-800 group-hover:text-blue-600 transition">Health Entries</h3>
+            <h3 class="ml-4 text-xl font-display uppercase tracking-wide text-nike-black group-hover:text-nike-orange transition">Health Entries</h3>
           </div>
-          <p class="text-gray-600">Log your diet, activity, and wellness data</p>
-          
+          <p class="text-nike-gray">Log your diet, activity, and wellness data</p>
+
         </div>
       </a>
 
@@ -80,13 +101,13 @@
       <a href="/suggestions" class="group">
         <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 cursor-pointer">
           <div class="flex items-center mb-4">
-            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-2xl">
+            <div class="w-12 h-12 bg-nike-light rounded-lg flex items-center justify-center text-2xl">
               ?
             </div>
-            <h3 class="ml-4 text-xl font-semibold text-gray-800 group-hover:text-purple-600 transition">Suggestions</h3>
+            <h3 class="ml-4 text-xl font-display uppercase tracking-wide text-nike-black group-hover:text-nike-orange transition">Suggestions</h3>
           </div>
-          <p class="text-gray-600">Get personalized diet and exercise recommendations</p>
-          
+          <p class="text-nike-gray">Get personalized diet and exercise recommendations</p>
+
         </div>
       </a>
 
@@ -94,13 +115,13 @@
       <a href="/community" class="group">
         <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 cursor-pointer">
           <div class="flex items-center mb-4">
-            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">
+            <div class="w-12 h-12 bg-nike-light rounded-lg flex items-center justify-center text-2xl">
               {xyz}
             </div>
-            <h3 class="ml-4 text-xl font-semibold text-gray-800 group-hover:text-green-600 transition">Community Chat</h3>
+            <h3 class="ml-4 text-xl font-display uppercase tracking-wide text-nike-black group-hover:text-nike-orange transition">Community Chat</h3>
           </div>
-          <p class="text-gray-600">Connect with other health tracker users</p>
-          
+          <p class="text-nike-gray">Connect with other health tracker users</p>
+
         </div>
       </a>
 
@@ -108,23 +129,23 @@
       <a href="/analytics" class="group">
         <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 cursor-pointer">
           <div class="flex items-center mb-4">
-            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-2xl">
+            <div class="w-12 h-12 bg-nike-light rounded-lg flex items-center justify-center text-2xl">
               [123]
             </div>
-            <h3 class="ml-4 text-xl font-semibold text-gray-800 group-hover:text-orange-600 transition">Analytics</h3>
+            <h3 class="ml-4 text-xl font-display uppercase tracking-wide text-nike-black group-hover:text-nike-orange transition">Analytics</h3>
           </div>
-          <p class="text-gray-600">View trends and insights about your health</p>
-          
+          <p class="text-nike-gray">View trends and insights about your health</p>
+
         </div>
       </a>
     </div>
 
-    
+
   </main>
 
   <!-- Footer -->
   <footer class="bg-gray-100 border-t border-gray-200 mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-gray-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-nike-gray">
       <p>&copy; 2026 Health Tracker - CMP-5012B Course Project | Team 299</p>
       <p class="mt-2 text-xs">Built with Node.js, Express, EJS, Tailwind CSS & PostgreSQL</p>
     </div>

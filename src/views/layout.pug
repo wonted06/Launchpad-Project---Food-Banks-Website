@@ -1,0 +1,43 @@
+//- --------------------------------------------------------
+//- layout.pug - Base Template for Public Pages
+//- --------------------------------------------------------
+//- This is the main public layout template
+//- It is used by pages such as:
+//- - Home / Landing page
+//- - Login page
+//- - Register page
+//- Dashboard pages should NOT use this layout
+//- Dashboard pages should extend dashboard-layout.pug instead
+//- --------------------------------------------------------
+
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title= pageTitle || 'FEED Birmingham'
+    block stylesheets
+      link(rel='stylesheet', href='/stylesheets/style.css')
+    block scripts
+
+  body.public-page
+
+    //- --------------------------------------------------------
+    //- HEADER SECTION — Public navigation bar
+    //- --------------------------------------------------------
+    header.app-header
+      .header-brand
+        span.logo-mark-sm(aria-hidden='true') FB
+        span.header-app-name FEED Birmingham
+
+      //- Public navigation links
+      nav.header-nav(aria-label='Public navigation')
+        a.nav-btn(href='/') Home
+        a.nav-btn(href='/login') Login
+        a.nav-btn(href='/register') Register
+
+    //- --------------------------------------------------------
+    //- MAIN CONTENT AREA
+    //- --------------------------------------------------------
+    main.public-main
+      block content

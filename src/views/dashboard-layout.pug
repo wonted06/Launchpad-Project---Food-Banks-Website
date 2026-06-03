@@ -1,0 +1,42 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title= pageTitle || 'Health Tracker'
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet", type="text/css", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css")
+
+  body.dashboard-page
+
+    header.app-header
+      .header-brand
+        span.logo-mark-sm HT
+        span.header-app-name Health Tracker
+
+      nav.header-nav
+        button.nav-btn.active(data-section='overview') Overview
+        button.nav-btn(data-section='exercise') Exercise
+        button.nav-btn(data-section='diet') Diet
+        button.nav-btn(data-section='stats') Stats
+        button.nav-btn(data-section='library') Library
+        button.nav-btn(data-section='routines') Routines
+        button.nav-btn(data-section='social') Social
+        button.nav-btn(data-section='profile') Profile
+
+      .header-user
+        a.btn.btn-secondary(href='/logout') Log out
+
+    main.dashboard-main
+      block content
+
+    include footer.pug
+
+    //- Chart.js library for rendering charts in the stats section
+    script(src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/chartjs-plugin-stacked100@1.0.0')
+    script(src='/javascripts/dashboard.js')
+    script(src='/javascripts/library.js')
+    script(src='/javascripts/routines.js')
+    script(src='/javascripts/profile.js')
+    script(src='/javascripts/charts.js')
