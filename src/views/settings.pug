@@ -1,0 +1,91 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Settings
+      p.page-subtitle Customise your Feed Birmingham experience.
+
+  section.section
+    .container.container--narrow
+      form.settings-form(action='/settings', method='POST')
+
+        .settings-card
+          h2
+            i.fa-solid.fa-language
+            |  Language
+          .settings-row
+            .settings-label
+              strong Language
+              p Choose your preferred language.
+            .settings-control
+              select.settings-select(name='language')
+                option(value='en', selected) English
+                option(value='bn') Polish
+                option(value='pu') Punjabi
+                option(value='ur') Urdu
+                option(value='bn') Bengali
+                option(value='bn') Pakistani Pahari
+
+        .settings-card
+          h2
+            i.fa-solid.fa-palette
+            |  Appearance
+          .settings-row
+            .settings-label
+              strong Theme
+              p Switch between light and dark mode.
+            .settings-control
+              .toggle-group
+                input#theme-light(type='radio', name='theme', value='light', checked)
+                label(for='theme-light')
+                  i.fa-solid.fa-sun
+                  |  Light
+                input#theme-dark(type='radio', name='theme', value='dark')
+                label(for='theme-dark')
+                  i.fa-solid.fa-moon
+                  |  Dark
+
+          .settings-row
+            .settings-label
+              strong Text Size
+              p Adjust the size of text across the site.
+            .settings-control
+              .size-slider-wrap
+                input#text-size(type='range', name='textSize', min='12', max='20', value='15', step='1')
+                span.size-preview(id='size-value') 15px
+
+        .settings-card
+          h2
+            i.fa-solid.fa-universal-access
+            |  Accessibility
+          .settings-row
+            .settings-label
+              strong Colour Blind Mode
+              p Adjust colours for colour-blind users.
+            .settings-control
+              label.toggle-switch
+                input(type='checkbox', name='colourBlind')
+                span.toggle-slider
+
+          .settings-row
+            .settings-label
+              strong Text to Speech
+              p Enable screen reader-friendly text-to-speech.
+            .settings-control
+              label.toggle-switch
+                input(type='checkbox', name='textToSpeech')
+                span.toggle-slider
+
+        .settings-actions
+          button.btn.btn-green(type='submit')
+            i.fa-solid.fa-floppy-disk
+            |  Save Settings
+
+  script.
+    const slider = document.getElementById('text-size');
+    const preview = document.getElementById('size-value');
+    slider.addEventListener('input', () => {
+      preview.textContent = slider.value + 'px';
+      document.documentElement.style.fontSize = slider.value + 'px';
+    });

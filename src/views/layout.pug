@@ -1,0 +1,132 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title= pageTitle || 'Feed Birmingham'
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css')
+    block head
+
+  body
+    //- ── TOP NAV ────────────────────────────────────────────────
+    header.site-header
+      .header-inner
+        a.header-logo(href='/')
+          img(src='/images/logo-icon.png', alt='Feed Birmingham', height='52')
+
+        button.nav-toggle(aria-label='Toggle menu', aria-expanded='false')
+          span
+          span
+          span
+
+        nav.main-nav
+          a.nav-link(href='/', class=pageId === 'home' ? 'active' : '') Home
+          a.nav-link(href='/locations', class=pageId === 'locations' ? 'active' : '') Locations
+          a.nav-link(href='/delivery', class=pageId === 'delivery' ? 'active' : '') Delivery
+          a.nav-link(href='/inventory', class=pageId === 'inventory' ? 'active' : '') Inventory
+          a.nav-link(href='/contact', class=pageId === 'contact' ? 'active' : '') Contact
+
+          .nav-more
+            button.nav-more-btn More
+              i.fa-solid.fa-chevron-down
+            .nav-more-dropdown
+              a(href='/about') About Us
+              a(href='/news') News
+              a(href='/hot-meals') Hot Meal Schedule
+              a(href='/feedback') Feedback
+              a(href='/settings') Settings
+
+        //- Auth area — right side of nav
+        .nav-auth
+          if isLoggedIn
+            //- Logged-in: avatar + dropdown
+            .nav-user
+              .nav-avatar= user.username[0].toUpperCase()
+              span.nav-username= user.username
+              .nav-user-dropdown
+                a.nav-user-item(href='/profile')
+                  i.fa-solid.fa-id-card
+                  |  My Profile
+                a.nav-user-item(href='/settings')
+                  i.fa-solid.fa-gear
+                  |  Settings
+                .nav-user-divider
+                a.nav-user-item.nav-user-logout(href='/logout')
+                  i.fa-solid.fa-right-from-bracket
+                  |  Log Out
+          else
+            //- Logged-out: Login + Sign Up links
+            a.nav-link(href='/login') Login
+            a.btn-donate(href='/register') Sign Up
+
+    //- ── MAIN CONTENT ──────────────────────────────────────────
+    main.site-main
+      block content
+
+    //- ── FOOTER ────────────────────────────────────────────────
+    footer.site-footer
+      .footer-inner
+        .footer-brand
+          img(src='/images/logo-icon.png', alt='Feed Birmingham', height='44')
+          p Connecting communities with food assistance across Birmingham.
+
+        .footer-links
+          .footer-col
+            h4 Services
+            a(href='/locations') Find a Food Bank
+            a(href='/delivery') Request Delivery
+            a(href='/hot-meals') Hot Meal Schedule
+            a(href='/inventory') View Inventory
+
+          .footer-col
+            h4 Organisation
+            a(href='/about') About Us
+            a(href='/news') News
+            a(href='/feedback') Feedback
+            a(href='/contact') Contact
+
+          .footer-col
+            h4 Account
+            if isLoggedIn
+              a(href='/profile') My Profile
+              a(href='/settings') Settings
+              a(href='/logout') Log Out
+            else
+              a(href='/login') Login
+              a(href='/register') Register
+              a(href='/settings') Settings
+
+        .footer-bottom
+          p &copy; 2025 Feed Birmingham. All rights reserved.
+
+    script.
+      // Mobile nav toggle
+      const toggle = document.querySelector('.nav-toggle');
+      const nav = document.querySelector('.main-nav');
+      toggle.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+
+      // "More" dropdown
+      const moreBtn = document.querySelector('.nav-more-btn');
+      const dropdown = document.querySelector('.nav-more-dropdown');
+      if (moreBtn) {
+        moreBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle('open');
+        });
+        document.addEventListener('click', () => dropdown.classList.remove('open'));
+      }
+
+      // User avatar dropdown
+      const navUser = document.querySelector('.nav-user');
+      const userDrop = document.querySelector('.nav-user-dropdown');
+      if (navUser && userDrop) {
+        navUser.addEventListener('click', (e) => {
+          e.stopPropagation();
+          userDrop.classList.toggle('open');
+        });
+        document.addEventListener('click', () => userDrop.classList.remove('open'));
+      }

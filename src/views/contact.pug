@@ -1,0 +1,72 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Contact Us
+      p.page-subtitle Get in touch with the Feed Birmingham team.
+
+  section.section
+    .container
+      .contact-layout
+        .contact-info
+          h2 Get in Touch
+          p We're here to help. Reach out with any questions, concerns, or feedback.
+
+          .info-row
+            i.fa-solid.fa-map-pin
+            div
+              strong Address
+              p Feed Birmingham, c/o Birmingham City Council, Victoria Square, Birmingham, B1 1BB
+
+          .info-row
+            i.fa-solid.fa-phone
+            div
+              strong Phone
+              p 0121 000 0000
+
+          .info-row
+            i.fa-solid.fa-envelope
+            div
+              strong Email
+              p hello@feedbirmingham.org
+
+          .info-row
+            i.fa-regular.fa-clock
+            div
+              strong Office Hours
+              p Monday – Friday: 09:00 – 17:00
+
+        .contact-form-wrap
+          h2 Send a Message
+          if success
+            .success-box
+              i.fa-solid.fa-circle-check
+              |  Message sent! We'll get back to you shortly.
+          form.form(action='/contact', method='POST')
+            .form-row
+              .form-group
+                label(for='c-name') Full Name
+                input#c-name(type='text', name='name', placeholder='Your name', required)
+              .form-group
+                label(for='c-email') Email Address
+                input#c-email(type='email', name='email', placeholder='your@email.com', required)
+
+            .form-group
+              label(for='c-subject') Subject
+              select#c-subject(name='subject')
+                option(value='') Select a subject
+                option General Enquiry
+                option Food Bank Support
+                option Delivery Request
+                option Volunteer
+                option Feedback
+                option Other
+
+            .form-group
+              label(for='c-message') Message
+              textarea#c-message(name='message', rows='5', placeholder='Write your message here...', required)
+
+            button.btn.btn-green(type='submit')
+              i.fa-solid.fa-paper-plane
+              |  Send Message

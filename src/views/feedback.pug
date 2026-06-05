@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Feedback
+      p.page-subtitle Let us know what you think about Feed Birmingham.
+
+  section.section
+    .container.container--narrow
+      if success
+        .success-box
+          i.fa-solid.fa-circle-check
+          |  Thank you for your feedback!
+
+      .feedback-card
+        h2 Share Your Experience
+        p.card-subtitle Your feedback helps us improve our service for everyone.
+
+        form.form(action='/feedback', method='POST')
+          .form-group
+            label How would you rate your overall experience?
+            .star-rating
+              input#star5(type='radio', name='rating', value='5')
+              label(for='star5', aria-label='5 stars')
+                i.fa-solid.fa-star
+              input#star4(type='radio', name='rating', value='4')
+              label(for='star4', aria-label='4 stars')
+                i.fa-solid.fa-star
+              input#star3(type='radio', name='rating', value='3')
+              label(for='star3', aria-label='3 stars')
+                i.fa-solid.fa-star
+              input#star2(type='radio', name='rating', value='2')
+              label(for='star2', aria-label='2 stars')
+                i.fa-solid.fa-star
+              input#star1(type='radio', name='rating', value='1')
+              label(for='star1', aria-label='1 star')
+                i.fa-solid.fa-star
+
+          .form-group
+            label(for='fb-service') Which service did you use?
+            select#fb-service(name='service')
+              option(value='') Select a service
+              option Food Bank Visit
+              option Delivery Service
+              option Website
+
+          .form-group
+            label(for='fb-comment') Additional Comments
+            textarea#fb-comment(name='comment', rows='5', placeholder='Tell us about your experience...')
+
+          .form-group
+            label(for='fb-email') Email (optional — for follow-up only)
+            input#fb-email(type='email', name='email', placeholder='your@email.com')
+
+          button.btn.btn-green.btn-full(type='submit')
+            i.fa-solid.fa-paper-plane
+            |  Submit Feedback

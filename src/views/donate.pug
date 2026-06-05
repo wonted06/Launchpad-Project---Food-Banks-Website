@@ -1,0 +1,131 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Donate
+      p.page-subtitle Your donation helps feed Birmingham families in need.
+
+  section.section
+    .container
+      .donate-layout
+        .donate-intro
+          h2 Make a Difference Today
+          p
+            | Every contribution — whether food, funds, or time — helps us
+            | reach more Birmingham residents facing hardship.
+
+          .donate-types
+            .donate-type-card.active#donate-money-card
+              i.fa-solid.fa-sterling-sign
+              h3 Donate Money
+              p One-off or regular financial donations.
+            .donate-type-card#donate-food-card
+              i.fa-solid.fa-basket-shopping
+              h3 Donate Food
+              p Drop off non-perishable food at a local collection point.
+            .donate-type-card#donate-time-card
+              i.fa-solid.fa-hands-helping
+              h3 Volunteer
+              p Give your time to help sort, pack, and deliver food parcels.
+
+        .donate-form-wrap
+
+          //- Money donation form
+          .donate-panel#donate-money.active
+            h2 Financial Donation
+            form.form(action='/donate/money', method='POST')
+              .form-group
+                label Donation Amount
+                .amount-selector
+                  button.amount-btn.active(type='button', data-amount='5') £5
+                  button.amount-btn(type='button', data-amount='10') £10
+                  button.amount-btn(type='button', data-amount='25') £25
+                  button.amount-btn(type='button', data-amount='50') £50
+                .form-group
+                  label(for='custom-amount') Or enter a custom amount (£)
+                  input#custom-amount(type='number', name='amount', min='1', placeholder='0.00')
+
+              .form-group
+                label(for='don-frequency') Frequency
+                select#don-frequency(name='frequency')
+                  option(value='one-off') One-off
+                  option(value='monthly') Monthly
+                  option(value='annual') Annual
+
+              .form-row
+                .form-group
+                  label(for='don-name') Full Name
+                  input#don-name(type='text', name='name', placeholder='Your name', required)
+                .form-group
+                  label(for='don-email') Email
+                  input#don-email(type='email', name='email', placeholder='your@email.com', required)
+
+              button.btn.btn-green.btn-full(type='submit')
+                i.fa-solid.fa-heart
+                |  Donate Now
+
+          //- Food donation panel
+          .donate-panel#donate-food
+            h2 Food Donation
+            p.card-subtitle
+              | Please only donate non-perishable, unopened items with at least
+              | 3 months before their use-by date.
+            .info-row
+              i.fa-solid.fa-map-pin
+              div
+                strong Drop-off Points
+                p Birmingham Central Food Bank, Broad Street
+                p Feeding Hands, Sparkhill Road
+                p St Anne's Community Hub, Aston
+
+            .info-row
+              i.fa-regular.fa-clock
+              div
+                strong Collection Hours
+                p Monday – Friday: 09:00 – 17:00
+
+          //- Volunteer panel
+          .donate-panel#donate-time
+            h2 Volunteer With Us
+            form.form(action='/donate/volunteer', method='POST')
+              .form-row
+                .form-group
+                  label(for='vol-name') Full Name
+                  input#vol-name(type='text', name='name', placeholder='Your name', required)
+                .form-group
+                  label(for='vol-email') Email
+                  input#vol-email(type='email', name='email', placeholder='your@email.com', required)
+
+              .form-group
+                label Availability
+                .checkbox-group
+                  each day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+                    label.checkbox-label
+                      input(type='checkbox', name='days[]', value=day.toLowerCase())
+                      span= day
+
+              .form-group
+                label(for='vol-notes') Tell us about yourself
+                textarea#vol-notes(name='notes', rows='4', placeholder='Any relevant experience or notes...')
+
+              button.btn.btn-green(type='submit') Apply to Volunteer
+
+  script.
+    document.querySelectorAll('.donate-type-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.donate-type-card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.donate-panel').forEach(p => p.classList.remove('active'));
+        card.classList.add('active');
+        const id = card.id.replace('-card', '').replace('donate-', 'donate-');
+        document.getElementById(card.id.replace('-card', '')).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('custom-amount').value = btn.dataset.amount;
+      });
+    });
