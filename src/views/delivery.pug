@@ -1,0 +1,90 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Delivery Service
+      p.page-subtitle Food delivery for Birmingham residents with accessibility needs.
+
+  section.section
+    .container
+      .delivery-layout
+        //- Request / Track tabs
+        .tab-bar
+          button.tab-btn.active(data-tab='request') Request Delivery
+          button.tab-btn(data-tab='track') Track Delivery
+
+        //- Request Delivery tab
+        .tab-panel#request.active
+          .card
+            h2 Request a Delivery
+            p.card-subtitle
+              | Our delivery service is available to residents who have accessibility
+              | needs and are unable to visit a food bank in person.
+            form.form(action='/delivery/request', method='POST')
+              .form-row
+                .form-group
+                  label(for='del-name') Full Name
+                  input#del-name(type='text', name='name', placeholder='Your full name', required)
+                .form-group
+                  label(for='del-phone') Phone Number
+                  input#del-phone(type='tel', name='phone', placeholder='07700 000000', required)
+
+              .form-group
+                label(for='del-address') Delivery Address
+                input#del-address(type='text', name='address', placeholder='Full delivery address', required)
+
+              .form-group
+                label(for='del-postcode') Postcode
+                input#del-postcode(type='text', name='postcode', placeholder='e.g. B1 1AY', required)
+
+              .form-group
+                label(for='del-notes') Additional Notes
+                textarea#del-notes(name='notes', rows='3', placeholder='Any dietary requirements or access instructions...')
+
+              button.btn.btn-green(type='submit')
+                i.fa-solid.fa-truck
+                |  Submit Request
+
+        //- Track Delivery tab
+        .tab-panel#track
+          .card
+            h2 Track Your Delivery
+            form.form(action='/delivery/track', method='GET')
+              .form-group
+                label(for='track-ref') Delivery Reference Number
+                input#track-ref(type='text', name='ref', placeholder='e.g. FB-2025-0001', required)
+              button.btn.btn-green(type='submit')
+                i.fa-solid.fa-magnifying-glass
+                |  Track Order
+
+            //- Status stepper (placeholder)
+            .delivery-status
+              h3 Delivery Status
+              .status-steps
+                .status-step.done
+                  .step-icon
+                    i.fa-solid.fa-check
+                  .step-label Order Received
+                .status-step.done
+                  .step-icon
+                    i.fa-solid.fa-check
+                  .step-label Being Prepared
+                .status-step.active
+                  .step-icon
+                    i.fa-solid.fa-truck
+                  .step-label Out for Delivery
+                .status-step
+                  .step-icon
+                    i.fa-solid.fa-house
+                  .step-label Delivered
+
+  script.
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });

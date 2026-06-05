@@ -1,0 +1,98 @@
+extends layout
+
+block content
+  //- ── HERO ───────────────────────────────────────────────────
+  section.hero
+    .hero-overlay
+    .hero-content
+      h1 Feeding Birmingham, One Meal at a Time
+      p.hero-subtitle
+        | Feed Birmingham connects local communities with food banks,
+        | hot meals, and delivery services across the city.
+      .hero-actions
+        a.btn.btn-white(href='/register') Sign Up
+        a.btn.btn-white(href='/login') Log In
+        a.btn.btn-outline-white(href='/locations') Find a Food Bank
+
+  //- ── QUICK LINKS ────────────────────────────────────────────
+  section.section.quick-links-section
+    .container
+      .quick-links
+        a.quick-link-card(href='/locations')
+          i.fa-solid.fa-map-location-dot
+          h3 Find a Food Bank
+          p Locate your nearest food bank and get directions.
+        a.quick-link-card(href='/delivery')
+          i.fa-solid.fa-truck
+          h3 Request Delivery
+          p Can't travel? We deliver to those with accessibility needs.
+        a.quick-link-card(href='/donate')
+          i.fa-solid.fa-hand-holding-heart
+          h3 Donate
+          p Donate food or funds to support the community.
+        a.quick-link-card(href='/hot-meals')
+          i.fa-solid.fa-utensils
+          h3 Hot Meals
+          p View the weekly hot meal schedule near you.
+
+  //- ── HOT MEAL SCHEDULE (PREVIEW) ────────────────────────────
+  section.section.meals-section
+    .container
+      .section-header
+        h2 This Week's Hot Meal Schedule
+        a.btn.btn-outline-green(href='/hot-meals') View Full Schedule
+      .meals-table-wrap
+        table.meals-table
+          thead
+            tr
+              th Day
+              th Location
+              th Time
+              th Spaces
+          tbody
+            tr
+              td Monday
+              td Birmingham Central Food Bank
+              td 12:00 – 14:00
+              td.badge-available Available
+            tr
+              td Tuesday
+              td Feeding Hands, Sparkhill
+              td 11:30 – 13:30
+              td.badge-limited Limited
+            tr
+              td Wednesday
+              td Birmingham East Food Bank
+              td 12:00 – 14:00
+              td.badge-available Available
+            tr
+              td Thursday
+              td St Anne's Community Hub
+              td 13:00 – 15:00
+              td.badge-full Full
+            tr
+              td Friday
+              td Birmingham Central Food Bank
+              td 11:00 – 13:00
+              td.badge-available Available
+
+  //- ── ABOUT STRIP ────────────────────────────────────────────
+  section.section.about-strip
+    .container
+      .about-strip-inner
+        .about-text
+          h2 About Feed Birmingham
+          p
+            | Our free web-based service helps Birmingham residents find food banks,
+            | request deliveries, and access essential food support — all in one place.
+          a.btn.btn-green(href='/about') Learn More
+        .about-stats
+          .stat
+            span.stat-num 20+
+            span.stat-label Food Banks
+          .stat
+            span.stat-num 500+
+            span.stat-label Families Helped
+          .stat
+            span.stat-num 7
+            span.stat-label Days a Week

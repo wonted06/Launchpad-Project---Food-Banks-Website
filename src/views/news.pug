@@ -1,0 +1,73 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 News & Updates
+      p.page-subtitle The latest from Feed Birmingham and local food banks.
+
+  section.section
+    .container
+      .news-grid
+        article.news-card.news-card--featured
+          .news-card-img
+            img(src='/images/hero.png', alt='Volunteers at work')
+          .news-card-body
+            span.news-tag Featured
+            h2 Feed Birmingham Expands Delivery Service to More Areas
+            p.news-meta
+              i.fa-regular.fa-calendar
+              |  2 June 2025
+            p
+              | We're pleased to announce that our delivery service is now available
+              | in three new Birmingham postcodes — B11, B12, and B25 — reaching
+              | hundreds of additional residents with accessibility needs.
+            a.btn.btn-outline-green.btn-sm(href='/news/1') Read More
+
+        article.news-card
+          .news-card-body
+            span.news-tag Community
+            h3 New Food Bank Opens in Aston
+            p.news-meta
+              i.fa-regular.fa-calendar
+              |  28 May 2025
+            p
+              | St Anne's Community Hub has opened a new food bank service on
+              | Monday and Wednesday afternoons, serving the Aston area.
+            a.btn.btn-outline-green.btn-sm(href='/news/2') Read More
+
+        article.news-card
+          .news-card-body
+            span.news-tag Donation
+            h3 100 Families Supported This Month
+            p.news-meta
+              i.fa-regular.fa-calendar
+              |  20 May 2025
+            p
+              | Thanks to generous donations from the community, we were able
+              | to support over 100 families across Birmingham this May.
+            a.btn.btn-outline-green.btn-sm(href='/news/3') Read More
+
+        article.news-card
+          .news-card-body
+            span.news-tag Volunteer
+            h3 Volunteer Recruitment Drive
+            p.news-meta
+              i.fa-regular.fa-calendar
+              |  15 May 2025
+            p
+              | We're looking for volunteers to help with sorting, packing, and
+              | delivering food parcels. No experience necessary!
+            a.btn.btn-outline-green.btn-sm(href='/donate') Get Involved
+
+        article.news-card
+          .news-card-body
+            span.news-tag Update
+            h3 Website Now Available in Punjabi & Urdu
+            p.news-meta
+              i.fa-regular.fa-calendar
+              |  5 May 2025
+            p
+              | Feed Birmingham is now available in Punjabi and Urdu, making
+              | our service accessible to even more Birmingham residents.
+            a.btn.btn-outline-green.btn-sm(href='/news/5') Read More

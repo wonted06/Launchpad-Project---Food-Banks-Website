@@ -1,0 +1,192 @@
+extends layout
+
+block content
+  //- ── PROFILE HERO ───────────────────────────────────────────
+  section.profile-hero
+    .container
+      .profile-hero-inner
+        .profile-avatar-large
+          span= user ? user.username[0].toUpperCase() : '?'
+        .profile-hero-text
+          h1= user ? user.username : 'My Profile'
+          p.profile-email= user ? user.email : ''
+          p.profile-member-since
+            i.fa-solid.fa-calendar-check
+            |  Member since #{user ? new Date(user.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '—'}
+
+  //- ── PROFILE BODY ───────────────────────────────────────────
+  section.section
+    .container
+      .profile-layout
+
+        //- ── Sidebar nav ──────────────────────────────────────
+        aside.profile-sidebar
+          nav.profile-nav
+            button.profile-nav-btn.active(data-tab='account')
+              i.fa-solid.fa-id-card
+              |  Account Details
+            button.profile-nav-btn(data-tab='health')
+              i.fa-solid.fa-heart-pulse
+              |  Health Details
+            button.profile-nav-btn(data-tab='history')
+              i.fa-solid.fa-clock-rotate-left
+              |  Delivery History
+            button.profile-nav-btn(data-tab='security')
+              i.fa-solid.fa-shield-halved
+              |  Security
+            .sidebar-divider
+            a.profile-nav-btn.danger(href='/logout')
+              i.fa-solid.fa-right-from-bracket
+              |  Log Out
+
+        //- ── Main content ─────────────────────────────────────
+        .profile-content
+
+          //- ── Account Details ──────────────────────────────────
+          .profile-tab#account.active
+            .profile-tab-header
+              h2
+                i.fa-solid.fa-id-card
+                |  Account Details
+              p.profile-tab-sub Update your username and email address.
+
+            form.form(action='/profile/update', method='POST')
+              .form-row
+                .form-group
+                  label(for='p-username')
+                    i.fa-solid.fa-user
+                    |  Username
+                  input#p-username(type='text', name='username', value=user ? user.username : '', placeholder='Your username')
+
+                .form-group
+                  label(for='p-email')
+                    i.fa-solid.fa-envelope
+                    |  Email Address
+                  input#p-email(type='email', name='email', value=user ? user.email : '', placeholder='your@email.com')
+
+              .form-actions
+                button.btn.btn-green(type='submit')
+                  i.fa-solid.fa-floppy-disk
+                  |  Save Changes
+                a.btn.btn-outline-green(href='/profile') Cancel
+
+          //- ── Health Details ─────────────────────────────────
+          .profile-tab#health
+            .profile-tab-header
+              h2
+                i.fa-solid.fa-heart-pulse
+                |  Health Details
+              p.profile-tab-sub This information helps us tailor deliveries to your needs.
+
+            form.form(action='/profile/health', method='POST')
+              .form-group
+                label Dietary Requirements
+                .checkbox-group
+                  label.checkbox-label
+                    input(type='checkbox', name='diet[]', value='vegetarian')
+                    span Vegetarian
+                  label.checkbox-label
+                    input(type='checkbox', name='diet[]', value='vegan')
+                    span Vegan
+                  label.checkbox-label
+                    input(type='checkbox', name='diet[]', value='gluten-free')
+                    span Gluten Free
+                  label.checkbox-label
+                    input(type='checkbox', name='diet[]', value='dairy-free')
+                    span Dairy Free
+                  label.checkbox-label
+                    input(type='checkbox', name='diet[]', value='halal')
+                    span Halal
+                  label.checkbox-label
+                    input(type='checkbox', name='diet[]', value='kosher')
+                    span Kosher
+
+              .form-group
+                label(for='allergies')
+                  i.fa-solid.fa-triangle-exclamation
+                  |  Allergies / Intolerances
+                textarea#allergies(name='allergies', rows='3', placeholder='List any allergies or food intolerances...')
+
+              .form-group
+                label(for='mobility')
+                  i.fa-solid.fa-wheelchair
+                  |  Mobility / Accessibility Notes
+                textarea#mobility(name='mobility', rows='3', placeholder='Any notes to help with delivery...')
+
+              .form-actions
+                button.btn.btn-green(type='submit')
+                  i.fa-solid.fa-floppy-disk
+                  |  Save Health Details
+
+          //- ── Delivery History ───────────────────────────────
+          .profile-tab#history
+            .profile-tab-header
+              h2
+                i.fa-solid.fa-clock-rotate-left
+                |  Delivery History
+              p.profile-tab-sub A record of your past and pending deliveries.
+
+            .history-table-wrap
+              table.inventory-table
+                thead
+                  tr
+                    th Reference
+                    th Date
+                    th Status
+                    th Food Bank
+                tbody
+                  tr
+                    td FB-2025-0012
+                    td 28 May 2025
+                    td
+                      span.badge.badge-open Delivered
+                    td Birmingham Central
+                  tr
+                    td FB-2025-0007
+                    td 14 May 2025
+                    td
+                      span.badge.badge-open Delivered
+                    td Feeding Hands
+
+          //- ── Security ───────────────────────────────────────
+          .profile-tab#security
+            .profile-tab-header
+              h2
+                i.fa-solid.fa-shield-halved
+                |  Security
+              p.profile-tab-sub Change your password.
+
+            form.form(action='/profile/password', method='POST')
+              .form-group
+                label(for='current-password')
+                  i.fa-solid.fa-lock
+                  |  Current Password
+                input#current-password(type='password', name='currentPassword', placeholder='Enter current password', autocomplete='current-password')
+
+              .form-group
+                label(for='new-password')
+                  i.fa-solid.fa-lock
+                  |  New Password
+                input#new-password(type='password', name='newPassword', placeholder='Enter new password (min 6 characters)', autocomplete='new-password')
+
+              .form-group
+                label(for='confirm-new-password')
+                  i.fa-solid.fa-lock
+                  |  Confirm New Password
+                input#confirm-new-password(type='password', name='confirmNewPassword', placeholder='Re-enter new password', autocomplete='new-password')
+
+              .form-actions
+                button.btn.btn-green(type='submit')
+                  i.fa-solid.fa-key
+                  |  Update Password
+
+  script.
+    // Tab switching
+    document.querySelectorAll('.profile-nav-btn[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.profile-nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });

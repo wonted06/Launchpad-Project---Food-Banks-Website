@@ -1,0 +1,97 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Find a Food Bank
+      p.page-subtitle Find all food banks in Birmingham near you.
+
+  section.section
+    .container
+      //- Search bar
+      .search-bar-wrap
+        form.search-bar(action='/locations', method='GET')
+          i.fa-solid.fa-location-dot
+          input#postcode(type='text', name='postcode', placeholder='Enter postcode e.g. B1 1AY', value=postcode || '')
+          button.btn.btn-green(type='submit') Search
+
+      //- Results area
+      .locations-layout
+        //- Food bank list
+        .foodbank-list
+          if foodBanks && foodBanks.length
+            each bank in foodBanks
+              .foodbank-card
+                .foodbank-card-header
+                  h3= bank.name
+                  span.distance-badge
+                    i.fa-solid.fa-location-dot
+                    |  #{bank.distance}
+                .foodbank-card-body
+                  p
+                    i.fa-solid.fa-map-pin
+                    |  #{bank.address}
+                  p
+                    i.fa-regular.fa-clock
+                    |  #{bank.hours}
+                .foodbank-card-footer
+                  a.btn.btn-outline-green.btn-sm(href='/locations/' + bank.id) Details
+                    i.fa-solid.fa-arrow-right
+          else
+            //- Placeholder cards shown before a search
+            .foodbank-card
+              .foodbank-card-header
+                h3 Birmingham Central Food Bank
+                span.distance-badge
+                  i.fa-solid.fa-location-dot
+                  |  0.7km away
+              .foodbank-card-body
+                p
+                  i.fa-solid.fa-map-pin
+                  |  123 Broad Street, Birmingham, B1 2AA
+                p
+                  i.fa-regular.fa-clock
+                  |  Mon–Fri: 10:00–16:00
+              .foodbank-card-footer
+                a.btn.btn-outline-green.btn-sm(href='/locations/1') Details
+                  i.fa-solid.fa-arrow-right
+
+            .foodbank-card
+              .foodbank-card-header
+                h3 Birmingham East Food Bank
+                span.distance-badge
+                  i.fa-solid.fa-location-dot
+                  |  0.8km away
+              .foodbank-card-body
+                p
+                  i.fa-solid.fa-map-pin
+                  |  45 Coventry Road, Birmingham, B10 0TP
+                p
+                  i.fa-regular.fa-clock
+                  |  Tue–Sat: 09:30–15:30
+              .foodbank-card-footer
+                a.btn.btn-outline-green.btn-sm(href='/locations/2') Details
+                  i.fa-solid.fa-arrow-right
+
+            .foodbank-card
+              .foodbank-card-header
+                h3 Feeding Hands Food Bank
+                span.distance-badge
+                  i.fa-solid.fa-location-dot
+                  |  1.5km away
+              .foodbank-card-body
+                p
+                  i.fa-solid.fa-map-pin
+                  |  78 Sparkhill Road, Birmingham, B11 4EJ
+                p
+                  i.fa-regular.fa-clock
+                  |  Mon, Wed, Fri: 11:00–14:00
+              .foodbank-card-footer
+                a.btn.btn-outline-green.btn-sm(href='/locations/3') Details
+                  i.fa-solid.fa-arrow-right
+
+        //- Map placeholder
+        .map-placeholder
+          i.fa-solid.fa-map
+          p Map view coming soon
+          span Enter a postcode to search nearby food banks

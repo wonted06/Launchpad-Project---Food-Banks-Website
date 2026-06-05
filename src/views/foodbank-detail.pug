@@ -1,0 +1,73 @@
+extends layout
+
+block content
+  section.section
+    .container
+      a.back-link(href='/locations')
+        i.fa-solid.fa-arrow-left
+        |  Back to Locations
+
+      .detail-card
+        .detail-header
+          h1= bank.name || 'Birmingham Central Food Bank'
+          .detail-badges
+            span.badge.badge-open Open Now
+            span.badge.badge-verified Verified
+
+        .detail-body
+          .detail-grid
+            .detail-info
+              h3 Contact & Location
+              .info-row
+                i.fa-solid.fa-map-pin
+                div
+                  strong Address
+                  p= bank.address || '123 Broad Street, Birmingham, B1 2AA'
+
+              .info-row
+                i.fa-solid.fa-phone
+                div
+                  strong Phone
+                  p= bank.phone || '0121 000 0000'
+
+              .info-row
+                i.fa-solid.fa-envelope
+                div
+                  strong Email
+                  p= bank.email || 'info@birminghamcentralfoodbank.org'
+
+              .info-row
+                i.fa-regular.fa-clock
+                div
+                  strong Opening Hours
+                  table.hours-table
+                    tr
+                      td Monday
+                      td 10:00 – 16:00
+                    tr
+                      td Tuesday
+                      td 10:00 – 16:00
+                    tr
+                      td Wednesday
+                      td 10:00 – 16:00
+                    tr
+                      td Thursday
+                      td 10:00 – 16:00
+                    tr
+                      td Friday
+                      td 10:00 – 14:00
+                    tr
+                      td Saturday
+                      td Closed
+                    tr
+                      td Sunday
+                      td Closed
+
+            .detail-map
+              .map-placeholder.map-placeholder--large
+                i.fa-solid.fa-map
+                p Map coming soon
+
+          .detail-actions
+            a.btn.btn-green(href='/delivery') Request Delivery
+            a.btn.btn-outline-green(href='/contact') Contact Us
