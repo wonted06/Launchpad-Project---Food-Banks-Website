@@ -1,12 +1,12 @@
 -- schema launchpad
 
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
 	category_id SERIAL PRIMARY KEY,
 	category_name VARCHAR(50) NOT NULL UNIQUE
 	
 );
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS  products (
     product_id SERIAL PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL,
     product_brand VARCHAR(100),
@@ -17,18 +17,17 @@ CREATE TABLE products (
     unit_type VARCHAR(20),
     is_halal BOOLEAN DEFAULT FALSE,
     is_vegetarian BOOLEAN DEFAULT FALSE,
-    is_vegan BOOLEAN DEFAULT FALSE, 
-
+    is_vegan BOOLEAN DEFAULT FALSE
     
 );
 
-CREATE TABLE locations (
+CREATE TABLE IF NOT EXISTS  locations (
     location_id SERIAL PRIMARY KEY,
     location_name VARCHAR(100) NOT NULL UNIQUE,
     location_type VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE inventory (
+CREATE TABLE IF NOT EXISTS  inventory (
     inventory_id SERIAL PRIMARY KEY,
     product_id INT NOT NULL REFERENCES products(product_id),
     location_id INT NOT NULL REFERENCES locations(location_id),

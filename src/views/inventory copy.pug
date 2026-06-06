@@ -1,0 +1,92 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Food Inventory
+      p.page-subtitle Current stock levels across Birmingham food banks.
+
+  section.section
+    .container
+      .inventory-toolbar
+        .search-bar-wrap.search-bar-wrap--small
+          form.search-bar(action='/inventory', method='GET')
+            i.fa-solid.fa-magnifying-glass
+            input(type='text', name='q', placeholder='Search items...', value=query || '')
+            button.btn.btn-green(type='submit') Search
+
+        .filter-group
+          label(for='category-filter') Category
+          select#category-filter(name='category')
+            option(value='') All Categories
+            option(value='tinned') Tinned Goods
+            option(value='dried') Dried Foods
+            option(value='fresh') Fresh Produce
+            option(value='dairy') Dairy
+            option(value='bakery') Bakery
+            option(value='hygiene') Hygiene Products
+
+      .inventory-table-wrap
+        table.inventory-table
+          thead
+            tr
+              th Item
+              th Category
+              th Location
+              th Stock Level
+              th Last Updated
+          tbody
+            tr
+              td Baked Beans (400g)
+              td Tinned Goods
+              td Birmingham Central
+              td
+                .stock-bar
+                  .stock-bar-fill(style='width:80%')
+                span.stock-label High
+              td 03 Jun 2025
+            tr
+              td Pasta (500g)
+              td Dried Foods
+              td Birmingham East
+              td
+                .stock-bar
+                  .stock-bar-fill.stock-bar-fill--medium(style='width:45%')
+                span.stock-label Medium
+              td 02 Jun 2025
+            tr
+              td Rice (1kg)
+              td Dried Foods
+              td Feeding Hands
+              td
+                .stock-bar
+                  .stock-bar-fill(style='width:90%')
+                span.stock-label High
+              td 03 Jun 2025
+            tr
+              td Tinned Tomatoes
+              td Tinned Goods
+              td Birmingham Central
+              td
+                .stock-bar
+                  .stock-bar-fill.stock-bar-fill--low(style='width:15%')
+                span.stock-label Low
+              td 01 Jun 2025
+            tr
+              td Cereal (500g)
+              td Dried Foods
+              td St Anne's Hub
+              td
+                .stock-bar
+                  .stock-bar-fill.stock-bar-fill--medium(style='width:55%')
+                span.stock-label Medium
+              td 02 Jun 2025
+            tr
+              td Soap (bar)
+              td Hygiene Products
+              td Birmingham East
+              td
+                .stock-bar
+                  .stock-bar-fill.stock-bar-fill--low(style='width:20%')
+                span.stock-label Low
+              td 31 May 2025

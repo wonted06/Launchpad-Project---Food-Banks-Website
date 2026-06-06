@@ -8,23 +8,22 @@ block content
 
   section.section
     .container
-      .inventory-toolbar
+      form.inventory-toolbar(action='/inventory', method='GET')
         .search-bar-wrap.search-bar-wrap--small
-          form.search-bar(action='/inventory', method='GET')
+          .search-bar
             i.fa-solid.fa-magnifying-glass
             input(type='text', name='q', placeholder='Search items...', value=query || '')
             button.btn.btn-green(type='submit') Search
 
         .filter-group
           label(for='category-filter') Category
-          select#category-filter(name='category')
+          select#category-filter(name='category', onchange='this.form.submit()')
             option(value='') All Categories
-            option(value='tinned') Tinned Goods
-            option(value='dried') Dried Foods
-            option(value='fresh') Fresh Produce
-            option(value='dairy') Dairy
-            option(value='bakery') Bakery
-            option(value='hygiene') Hygiene Products
+            each cat in categories
+              option(value=cat.category_name, selected=(cat.category_name === category))= cat.category_name
+
+      if error
+        p.error-message= error
 
       .inventory-table-wrap
         table.inventory-table
@@ -34,59 +33,25 @@ block content
               th Category
               th Location
               th Stock Level
-              th Last Updated
+              th Expiry Date
           tbody
-            tr
-              td Baked Beans (400g)
-              td Tinned Goods
-              td Birmingham Central
-              td
-                .stock-bar
-                  .stock-bar-fill(style='width:80%')
-                span.stock-label High
-              td 03 Jun 2025
-            tr
-              td Pasta (500g)
-              td Dried Foods
-              td Birmingham East
-              td
-                .stock-bar
-                  .stock-bar-fill.stock-bar-fill--medium(style='width:45%')
-                span.stock-label Medium
-              td 02 Jun 2025
-            tr
-              td Rice (1kg)
-              td Dried Foods
-              td Feeding Hands
-              td
-                .stock-bar
-                  .stock-bar-fill(style='width:90%')
-                span.stock-label High
-              td 03 Jun 2025
-            tr
-              td Tinned Tomatoes
-              td Tinned Goods
-              td Birmingham Central
-              td
-                .stock-bar
-                  .stock-bar-fill.stock-bar-fill--low(style='width:15%')
-                span.stock-label Low
-              td 01 Jun 2025
-            tr
-              td Cereal (500g)
-              td Dried Foods
-              td St Anne's Hub
-              td
-                .stock-bar
-                  .stock-bar-fill.stock-bar-fill--medium(style='width:55%')
-                span.stock-label Medium
-              td 02 Jun 2025
-            tr
-              td Soap (bar)
-              td Hygiene Products
-              td Birmingham East
-              td
-                .stock-bar
-                  .stock-bar-fill.stock-bar-fill--low(style='width:20%')
-                span.stock-label Low
-              td 31 May 2025
+            if !inventory || inventory.length === 0
+              tr
+                td(colspan='5') No inventory items found.
+            else
+              each item in inventory
+                - const pct = Math.min(item.quantity, 100)
+                - const level = item.quantity < 20 ? 'low' : item.quantity < 60 ? 'medium' : 'high'
+                - const fillClass = level === 'low' ? 'stock-bar-fill--low' : level === 'medium' ? 'stock-bar-fill--medium' : null
+                - const label = level.charAt(0).toUpperCase() + level.slice(1)
+                - const expiryStr = item.expiry_date ? new Date(item.expiry_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+                - const itemLabel = item.product_name + (item.weight_grams ? ` (${item.weight_grams}g)` : '')
+                tr
+                  td= itemLabel
+                  td= item.category_name
+                  td= item.location_name
+                  td
+                    .stock-bar
+                      .stock-bar-fill(class=fillClass, style=`width:${pct}%`)
+                    span.stock-label= label
+                  td= expiryStr

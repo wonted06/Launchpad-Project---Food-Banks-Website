@@ -26,7 +26,7 @@ INSERT INTO products (
 VALUES (
     'Baked Beans',
     'Heinz',
-    13,
+    1,
     78,
     415,
     'Tin',
