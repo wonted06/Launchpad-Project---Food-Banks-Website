@@ -8,11 +8,11 @@ SET search_path TO foodbank;
 
 -- Recreates tables to be empty everytime when running these DROP TABLE queries,
 -- but ensures that this entire script can be run multiple times without errors
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS categories CASCADE;
-DROP TABLE IF EXISTS products CASCADE;
-DROP TABLE IF EXISTS locations CASCADE;
-DROP TABLE IF EXISTS inventory CASCADE;
+-- DROP TABLE IF EXISTS users CASCADE;
+-- DROP TABLE IF EXISTS categories CASCADE;
+-- DROP TABLE IF EXISTS products CASCADE;
+-- DROP TABLE IF EXISTS locations CASCADE;
+-- DROP TABLE IF EXISTS inventory CASCADE;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
