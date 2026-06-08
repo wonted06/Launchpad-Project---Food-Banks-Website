@@ -3,81 +3,79 @@ extends layout
 block content
   section.page-hero.page-hero--short
     .container
-      h1 Delivery Service
-      p.page-subtitle Food delivery for Birmingham residents with accessibility needs.
+      h1 #{t('delivery.hero.title')}
+      p.page-subtitle #{t('delivery.hero.subtitle')}
 
   section.section
     .container
       .delivery-layout
         //- Request / Track tabs
         .tab-bar
-          button.tab-btn.active(data-tab='request') Request Delivery
-          button.tab-btn(data-tab='track') Track Delivery
+          button.tab-btn.active(data-tab='request') #{t('delivery.tab.request')}
+          button.tab-btn(data-tab='track') #{t('delivery.tab.track')}
 
         //- Request Delivery tab
         .tab-panel#request.active
           .card
-            h2 Request a Delivery
-            p.card-subtitle
-              | Our delivery service is available to residents who have accessibility
-              | needs and are unable to visit a food bank in person.
+            h2 #{t('delivery.form.title')}
+            p.card-subtitle #{t('delivery.form.subtitle')}
             form.form(action='/delivery/request', method='POST')
               .form-row
                 .form-group
-                  label(for='del-name') Full Name
+                  label(for='del-name') #{t('delivery.form.name')}
                   input#del-name(type='text', name='name', placeholder='Your full name', required)
                 .form-group
-                  label(for='del-phone') Phone Number
+                  label(for='del-phone') #{t('delivery.form.phone')}
                   input#del-phone(type='tel', name='phone', placeholder='07700 000000', required)
 
               .form-group
-                label(for='del-address') Delivery Address
+                label(for='del-address') #{t('delivery.form.address')}
                 input#del-address(type='text', name='address', placeholder='Full delivery address', required)
 
               .form-group
-                label(for='del-postcode') Postcode
+                label(for='del-postcode') #{t('delivery.form.postcode')}
                 input#del-postcode(type='text', name='postcode', placeholder='e.g. B1 1AY', required)
 
               .form-group
-                label(for='del-notes') Additional Notes
+                label(for='del-notes') #{t('delivery.form.notes')}
                 textarea#del-notes(name='notes', rows='3', placeholder='Any dietary requirements or access instructions...')
 
               button.btn.btn-green(type='submit')
                 i.fa-solid.fa-truck
-                |  Submit Request
+                |  #{t('delivery.form.submit')}
 
         //- Track Delivery tab
         .tab-panel#track
           .card
-            h2 Track Your Delivery
+            h2 #{t('delivery.track.title')}
             form.form(action='/delivery/track', method='GET')
               .form-group
-                label(for='track-ref') Delivery Reference Number
+                label(for='track-ref') #{t('delivery.track.ref')}
                 input#track-ref(type='text', name='ref', placeholder='e.g. FB-2025-0001', required)
               button.btn.btn-green(type='submit')
                 i.fa-solid.fa-magnifying-glass
-                |  Track Order
+                |  #{t('delivery.track.btn')}
 
             //- Status stepper (placeholder)
             .delivery-status
-              h3 Delivery Status
+              h3 #{t('delivery.status.title')}
               .status-steps
                 .status-step.done
                   .step-icon
                     i.fa-solid.fa-check
-                  .step-label Order Received
+                  .step-label #{t('delivery.step.received')}
                 .status-step.done
                   .step-icon
                     i.fa-solid.fa-check
-                  .step-label Being Prepared
+                  .step-label #{t('delivery.step.prepared')}
                 .status-step.active
                   .step-icon
                     i.fa-solid.fa-truck
-                  .step-label Out for Delivery
+                  .step-label #{t('delivery.step.out')}
                 .status-step
                   .step-icon
                     i.fa-solid.fa-house
-                  .step-label Delivered
+                  .step-label #{t('delivery.step.delivered')}
 
   script.
     document.querySelectorAll('.tab-btn').forEach(btn => {

@@ -1,5 +1,8 @@
 extends layout
 
+block head
+  link(rel='stylesheet', href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css')
+
 block content
   section.section
     .container
@@ -9,10 +12,11 @@ block content
 
       .detail-card
         .detail-header
-          h1= bank.name || 'Birmingham Central Food Bank'
+          h1= bank.name
           .detail-badges
-            span.badge.badge-open Open Now
-            span.badge.badge-verified Verified
+            span.badge.badge-verified
+              i.fa-solid.fa-circle-check
+              |  Verified
 
         .detail-body
           .detail-grid
@@ -22,52 +26,63 @@ block content
                 i.fa-solid.fa-map-pin
                 div
                   strong Address
-                  p= bank.address || '123 Broad Street, Birmingham, B1 2AA'
+                  p= bank.address + ', ' + bank.postcode
 
-              .info-row
-                i.fa-solid.fa-phone
-                div
-                  strong Phone
-                  p= bank.phone || '0121 000 0000'
+              if bank.phone
+                .info-row
+                  i.fa-solid.fa-phone
+                  div
+                    strong Phone
+                    p= bank.phone
 
-              .info-row
-                i.fa-solid.fa-envelope
-                div
-                  strong Email
-                  p= bank.email || 'info@birminghamcentralfoodbank.org'
+              if bank.email
+                .info-row
+                  i.fa-solid.fa-envelope
+                  div
+                    strong Email
+                    p= bank.email
 
-              .info-row
-                i.fa-regular.fa-clock
-                div
-                  strong Opening Hours
-                  table.hours-table
-                    tr
-                      td Monday
-                      td 10:00 – 16:00
-                    tr
-                      td Tuesday
-                      td 10:00 – 16:00
-                    tr
-                      td Wednesday
-                      td 10:00 – 16:00
-                    tr
-                      td Thursday
-                      td 10:00 – 16:00
-                    tr
-                      td Friday
-                      td 10:00 – 14:00
-                    tr
-                      td Saturday
-                      td Closed
-                    tr
-                      td Sunday
-                      td Closed
+              if bank.hours
+                .info-row
+                  i.fa-regular.fa-clock
+                  div
+                    strong Opening Hours
+                    p= bank.hours
+
+              if bank.description
+                .info-row
+                  i.fa-solid.fa-circle-info
+                  div
+                    strong About
+                    p= bank.description
 
             .detail-map
-              .map-placeholder.map-placeholder--large
-                i.fa-solid.fa-map
-                p Map coming soon
+              #detail-map
 
           .detail-actions
             a.btn.btn-green(href='/delivery') Request Delivery
             a.btn.btn-outline-green(href='/contact') Contact Us
+
+  script(src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
+  script.
+    const lat = !{bank.lat};
+    const lng = !{bank.lng};
+    const map = L.map('detail-map').setView([lat, lng], 16);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    const icon = L.divIcon({
+      html: '<i class="fa-solid fa-location-dot" style="color:#16a34a;font-size:2rem;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))"></i>',
+      className: '',
+      iconSize:   [32, 32],
+      iconAnchor: [10, 30],
+      popupAnchor:[0, -32]
+    });
+
+    L.marker([lat, lng], { icon })
+      .addTo(map)
+      .bindPopup('!{bank.name}')
+      .openPopup();

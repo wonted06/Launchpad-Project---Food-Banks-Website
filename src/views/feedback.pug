@@ -56,3 +56,14 @@ block content
           button.btn.btn-green.btn-full(type='submit')
             i.fa-solid.fa-paper-plane
             |  Submit Feedback
+            if error
+              .error-box
+                i.fa-solid.fa-circle-exclamation
+                |  #{error}
+                input#star5(type='radio', name='rating', value='5', checked=form.rating=='5')
+                // ... same pattern for star4 through star1
+                select#fb-service(name='service')
+                  option(value='') Select a service
+                  option(value='Food Bank Visit', selected=form.service==='Food Bank Visit') Food Bank Visit
+                  option(value='Delivery Service', selected=form.service==='Delivery Service') Delivery Service
+                  option(value='Website', selected=form.service==='Website') Website

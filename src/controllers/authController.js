@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User   = require('../models/User');
+const pool   = require('../../db');
 
 // ── GET /login ────────────────────────────────────────────────
 exports.getLogin = (req, res) => {
@@ -43,6 +44,18 @@ exports.postLogin = async (req, res) => {
             email:      user.email,
             created_at: user.created_at,
         };
+
+        // Load user settings into session
+        try {
+            const sr = await pool.query(
+                'SELECT theme, text_size, colour_blind, text_to_speech, language FROM foodbank.users WHERE id = $1',
+                [user.id]
+            );
+            if (sr.rows.length) {
+                const r = sr.rows[0];
+                req.session.settings = { theme: r.theme, textSize: r.text_size, colourBlind: r.colour_blind, textToSpeech: r.text_to_speech, language: r.language };
+            }
+        } catch (_) {}
 
         const next = req.query.next || '/';
         res.redirect(next);
@@ -127,6 +140,9 @@ exports.postRegister = async (req, res) => {
             email:      newUser.email,
             created_at: newUser.created_at,
         };
+
+        // New users get default settings in session
+        req.session.settings = { theme: 'light', textSize: 15, colourBlind: false, textToSpeech: false };
 
         res.redirect('/profile');
 

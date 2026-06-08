@@ -1,5 +1,5 @@
 doctype html
-html(lang='en')
+html(lang=lang || 'en')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -8,7 +8,13 @@ html(lang='en')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css')
     block head
 
-  body
+  body(data-theme=settings ? settings.theme : 'light', data-logged-in=isLoggedIn ? 'true' : 'false', class=settings && settings.colourBlind ? 'colour-blind' : '')
+    //- ── COLOUR BLIND SVG FILTER (hidden) ───────────────────────
+    svg(xmlns='http://www.w3.org/2000/svg', style='display:none')
+      defs
+        filter#deuteranopia
+          feColorMatrix(type='matrix', values='0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0')
+
     //- ── TOP NAV ────────────────────────────────────────────────
     header.site-header
       .header-inner
@@ -21,44 +27,44 @@ html(lang='en')
           span
 
         nav.main-nav
-          a.nav-link(href='/', class=pageId === 'home' ? 'active' : '') Home
-          a.nav-link(href='/locations', class=pageId === 'locations' ? 'active' : '') Locations
-          a.nav-link(href='/delivery', class=pageId === 'delivery' ? 'active' : '') Delivery
-          a.nav-link(href='/inventory', class=pageId === 'inventory' ? 'active' : '') Inventory
-          a.nav-link(href='/contact', class=pageId === 'contact' ? 'active' : '') Contact
+          a.nav-link(href='/', class=pageId === 'home' ? 'active' : '') #{t('nav.home')}
+          a.nav-link(href='/locations', class=pageId === 'locations' ? 'active' : '') #{t('nav.locations')}
+          a.nav-link(href='/delivery', class=pageId === 'delivery' ? 'active' : '') #{t('nav.delivery')}
+          a.nav-link(href='/inventory', class=pageId === 'inventory' ? 'active' : '') #{t('nav.inventory')}
+          a.nav-link(href='/contact', class=pageId === 'contact' ? 'active' : '') #{t('nav.contact')}
 
           .nav-more
-            button.nav-more-btn More
+            button.nav-more-btn #{t('nav.more')}
               i.fa-solid.fa-chevron-down
             .nav-more-dropdown
-              a(href='/about') About Us
-              a(href='/news') News
-              a(href='/hot-meals') Hot Meal Schedule
-              a(href='/feedback') Feedback
-              a(href='/settings') Settings
+              a(href='/about') #{t('nav.about')}
+              a(href='/news') #{t('nav.news')}
+              a(href='/hot-meals') #{t('nav.hotmeals')}
+              a(href='/feedback') #{t('nav.feedback')}
+              a(href='/settings') #{t('nav.settings')}
 
-        //- Auth area — right side of nav
-        .nav-auth
           if isLoggedIn
-            //- Logged-in: avatar + dropdown
+            //- Logged-in: avatar + dropdown sits next to More
             .nav-user
               .nav-avatar= user.username[0].toUpperCase()
               span.nav-username= user.username
               .nav-user-dropdown
                 a.nav-user-item(href='/profile')
                   i.fa-solid.fa-id-card
-                  |  My Profile
+                  |  #{t('nav.profile')}
                 a.nav-user-item(href='/settings')
                   i.fa-solid.fa-gear
-                  |  Settings
+                  |  #{t('nav.settings')}
                 .nav-user-divider
                 a.nav-user-item.nav-user-logout(href='/logout')
                   i.fa-solid.fa-right-from-bracket
-                  |  Log Out
-          else
-            //- Logged-out: Login + Sign Up links
-            a.nav-link(href='/login') Login
-            a.btn-donate(href='/register') Sign Up
+                  |  #{t('nav.logout')}
+
+        //- Auth area — right side of nav
+        .nav-auth
+          if !isLoggedIn
+            a.nav-link(href='/login') #{t('nav.login')}
+          a.btn-donate(href='/donate') #{t('nav.donate')}
 
     //- ── MAIN CONTENT ──────────────────────────────────────────
     main.site-main
@@ -69,36 +75,36 @@ html(lang='en')
       .footer-inner
         .footer-brand
           img(src='/images/logo-icon.png', alt='Feed Birmingham', height='44')
-          p Connecting communities with food assistance across Birmingham.
+          p #{t('footer.tagline')}
 
         .footer-links
           .footer-col
-            h4 Services
-            a(href='/locations') Find a Food Bank
-            a(href='/delivery') Request Delivery
-            a(href='/hot-meals') Hot Meal Schedule
-            a(href='/inventory') View Inventory
+            h4 #{t('footer.services')}
+            a(href='/locations') #{t('footer.find')}
+            a(href='/delivery') #{t('footer.delivery')}
+            a(href='/hot-meals') #{t('footer.hotmeals')}
+            a(href='/inventory') #{t('footer.inventory')}
 
           .footer-col
-            h4 Organisation
-            a(href='/about') About Us
-            a(href='/news') News
-            a(href='/feedback') Feedback
-            a(href='/contact') Contact
+            h4 #{t('footer.organisation')}
+            a(href='/about') #{t('nav.about')}
+            a(href='/news') #{t('nav.news')}
+            a(href='/feedback') #{t('nav.feedback')}
+            a(href='/contact') #{t('nav.contact')}
 
           .footer-col
-            h4 Account
+            h4 #{t('footer.account')}
             if isLoggedIn
-              a(href='/profile') My Profile
-              a(href='/settings') Settings
-              a(href='/logout') Log Out
+              a(href='/profile') #{t('nav.profile')}
+              a(href='/settings') #{t('nav.settings')}
+              a(href='/logout') #{t('nav.logout')}
             else
-              a(href='/login') Login
-              a(href='/register') Register
-              a(href='/settings') Settings
+              a(href='/login') #{t('nav.login')}
+              a(href='/register') #{t('nav.register')}
+              a(href='/settings') #{t('nav.settings')}
 
         .footer-bottom
-          p &copy; 2025 Feed Birmingham. All rights reserved.
+          p #{t('footer.copyright')}
 
     script.
       // Mobile nav toggle
@@ -130,3 +136,53 @@ html(lang='en')
         });
         document.addEventListener('click', () => userDrop.classList.remove('open'));
       }
+
+    //- ── TTS FLOATING BUTTON ─────────────────────────────────────
+    button#tts-btn(style='display:none', aria-label='Read page aloud', title='Read page aloud')
+      i.fa-solid.fa-volume-high
+
+    //- ── SETTINGS APPLICATION SCRIPT ─────────────────────────────
+    script.
+      (function () {
+        var loggedIn = document.body.dataset.loggedIn === 'true';
+        var s = null;
+
+        if (!loggedIn) {
+          // Guest: load from localStorage and apply
+          try { s = JSON.parse(localStorage.getItem('fbSettings') || 'null'); } catch (_) {}
+          if (s) {
+            document.body.dataset.theme = s.theme || 'light';
+            if (s.colourBlind) document.body.classList.add('colour-blind');
+          }
+        }
+
+        // Apply text size — set root font-size so rem units scale site-wide
+        var serverSize = !{settings ? settings.textSize : 'null'};
+        var size = loggedIn ? serverSize : (s && s.textSize ? s.textSize : null);
+        if (size && size !== 16) document.documentElement.style.fontSize = size + 'px';
+
+        // TTS
+        var ttsOn = loggedIn
+          ? !{settings ? settings.textToSpeech : false}
+          : (s && !!s.textToSpeech);
+        var ttsBtn = document.getElementById('tts-btn');
+        if (ttsBtn) {
+          if (ttsOn) ttsBtn.style.display = 'flex';
+          var speaking = false;
+          ttsBtn.addEventListener('click', function () {
+            if (speaking) {
+              window.speechSynthesis.cancel();
+              speaking = false;
+              ttsBtn.classList.remove('tts-active');
+            } else {
+              var text = Array.from(document.querySelectorAll('main p, main h1, main h2, main h3, main li'))
+                             .map(function (el) { return el.innerText; }).join('. ');
+              var utt = new SpeechSynthesisUtterance(text);
+              utt.onend = function () { speaking = false; ttsBtn.classList.remove('tts-active'); };
+              window.speechSynthesis.speak(utt);
+              speaking = true;
+              ttsBtn.classList.add('tts-active');
+            }
+          });
+        }
+      })();

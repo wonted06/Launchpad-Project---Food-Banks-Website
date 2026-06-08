@@ -3,14 +3,14 @@ extends layout
 block content
   section.page-hero.page-hero--short
     .container
-      h1 Donate
-      p.page-subtitle Your donation helps feed Birmingham families in need.
+      h1 #{t('donate.hero.title')}
+      p.page-subtitle #{t('donate.hero.subtitle')}
 
   section.section
     .container
       .donate-layout
         .donate-intro
-          h2 Make a Difference Today
+          h2 #{t('donate.section.title')}
           p
             | Every contribution — whether food, funds, or time — helps us
             | reach more Birmingham residents facing hardship.
@@ -18,56 +18,56 @@ block content
           .donate-types
             .donate-type-card.active#donate-money-card
               i.fa-solid.fa-sterling-sign
-              h3 Donate Money
-              p One-off or regular financial donations.
+              h3 #{t('donate.type.money')}
+              p #{t('donate.type.money.sub')}
             .donate-type-card#donate-food-card
               i.fa-solid.fa-basket-shopping
-              h3 Donate Food
-              p Drop off non-perishable food at a local collection point.
+              h3 #{t('donate.type.food')}
+              p #{t('donate.type.food.sub')}
             .donate-type-card#donate-time-card
               i.fa-solid.fa-hands-helping
-              h3 Volunteer
-              p Give your time to help sort, pack, and deliver food parcels.
+              h3 #{t('donate.type.volunteer')}
+              p #{t('donate.type.volunteer.sub')}
 
         .donate-form-wrap
 
           //- Money donation form
           .donate-panel#donate-money.active
-            h2 Financial Donation
+            h2 #{t('donate.money.title')}
             form.form(action='/donate/money', method='POST')
               .form-group
-                label Donation Amount
+                label #{t('donate.money.amount')}
                 .amount-selector
                   button.amount-btn.active(type='button', data-amount='5') £5
                   button.amount-btn(type='button', data-amount='10') £10
                   button.amount-btn(type='button', data-amount='25') £25
                   button.amount-btn(type='button', data-amount='50') £50
                 .form-group
-                  label(for='custom-amount') Or enter a custom amount (£)
+                  label(for='custom-amount') #{t('donate.money.custom')}
                   input#custom-amount(type='number', name='amount', min='1', placeholder='0.00')
 
               .form-group
-                label(for='don-frequency') Frequency
+                label(for='don-frequency') #{t('donate.money.frequency')}
                 select#don-frequency(name='frequency')
-                  option(value='one-off') One-off
-                  option(value='monthly') Monthly
-                  option(value='annual') Annual
+                  option(value='one-off') #{t('donate.money.oneoff')}
+                  option(value='monthly') #{t('donate.money.monthly')}
+                  option(value='annual') #{t('donate.money.annual')}
 
               .form-row
                 .form-group
-                  label(for='don-name') Full Name
+                  label(for='don-name') #{t('donate.volunteer.name')}
                   input#don-name(type='text', name='name', placeholder='Your name', required)
                 .form-group
-                  label(for='don-email') Email
+                  label(for='don-email') #{t('donate.volunteer.email')}
                   input#don-email(type='email', name='email', placeholder='your@email.com', required)
 
               button.btn.btn-green.btn-full(type='submit')
                 i.fa-solid.fa-heart
-                |  Donate Now
+                |  #{t('donate.money.btn')}
 
           //- Food donation panel
           .donate-panel#donate-food
-            h2 Food Donation
+            h2 #{t('donate.food.title')}
             p.card-subtitle
               | Please only donate non-perishable, unopened items with at least
               | 3 months before their use-by date.
@@ -87,18 +87,18 @@ block content
 
           //- Volunteer panel
           .donate-panel#donate-time
-            h2 Volunteer With Us
+            h2 #{t('donate.volunteer.title')}
             form.form(action='/donate/volunteer', method='POST')
               .form-row
                 .form-group
-                  label(for='vol-name') Full Name
+                  label(for='vol-name') #{t('donate.volunteer.name')}
                   input#vol-name(type='text', name='name', placeholder='Your name', required)
                 .form-group
-                  label(for='vol-email') Email
+                  label(for='vol-email') #{t('donate.volunteer.email')}
                   input#vol-email(type='email', name='email', placeholder='your@email.com', required)
 
               .form-group
-                label Availability
+                label #{t('donate.volunteer.availability')}
                 .checkbox-group
                   each day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
                     label.checkbox-label
@@ -106,10 +106,10 @@ block content
                       span= day
 
               .form-group
-                label(for='vol-notes') Tell us about yourself
+                label(for='vol-notes') #{t('donate.volunteer.about')}
                 textarea#vol-notes(name='notes', rows='4', placeholder='Any relevant experience or notes...')
 
-              button.btn.btn-green(type='submit') Apply to Volunteer
+              button.btn.btn-green(type='submit') #{t('donate.volunteer.btn')}
 
   script.
     document.querySelectorAll('.donate-type-card').forEach(card => {

@@ -23,10 +23,26 @@ app.use(session({
     cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 } // 7 days
 }));
 
+// Load locale files once at startup
+const locales = {
+  en: require('./src/locales/en.json'),
+  pl: require('./src/locales/pl.json'),
+  pu: require('./src/locales/pu.json'),
+};
+const SUPPORTED = ['en', 'pl', 'pu'];
+
 // ── Auth locals (available in every view) ─────────────────────
 app.use((req, res, next) => {
     res.locals.user       = req.session.user || null;
     res.locals.isLoggedIn = !!req.session.userId;
+    res.locals.settings   = req.session.settings || null;
+
+     // i18n
+    const raw   = req.session.settings?.language || req.session.guestLang || 'en';
+    const lang  = SUPPORTED.includes(raw) ? raw : 'en';
+    const dict  = locales[lang] || locales.en;
+    res.locals.t    = (key) => dict[key] || locales.en[key] || key;
+    res.locals.lang = lang;
     next();
 });
 

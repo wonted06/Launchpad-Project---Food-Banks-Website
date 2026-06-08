@@ -6,8 +6,8 @@ block content
       .auth-logo
         img(src='/images/logo-icon.png', alt='Feed Birmingham', height='72')
 
-      h1 Welcome Back
-      p.auth-subtitle Login to your Feed Birmingham account.
+      h1 #{t('auth.login.title')}
+      p.auth-subtitle #{t('auth.login.subtitle')}
 
       if error
         .error-box
@@ -18,13 +18,13 @@ block content
         .form-group
           label(for='email')
             i.fa-solid.fa-envelope
-            |  Email
+            |  #{t('auth.form.email')}
           input#email(type='email', name='email', placeholder='Enter your email address', required)
 
         .form-group
           label(for='password')
             i.fa-solid.fa-lock
-            |  Password
+            |  #{t('auth.form.password')}
           input#password(type='password', name='password', placeholder='Enter your password', required)
 
         .form-row-check
@@ -33,13 +33,13 @@ block content
             span Remember me
           a.forgot-link(href='/forgot-password') Forgot password?
 
-        button.btn.btn-green.btn-full(type='submit') Login
+        button.btn.btn-green.btn-full(type='submit') #{t('auth.btn.login')}
 
       .auth-divider
         span or
 
       .auth-switch
-        | Don't have an account?
+        | #{t('auth.switch.register')}
         a(href='/register')  Create one here
 
       a.back-home(href='/')
