@@ -75,3 +75,33 @@ ON CONFLICT (product_id, location_id, batch_number) DO NOTHING;
 
 -- PostgreSQL SERIAL columns use sequence generators.
 -- Sequence values are consumed when requested and are not reused if a transaction fails or rows are deleted. Therefore gaps in identifier values are expected behaviour and do not indicate missing data.
+INSERT INTO inventory (
+    product_id,
+	location_id,
+    quantity,
+    received_date,
+    expiry_date,
+    batch_number
+)
+VALUES (
+    -- 'SELECT' statements below makes it easier to select which 
+    -- product and location without having to look for their respective IDs.
+    (SELECT product_id
+     FROM products
+     WHERE product_name = 'Baked Beans'),
+
+    (SELECT location_id
+     FROM locations
+     WHERE location_name = 'Main Warehouse'),
+    50,
+    '2025-05-01',
+    '2026-01-01',
+    'BB001'
+);
+
+
+-- PostgreSQL SERIAL columns use sequence generators.
+
+-- Sequence values are consumed when requested and are not reused if a transaction 
+-- fails or rows are deleted. Therefore gaps in identifier values are expected 
+-- behaviour and do not indicate missing data.
