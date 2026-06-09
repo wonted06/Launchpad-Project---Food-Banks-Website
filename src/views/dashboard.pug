@@ -5,14 +5,13 @@ block content
   section.hero
     .hero-overlay
     .hero-content
-      h1 Feeding Birmingham, One Meal at a Time
+      h1 #{t('home.hero.title')}
       p.hero-subtitle
-        | Feed Birmingham connects local communities with food banks,
-        | hot meals, and delivery services across the city.
+        | #{t('home.hero.subtitle')}
       .hero-actions
-        a.btn.btn-white(href='/register') Sign Up
-        a.btn.btn-white(href='/login') Log In
-        a.btn.btn-outline-white(href='/locations') Find a Food Bank
+        if !isLoggedIn
+          a.btn.btn-white(href='/register') #{t('common.signup')}
+        a.btn.btn-outline-white(href='/locations') #{t('common.findbank')}
 
   //- ── QUICK LINKS ────────────────────────────────────────────
   section.section.quick-links-section
@@ -20,79 +19,77 @@ block content
       .quick-links
         a.quick-link-card(href='/locations')
           i.fa-solid.fa-map-location-dot
-          h3 Find a Food Bank
-          p Locate your nearest food bank and get directions.
+          h3 #{t('home.quick.find')}
+          p #{t('home.quick.find.sub')}
         a.quick-link-card(href='/delivery')
           i.fa-solid.fa-truck
-          h3 Request Delivery
-          p Can't travel? We deliver to those with accessibility needs.
+          h3 #{t('home.quick.delivery')}
+          p #{t('home.quick.delivery.sub')}
         a.quick-link-card(href='/donate')
           i.fa-solid.fa-hand-holding-heart
-          h3 Donate
-          p Donate food or funds to support the community.
+          h3 #{t('home.quick.donate')}
+          p #{t('home.quick.donate.sub')}
         a.quick-link-card(href='/hot-meals')
           i.fa-solid.fa-utensils
-          h3 Hot Meals
-          p View the weekly hot meal schedule near you.
+          h3 #{t('home.quick.hotmeals')}
+          p #{t('home.quick.hotmeals.sub')}
 
   //- ── HOT MEAL SCHEDULE (PREVIEW) ────────────────────────────
   section.section.meals-section
     .container
       .section-header
-        h2 This Week's Hot Meal Schedule
-        a.btn.btn-outline-green(href='/hot-meals') View Full Schedule
+        h2 #{t('home.schedule.title')}
+        a.btn.btn-outline-green(href='/hot-meals') #{t('common.viewfull')}
       .meals-table-wrap
         table.meals-table
           thead
             tr
-              th Day
-              th Location
-              th Time
-              th Spaces
+              th #{t('common.day')}
+              th #{t('common.location')}
+              th #{t('common.time')}
+              th #{t('common.spaces')}
           tbody
             tr
-              td Monday
+              td #{t('common.monday')}
               td Birmingham Central Food Bank
               td 12:00 – 14:00
-              td.badge-available Available
+              td.badge-available #{t('common.available')}
             tr
-              td Tuesday
+              td #{t('common.tuesday')}
               td Feeding Hands, Sparkhill
               td 11:30 – 13:30
-              td.badge-limited Limited
+              td.badge-limited #{t('common.limited')}
             tr
-              td Wednesday
+              td #{t('common.wednesday')}
               td Birmingham East Food Bank
               td 12:00 – 14:00
-              td.badge-available Available
+              td.badge-available #{t('common.available')}
             tr
-              td Thursday
+              td #{t('common.thursday')}
               td St Anne's Community Hub
               td 13:00 – 15:00
-              td.badge-full Full
+              td.badge-full #{t('common.full')}
             tr
-              td Friday
+              td #{t('common.friday')}
               td Birmingham Central Food Bank
               td 11:00 – 13:00
-              td.badge-available Available
+              td.badge-available #{t('common.available')}
 
   //- ── ABOUT STRIP ────────────────────────────────────────────
   section.section.about-strip
     .container
       .about-strip-inner
         .about-text
-          h2 About Feed Birmingham
-          p
-            | Our free web-based service helps Birmingham residents find food banks,
-            | request deliveries, and access essential food support — all in one place.
-          a.btn.btn-green(href='/about') Learn More
+          h2 #{t('home.about.title')}
+          p #{t('home.about.body')}
+          a.btn.btn-green(href='/about') #{t('common.learnmore')}
         .about-stats
           .stat
             span.stat-num 20+
-            span.stat-label Food Banks
+            span.stat-label #{t('home.stat.banks')}
           .stat
             span.stat-num 500+
-            span.stat-label Families Helped
+            span.stat-label #{t('home.stat.families')}
           .stat
             span.stat-num 7
-            span.stat-label Days a Week
+            span.stat-label #{t('home.stat.days')}

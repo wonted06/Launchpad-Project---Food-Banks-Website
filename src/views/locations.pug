@@ -1,32 +1,38 @@
 extends layout
 
+block head
+  link(rel='stylesheet', href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css')
+
 block content
   section.page-hero.page-hero--short
     .container
-      h1 Find a Food Bank
-      p.page-subtitle Find all food banks in Birmingham near you.
+      h1 #{t('locations.hero.title')}
+      p.page-subtitle #{t('locations.hero.subtitle')}
 
   section.section
     .container
-      //- Search bar
       .search-bar-wrap
-        form.search-bar(action='/locations', method='GET')
+        .search-bar
           i.fa-solid.fa-location-dot
-          input#postcode(type='text', name='postcode', placeholder='Enter postcode e.g. B1 1AY', value=postcode || '')
-          button.btn.btn-green(type='submit') Search
+          input#search-input(type='text', placeholder=t('locations.search.placeholder'), value=searchQuery)
+          //- No submit button needed — filters live
 
-      //- Results area
       .locations-layout
-        //- Food bank list
-        .foodbank-list
+        .foodbank-list#foodbank-list
           if foodBanks && foodBanks.length
             each bank in foodBanks
-              .foodbank-card
+              .foodbank-card(
+                data-id=bank.id,
+                data-name=bank.name,
+                data-postcode=bank.postcode,
+                data-lat=bank.lat,
+                data-lng=bank.lng
+              )
                 .foodbank-card-header
                   h3= bank.name
                   span.distance-badge
                     i.fa-solid.fa-location-dot
-                    |  #{bank.distance}
+                    |  #{bank.postcode}
                 .foodbank-card-body
                   p
                     i.fa-solid.fa-map-pin
@@ -35,63 +41,84 @@ block content
                     i.fa-regular.fa-clock
                     |  #{bank.hours}
                 .foodbank-card-footer
-                  a.btn.btn-outline-green.btn-sm(href='/locations/' + bank.id) Details
+                  a.btn.btn-outline-green.btn-sm(href='/locations/' + bank.id) #{t('common.details')}
                     i.fa-solid.fa-arrow-right
           else
-            //- Placeholder cards shown before a search
-            .foodbank-card
-              .foodbank-card-header
-                h3 Birmingham Central Food Bank
-                span.distance-badge
-                  i.fa-solid.fa-location-dot
-                  |  0.7km away
-              .foodbank-card-body
-                p
-                  i.fa-solid.fa-map-pin
-                  |  123 Broad Street, Birmingham, B1 2AA
-                p
-                  i.fa-regular.fa-clock
-                  |  Mon–Fri: 10:00–16:00
-              .foodbank-card-footer
-                a.btn.btn-outline-green.btn-sm(href='/locations/1') Details
-                  i.fa-solid.fa-arrow-right
+            p.no-results No food banks found.
 
-            .foodbank-card
-              .foodbank-card-header
-                h3 Birmingham East Food Bank
-                span.distance-badge
-                  i.fa-solid.fa-location-dot
-                  |  0.8km away
-              .foodbank-card-body
-                p
-                  i.fa-solid.fa-map-pin
-                  |  45 Coventry Road, Birmingham, B10 0TP
-                p
-                  i.fa-regular.fa-clock
-                  |  Tue–Sat: 09:30–15:30
-              .foodbank-card-footer
-                a.btn.btn-outline-green.btn-sm(href='/locations/2') Details
-                  i.fa-solid.fa-arrow-right
+        #locations-map
 
-            .foodbank-card
-              .foodbank-card-header
-                h3 Feeding Hands Food Bank
-                span.distance-badge
-                  i.fa-solid.fa-location-dot
-                  |  1.5km away
-              .foodbank-card-body
-                p
-                  i.fa-solid.fa-map-pin
-                  |  78 Sparkhill Road, Birmingham, B11 4EJ
-                p
-                  i.fa-regular.fa-clock
-                  |  Mon, Wed, Fri: 11:00–14:00
-              .foodbank-card-footer
-                a.btn.btn-outline-green.btn-sm(href='/locations/3') Details
-                  i.fa-solid.fa-arrow-right
+  script(src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
+  script.
+    const banks  = !{foodBanksJson};
+    const map    = L.map('locations-map').setView([52.4814, -1.8998], 12);
 
-        //- Map placeholder
-        .map-placeholder
-          i.fa-solid.fa-map
-          p Map view coming soon
-          span Enter a postcode to search nearby food banks
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Custom green pin icon using Font Awesome
+    function makeIcon(active) {
+      return L.divIcon({
+        html: `<i class="fa-solid fa-location-dot" style="color:${active ? '#15803d' : '#16a34a'};font-size:2rem;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))"></i>`,
+        className: '',
+        iconSize:   [32, 32],
+        iconAnchor: [10, 30],
+        popupAnchor:[0, -32]
+      });
+    }
+
+    // Create markers + link to cards
+    const markers = {};
+    banks.forEach(bank => {
+      const marker = L.marker([bank.lat, bank.lng], { icon: makeIcon(false) })
+        .addTo(map)
+        .bindPopup(`
+          <strong>${bank.name}</strong><br>
+          ${bank.address}<br>
+          <small>${bank.hours || ''}</small><br>
+          <a href="/locations/${bank.id}" class="popup-link">View Details →</a>
+        `);
+      markers[bank.id] = marker;
+    });
+
+    // Card click → pan & open popup
+    document.querySelectorAll('.foodbank-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return; // let Detail link work normally
+        const id  = card.dataset.id;
+        const lat = parseFloat(card.dataset.lat);
+        const lng = parseFloat(card.dataset.lng);
+        map.setView([lat, lng], 15);
+        if (markers[id]) markers[id].openPopup();
+      });
+    });
+
+    // Live search — filter cards + markers
+    const searchInput = document.getElementById('search-input');
+    const allCards    = document.querySelectorAll('.foodbank-card');
+
+    function filterResults(query) {
+      const q = query.trim().toLowerCase();
+      let anyVisible = false;
+      allCards.forEach(card => {
+        const name     = card.dataset.name.toLowerCase();
+        const postcode = card.dataset.postcode.toLowerCase();
+        const visible  = !q || name.includes(q) || postcode.includes(q);
+        card.style.display = visible ? '' : 'none';
+        const id = card.dataset.id;
+        if (markers[id]) {
+          if (visible) {
+            if (!map.hasLayer(markers[id])) markers[id].addTo(map);
+          } else {
+            if (map.hasLayer(markers[id])) map.removeLayer(markers[id]);
+          }
+        }
+        if (visible) anyVisible = true;
+      });
+    }
+
+    searchInput.addEventListener('input', () => filterResults(searchInput.value));
+    // Apply on load if a query param was pre-filled
+    if (searchInput.value) filterResults(searchInput.value);

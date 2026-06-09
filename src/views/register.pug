@@ -6,8 +6,8 @@ block content
       .auth-logo
         img(src='/images/logo-icon.png', alt='Feed Birmingham', height='72')
 
-      h1 Create Your Account
-      p.auth-subtitle Join Feed Birmingham to access food assistance services.
+      h1 #{t('auth.register.title')}
+      p.auth-subtitle #{t('auth.register.subtitle')}
 
       if error
         .error-box
@@ -19,36 +19,36 @@ block content
         .form-group
           label(for='username')
             i.fa-solid.fa-user
-            |  Username
+            |  #{t('auth.form.username')}
           input#username(type='text', name='username', placeholder='Choose a username', required, autocomplete='username')
 
         .form-group
           label(for='email')
             i.fa-solid.fa-envelope
-            |  Email Address
+            |  #{t('auth.form.email')}
           input#email(type='email', name='email', placeholder='Enter your email address', required, autocomplete='email')
 
         .form-group
           label(for='password')
             i.fa-solid.fa-lock
-            |  Password
+            |  #{t('auth.form.password')}
           input#password(type='password', name='password', placeholder='Create a password (min 6 characters)', required, autocomplete='new-password')
 
         .form-group
           label(for='password2')
             i.fa-solid.fa-lock
-            |  Confirm Password
+            |  #{t('auth.form.confirm')}
           input#password2(type='password', name='password2', placeholder='Re-enter your password', required, autocomplete='new-password')
 
         button.btn.btn-green.btn-full(type='submit')
           i.fa-solid.fa-user-plus
-          |  Create Account
+          |  #{t('auth.btn.register')}
 
       .auth-divider
         span or
 
       .auth-switch
-        | Already have an account?
+        | #{t('auth.switch.login')}
         a(href='/login')  Log in here
 
       a.back-home(href='/')

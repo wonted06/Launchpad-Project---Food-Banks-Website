@@ -13,6 +13,11 @@ block content
           i.fa-solid.fa-circle-check
           |  Thank you for your feedback!
 
+      if error
+        .error-box
+          i.fa-solid.fa-circle-exclamation
+          |  #{error}
+
       .feedback-card
         h2 Share Your Experience
         p.card-subtitle Your feedback helps us improve our service for everyone.
@@ -21,19 +26,19 @@ block content
           .form-group
             label How would you rate your overall experience?
             .star-rating
-              input#star5(type='radio', name='rating', value='5')
+              input#star5(type='radio', name='rating', value='5', checked=form && form.rating==='5')
               label(for='star5', aria-label='5 stars')
                 i.fa-solid.fa-star
-              input#star4(type='radio', name='rating', value='4')
+              input#star4(type='radio', name='rating', value='4', checked=form && form.rating==='4')
               label(for='star4', aria-label='4 stars')
                 i.fa-solid.fa-star
-              input#star3(type='radio', name='rating', value='3')
+              input#star3(type='radio', name='rating', value='3', checked=form && form.rating==='3')
               label(for='star3', aria-label='3 stars')
                 i.fa-solid.fa-star
-              input#star2(type='radio', name='rating', value='2')
+              input#star2(type='radio', name='rating', value='2', checked=form && form.rating==='2')
               label(for='star2', aria-label='2 stars')
                 i.fa-solid.fa-star
-              input#star1(type='radio', name='rating', value='1')
+              input#star1(type='radio', name='rating', value='1', checked=form && form.rating==='1')
               label(for='star1', aria-label='1 star')
                 i.fa-solid.fa-star
 
@@ -41,17 +46,17 @@ block content
             label(for='fb-service') Which service did you use?
             select#fb-service(name='service')
               option(value='') Select a service
-              option Food Bank Visit
-              option Delivery Service
-              option Website
+              option(value='Food Bank Visit', selected=form && form.service==='Food Bank Visit') Food Bank Visit
+              option(value='Delivery Service', selected=form && form.service==='Delivery Service') Delivery Service
+              option(value='Website', selected=form && form.service==='Website') Website
 
           .form-group
             label(for='fb-comment') Additional Comments
-            textarea#fb-comment(name='comment', rows='5', placeholder='Tell us about your experience...')
+            textarea#fb-comment(name='comment', rows='5', placeholder='Tell us about your experience...')= form && form.comment ? form.comment : ''
 
           .form-group
             label(for='fb-email') Email (optional — for follow-up only)
-            input#fb-email(type='email', name='email', placeholder='your@email.com')
+            input#fb-email(type='email', name='email', value=form && form.email ? form.email : '', placeholder='your@email.com')
 
           button.btn.btn-green.btn-full(type='submit')
             i.fa-solid.fa-paper-plane

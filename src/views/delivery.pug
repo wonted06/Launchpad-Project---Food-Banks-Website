@@ -1,76 +1,111 @@
 extends layout
 
+block head
+  link(rel='stylesheet', href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css')
+
 block content
   section.page-hero.page-hero--short
     .container
-      h1 Delivery Service
-      p.page-subtitle Food delivery for Birmingham residents with accessibility needs.
+      h1 #{t('delivery.hero.title')}
+      p.page-subtitle #{t('delivery.hero.subtitle')}
 
   section.section
     .container
       .delivery-layout
-        //- Request / Track tabs
+
+        //- ── TABS ───────────────────────────────────────────────
         .tab-bar
-          button.tab-btn.active(data-tab='request') Request Delivery
-          button.tab-btn(data-tab='track') Track Delivery
+          button.tab-btn(class=activeTab==='track' ? '' : 'active', data-tab='request') #{t('delivery.tab.request')}
+          button.tab-btn(class=activeTab==='track' ? 'active' : '', data-tab='track') #{t('delivery.tab.track')}
 
-        //- Request Delivery tab
-        .tab-panel#request.active
+        //- ── REQUEST DELIVERY TAB ───────────────────────────────
+        .tab-panel#request(class=activeTab==='track' ? '' : 'active')
           .card
-            h2 Request a Delivery
-            p.card-subtitle
-              | Our delivery service is available to residents who have accessibility
-              | needs and are unable to visit a food bank in person.
-            form.form(action='/delivery/request', method='POST')
-              .form-row
-                .form-group
-                  label(for='del-name') Full Name
-                  input#del-name(type='text', name='name', placeholder='Your full name', required)
-                .form-group
-                  label(for='del-phone') Phone Number
-                  input#del-phone(type='tel', name='phone', placeholder='07700 000000', required)
+            h2 Find Your Nearest Food Bank
+            p.card-subtitle Enter your postcode to see available food banks that can deliver to you.
 
-              .form-group
-                label(for='del-address') Delivery Address
-                input#del-address(type='text', name='address', placeholder='Full delivery address', required)
+            //- Step 1: Postcode search
+            .form-group
+              label(for='search-postcode')
+                i.fa-solid.fa-location-dot
+                |  Your Postcode
+              .search-bar
+                input#search-postcode(type='text', placeholder='e.g. B1 1AY', autocomplete='postal-code')
+                button.btn.btn-green#find-banks-btn(type='button')
+                  i.fa-solid.fa-magnifying-glass
+                  |  Find Food Banks
 
-              .form-group
-                label(for='del-postcode') Postcode
-                input#del-postcode(type='text', name='postcode', placeholder='e.g. B1 1AY', required)
+            //- Step 2: Results (hidden until search)
+            #bank-results(style='display:none')
+              h3.results-title
+                i.fa-solid.fa-store
+                |  Available Food Banks
+              p.card-subtitle Here are the food banks nearest to you:
+              #bank-list.bank-results-list
 
-              .form-group
-                label(for='del-notes') Additional Notes
-                textarea#del-notes(name='notes', rows='3', placeholder='Any dietary requirements or access instructions...')
+            //- Step 3: Delivery form (hidden until bank selected)
+            #delivery-form-wrap(style='display:none')
+              .form-divider
+              .selected-bank-banner
+                i.fa-solid.fa-circle-check
+                span#selected-bank-label Delivering from: —
 
-              button.btn.btn-green(type='submit')
+              h3.form-section-title
                 i.fa-solid.fa-truck
-                |  Submit Request
+                |  #{t('delivery.form.title')}
+              p.card-subtitle #{t('delivery.form.subtitle')}
 
-        //- Track Delivery tab
-        .tab-panel#track
-          .card
-            h2 Track Your Delivery
-            form.form(action='/delivery/track', method='GET')
-              .form-group
-                label(for='track-ref') Delivery Reference Number
-                input#track-ref(type='text', name='ref', placeholder='e.g. FB-2025-0001', required)
-              button.btn.btn-green(type='submit')
-                i.fa-solid.fa-magnifying-glass
-                |  Track Order
+              form.form(action='/delivery/request', method='POST')
+                input(type='hidden', name='food_bank_id', id='hidden-bank-id')
 
-            //- Status stepper (placeholder)
-            .delivery-status
-              h3 Delivery Status
-              .status-steps
+                .form-row
+                  .form-group
+                    label(for='del-name') #{t('delivery.form.name')} *
+                    input#del-name(type='text', name='name', placeholder='Your full name', required)
+                  .form-group
+                    label(for='del-phone') #{t('delivery.form.phone')} *
+                    input#del-phone(type='tel', name='phone', placeholder='07700 000000', required)
+
+                .form-group
+                  label(for='del-address') #{t('delivery.form.address')} *
+                  input#del-address(type='text', name='address', placeholder='Full delivery address', required)
+
+                .form-group
+                  label(for='del-postcode') #{t('delivery.form.postcode')} *
+                  input#del-postcode(type='text', name='postcode', placeholder='e.g. B1 1AY', required)
+
+                .form-group
+                  label(for='del-notes') #{t('delivery.form.notes')}
+                  textarea#del-notes(name='notes', rows='3', placeholder='Any dietary requirements or access instructions...')
+
+                button.btn.btn-green(type='submit')
+                  i.fa-solid.fa-paper-plane
+                  |  #{t('delivery.form.submit')}
+
+        //- ── TRACK DELIVERY TAB ─────────────────────────────────
+        .tab-panel#track(class=activeTab==='track' ? 'active' : '')
+
+          if delivery
+            //- Delivery found — show full tracking view
+            .card
+              .track-header
+                .track-ref-block
+                  span.track-label Order Reference
+                  strong.track-ref-value= delivery.reference
+                span.badge.badge-preparing
+                  i.fa-solid.fa-box
+                  |  Being Prepared
+
+              .delivery-status
                 .status-step.done
                   .step-icon
                     i.fa-solid.fa-check
                   .step-label Order Received
-                .status-step.done
-                  .step-icon
-                    i.fa-solid.fa-check
-                  .step-label Being Prepared
                 .status-step.active
+                  .step-icon
+                    i.fa-solid.fa-box
+                  .step-label Being Prepared
+                .status-step
                   .step-icon
                     i.fa-solid.fa-truck
                   .step-label Out for Delivery
@@ -79,12 +114,201 @@ block content
                     i.fa-solid.fa-house
                   .step-label Delivered
 
+              .track-info
+                .info-row
+                  i.fa-solid.fa-store
+                  div
+                    strong Food Bank
+                    p= delivery.food_bank_name || 'Not specified'
+                .info-row
+                  i.fa-solid.fa-map-pin
+                  div
+                    strong Delivering to
+                    p= delivery.address + ', ' + delivery.postcode
+                .info-row
+                  i.fa-regular.fa-clock
+                  div
+                    strong Status Update
+                    p Your order is being prepared at the food bank. We will notify you when it is on its way.
+
+              h3.map-section-title
+                i.fa-solid.fa-route
+                |  Delivery Route
+              p.card-subtitle The route from the food bank to your delivery address.
+              #delivery-map
+
+          else
+            //- No delivery yet — show lookup form
+            .card
+              h2 #{t('delivery.track.title')}
+              p.card-subtitle #{t('delivery.track.subtitle')}
+
+              if error
+                .error-box
+                  i.fa-solid.fa-circle-exclamation
+                  |  #{error}
+
+              form.form(action='/delivery/track', method='GET')
+                .form-group
+                  label(for='track-ref') #{t('delivery.track.ref')}
+                  input#track-ref(type='text', name='ref', placeholder='e.g. FB-2026-0001', required)
+                button.btn.btn-green(type='submit')
+                  i.fa-solid.fa-magnifying-glass
+                  |  #{t('delivery.track.btn')}
+
+  script(src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
   script.
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    // ── TAB SWITCHING ─────────────────────────────────────────
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
       });
     });
+
+    // ── FOOD BANK POSTCODE SEARCH ──────────────────────────────
+    var allBanks = !{foodBanksJson};
+
+    function haversine(lat1, lng1, lat2, lng2) {
+      var R    = 6371;
+      var dLat = (lat2 - lat1) * Math.PI / 180;
+      var dLng = (lng2 - lng1) * Math.PI / 180;
+      var a    = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                 Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                 Math.sin(dLng/2) * Math.sin(dLng/2);
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function findNearestBanks() {
+      var postcodeInput = document.getElementById('search-postcode');
+      var postcode = postcodeInput.value.trim().replace(/\s+/g, '');
+      if (!postcode) { postcodeInput.focus(); return; }
+
+      var btn = document.getElementById('find-banks-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Searching…';
+
+      fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(postcode))
+        .then(function(r) { return r.json(); })
+        .then(function(geo) {
+          if (geo.status !== 200) {
+            alert('Postcode not found. Please check and try again.');
+            return;
+          }
+          var uLat = geo.result.latitude;
+          var uLng = geo.result.longitude;
+
+          var sorted = allBanks
+            .map(function(b) {
+              return Object.assign({}, b, { dist: haversine(uLat, uLng, parseFloat(b.lat), parseFloat(b.lng)) });
+            })
+            .sort(function(a, b) { return a.dist - b.dist; })
+            .slice(0, 5);
+
+          var list = document.getElementById('bank-list');
+          list.innerHTML = sorted.map(function(b) {
+            return '<div class="delivery-bank-card">' +
+              '<div class="delivery-bank-info">' +
+                '<h4>' + b.name + '</h4>' +
+                '<p><i class="fa-solid fa-map-pin"></i> ' + b.address + ', ' + b.postcode + '</p>' +
+                '<p><i class="fa-regular fa-clock"></i> ' + (b.hours || 'Hours not available') + '</p>' +
+              '</div>' +
+              '<div class="delivery-bank-meta">' +
+                '<span class="distance-badge"><i class="fa-solid fa-location-dot"></i> ' + b.dist.toFixed(1) + ' km away</span>' +
+                '<button class="btn btn-green btn-sm select-bank-btn" ' +
+                  'data-id="' + b.id + '" data-name="' + b.name.replace(/"/g, '&quot;') + '">' +
+                  'Select' +
+                '</button>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+
+          document.getElementById('bank-results').style.display = '';
+          document.getElementById('del-postcode').value = postcodeInput.value.trim();
+
+          document.querySelectorAll('.select-bank-btn').forEach(function(selectBtn) {
+            selectBtn.addEventListener('click', function() {
+              document.getElementById('hidden-bank-id').value = selectBtn.dataset.id;
+              document.getElementById('selected-bank-label').textContent =
+                'Delivering from: ' + selectBtn.dataset.name;
+              var wrap = document.getElementById('delivery-form-wrap');
+              wrap.style.display = '';
+              wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+          });
+        })
+        .catch(function() { alert('Could not fetch postcode data. Please check your connection.'); })
+        .finally(function() {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Find Food Banks';
+        });
+    }
+
+    document.getElementById('find-banks-btn').addEventListener('click', findNearestBanks);
+    document.getElementById('search-postcode').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); findNearestBanks(); }
+    });
+
+    // ── DELIVERY ROUTE MAP (Track tab) ────────────────────────
+    var deliveryMapEl = document.getElementById('delivery-map');
+    if (deliveryMapEl) {
+      var fbLat = !{delivery && delivery.food_bank_lat ? delivery.food_bank_lat : 'null'};
+      var fbLng = !{delivery && delivery.food_bank_lng ? delivery.food_bank_lng : 'null'};
+      var delPc = !{delivery ? JSON.stringify(delivery.postcode) : '""'};
+
+      if (fbLat && fbLng) {
+        var map = L.map('delivery-map').setView([fbLat, fbLng], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 19
+        }).addTo(map);
+
+        var bankIcon = L.divIcon({
+          html: '<i class="fa-solid fa-store" style="color:#16a34a;font-size:1.8rem;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))"></i>',
+          className: '', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -34]
+        });
+        var houseIcon = L.divIcon({
+          html: '<i class="fa-solid fa-house" style="color:#1e40af;font-size:1.8rem;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))"></i>',
+          className: '', iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -34]
+        });
+
+        L.marker([fbLat, fbLng], { icon: bankIcon })
+          .addTo(map)
+          .bindPopup('<strong>Food Bank (Origin)</strong>')
+          .openPopup();
+
+        if (delPc) {
+          fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(delPc))
+            .then(function(r) { return r.json(); })
+            .then(function(geo) {
+              if (geo.status !== 200) return null;
+              var uLat = geo.result.latitude;
+              var uLng = geo.result.longitude;
+
+              L.marker([uLat, uLng], { icon: houseIcon })
+                .addTo(map)
+                .bindPopup('<strong>Delivery Address</strong>');
+
+              return fetch(
+                'https://router.project-osrm.org/route/v1/driving/' +
+                fbLng + ',' + fbLat + ';' + uLng + ',' + uLat +
+                '?overview=full&geometries=geojson'
+              ).then(function(r) { return r.json(); });
+            })
+            .then(function(data) {
+              if (!data || !data.routes || !data.routes[0]) return;
+              // OSRM returns [lng, lat] — Leaflet needs [lat, lng]
+              var coords = data.routes[0].geometry.coordinates.map(function(c) {
+                return [c[1], c[0]];
+              });
+              var route = L.polyline(coords, { color: '#16a34a', weight: 5, opacity: 0.85 });
+              route.addTo(map);
+              map.fitBounds(route.getBounds(), { padding: [50, 50] });
+            })
+            .catch(function(err) { console.warn('Route map error:', err); });
+        }
+      }
+    }

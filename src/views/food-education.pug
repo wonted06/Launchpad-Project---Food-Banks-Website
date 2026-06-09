@@ -1,0 +1,194 @@
+extends layout
+
+block content
+  section.page-hero.page-hero--short
+    .container
+      h1 Food Education
+      p.page-subtitle Learn about healthy eating, food growing, and how to make informed choices for you and your community.
+
+  section.section
+    .container
+      .edu-grid
+        //- ── Card 1: Why Healthy Eating Matters ─────────────────
+        .edu-card
+          .edu-card-icon
+            i.fa-solid.fa-heart-pulse
+          h2 Why Healthy Eating Matters
+          p A balanced diet provides your body with the nutrients it needs to function properly. Eating a variety of foods rich in vitamins, minerals, and fibre helps maintain energy levels, supports immune function, and reduces the risk of chronic diseases.
+          p Birmingham is home to a growing food growing movement that connects communities with local produce. With over 113 allotment sites across the city, residents can access fresh, affordable food year-round.
+          .edu-stat-strip
+            .edu-stat
+              span.edu-stat-number 113
+              span.edu-stat-label Allotment Sites
+            .edu-stat
+              span.edu-stat-number 7,000
+              span.edu-stat-label Plots Available
+            .edu-stat
+              span.edu-stat-number 35,000
+              span.edu-stat-label People Supported
+
+        //- ── Card 2: Five a Day ──────────────────────────────────
+        .edu-card
+          .edu-card-icon
+            i.fa-solid.fa-apple-whole
+          h2 How to Incorporate Your Five a Day
+          p Getting your recommended five portions of fruit and vegetables each day is easier than you might think. Here are some simple ideas for every meal:
+          .meal-rows
+            .meal-row
+              .meal-icon
+                i.fa-solid.fa-sun
+              .meal-info
+                strong Breakfast
+                p Yoghurt with berries · Glass of orange juice
+            .meal-row
+              .meal-icon
+                i.fa-solid.fa-seedling
+              .meal-info
+                strong Lunch
+                p Mixed salad · Apple or banana on the side
+            .meal-row
+              .meal-icon
+                i.fa-solid.fa-utensils
+              .meal-info
+                strong Dinner
+                p Broccoli, carrots and peas with your main course
+            .meal-row
+              .meal-icon
+                i.fa-solid.fa-cookie-bite
+              .meal-info
+                strong Snacks
+                p Carrot sticks with hummus · Handful of grapes
+          .edu-tip
+            i.fa-solid.fa-lightbulb
+            p
+              strong Tip:&nbsp;
+              | Aim for a variety of colours on your plate — each colour represents different nutrients your body needs.
+
+        //- ── Card 3: Food Classifications ───────────────────────
+        .edu-card
+          .edu-card-icon
+            i.fa-solid.fa-chart-pie
+          h2 Food Classifications
+          p Understanding the five main food groups helps you build a balanced plate. Aim to include each group in your daily diet in the right proportions.
+          .food-groups-list
+            .food-group-badge.badge--green
+              i.fa-solid.fa-leaf
+              div
+                strong Fruits &amp; Vegetables
+                p Vitamins, minerals &amp; fibre — aim for the largest portion
+            .food-group-badge.badge--amber
+              i.fa-solid.fa-wheat-awn
+              div
+                strong Carbohydrates
+                p Bread, rice, pasta, potatoes — your main energy source
+            .food-group-badge.badge--red
+              i.fa-solid.fa-drumstick-bite
+              div
+                strong Protein
+                p Meat, fish, eggs, beans, lentils — for growth and repair
+            .food-group-badge.badge--blue
+              i.fa-solid.fa-bottle-water
+              div
+                strong Dairy &amp; Alternatives
+                p Milk, cheese, yoghurt — for calcium and bone health
+            .food-group-badge.badge--purple
+              i.fa-solid.fa-droplet
+              div
+                strong Fats &amp; Oils
+                p Olive oil, nuts, avocado — essential in small amounts
+          .edu-note
+            i.fa-solid.fa-circle-info
+            p Also remember to drink 6–8 glasses of water per day and limit added salt and sugar.
+
+  //- ── Plate Guide Section ──────────────────────────────────────
+  section.section.plate-section
+    .container
+      .plate-layout
+        //- Left: Image
+        .plate-image-wrap
+          .plate-image-ring
+            img(src='/images/healthy-eating-plate.avif', alt='The Healthy Eating Plate — food groups diagram showing Grain Foods, Vegetables and Beans, Fruits, Lean Meats Fish and Poultry, and Dairy Foods')
+
+        //- Right: Explanation
+        .plate-info
+          .plate-eyebrow
+            i.fa-solid.fa-circle-check
+            span Visual Guide
+          h2 The Healthy Eating Plate
+          p This food plate diagram shows the five core food groups and the proportions you should aim to include in your daily diet. Each coloured segment represents a different group — the larger the segment, the more of that food type you should eat.
+          .plate-segments
+            .plate-segment
+              .plate-segment-dot(style='background: #4caf50')
+              div
+                strong Vegetables &amp; Beans
+                p Fill roughly a third of your plate — packed with fibre, vitamins, and antioxidants.
+            .plate-segment
+              .plate-segment-dot(style='background: #f97316')
+              div
+                strong Grain Foods
+                p Wholegrain breads, rice, oats, and pasta — your primary source of sustained energy.
+            .plate-segment
+              .plate-segment-dot(style='background: #84cc16')
+              div
+                strong Fruits
+                p Fresh, frozen, or tinned — aim for two or more servings of fruit each day.
+            .plate-segment
+              .plate-segment-dot(style='background: #ef4444')
+              div
+                strong Lean Meats, Fish &amp; Poultry
+                p Choose lean cuts and include oily fish twice a week for omega-3 fatty acids.
+            .plate-segment
+              .plate-segment-dot(style='background: #38bdf8')
+              div
+                strong Dairy Foods
+                p Milk, cheese, and yoghurt provide calcium for strong bones and teeth.
+          .plate-cta
+            i.fa-solid.fa-info-circle
+            p For personalised nutrition advice, speak to your GP or a registered dietitian.
+
+  //- ── Bottom section ───────────────────────────────────────────
+  section.section.section--light-green
+    .container
+      .edu-bottom-grid
+        //- Left: Grow Your Own
+        .grow-card
+          .grow-card-header
+            i.fa-solid.fa-seedling
+            h2 Grow Your Own – Get Involved
+          p Birmingham has a thriving network of community allotments and growing spaces. Growing your own food is a great way to access fresh produce, reduce food costs, and connect with your local community.
+          p Whether you have a garden, balcony, or just a windowsill, you can start growing herbs, vegetables, and fruits at home. Community allotments offer plots for those without outdoor space.
+          .grow-benefits
+            .grow-benefit
+              i.fa-solid.fa-check
+              span Fresh, nutritious produce year-round
+            .grow-benefit
+              i.fa-solid.fa-check
+              span Reduce household food costs
+            .grow-benefit
+              i.fa-solid.fa-check
+              span Connect with the local community
+            .grow-benefit
+              i.fa-solid.fa-check
+              span Improve mental wellbeing through gardening
+
+        //- Right: Useful Links
+        .links-card
+          .links-card-header
+            i.fa-solid.fa-link
+            h2 Useful Links
+          p Find out more about growing your own food and Birmingham's allotment network:
+          .useful-links
+            .useful-link-item
+              .useful-link-info
+                strong Warm Earth
+                p Expert gardening advice, seasonal growing guides, and community growing resources.
+              a.btn.btn-green.btn-sm(href='https://www.warmearth.org.uk', target='_blank', rel='noopener noreferrer')
+                i.fa-solid.fa-arrow-up-right-from-square
+                |  Visit Website
+            .useful-link-item
+              .useful-link-info
+                strong Birmingham Allotments
+                p Apply for an allotment plot, find your nearest site, and join Birmingham's growing community.
+              a.btn.btn-green.btn-sm(href='https://www.birmingham.gov.uk/allotments', target='_blank', rel='noopener noreferrer')
+                i.fa-solid.fa-arrow-up-right-from-square
+                |  Visit Website

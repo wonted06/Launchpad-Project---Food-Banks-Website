@@ -3,77 +3,77 @@ extends layout
 block content
   section.page-hero.page-hero--short
     .container
-      h1 Hot Meal Schedule
-      p.page-subtitle Free hot meals available across Birmingham every week.
+      h1 #{t('hotmeals.hero.title')}
+      p.page-subtitle #{t('hotmeals.hero.subtitle')}
 
   section.section
     .container
       .meals-info-strip
         .meals-info-item
           i.fa-solid.fa-utensils
-          p Free hot nutritious meals served weekly
+          p #{t('hotmeals.info1')}
         .meals-info-item
           i.fa-solid.fa-map-location-dot
-          p Multiple locations across Birmingham
+          p #{t('hotmeals.info2')}
         .meals-info-item
           i.fa-solid.fa-users
-          p Open to all Birmingham residents
+          p #{t('hotmeals.info3')}
 
       .meals-table-wrap
         table.meals-table.meals-table--full
           thead
             tr
-              th Day
+              th #{t('common.day')}
               th Food Bank / Location
               th Address
-              th Time
-              th Menu
-              th Spaces
+              th #{t('common.time')}
+              th #{t('hotmeals.table.menu')}
+              th #{t('common.spaces')}
           tbody
             tr
-              td Monday
+              td #{t('common.monday')}
               td Birmingham Central Food Bank
               td 123 Broad Street, B1 2AA
               td 12:00 – 14:00
               td Soup, Bread, Main, Dessert
-              td.badge-available Available
+              td.badge-available #{t('common.available')}
             tr
-              td Tuesday
+              td #{t('common.tuesday')}
               td Feeding Hands, Sparkhill
               td 78 Sparkhill Road, B11 4EJ
               td 11:30 – 13:30
               td Main Course, Drink
-              td.badge-limited Limited
+              td.badge-limited #{t('common.limited')}
             tr
-              td Wednesday
+              td #{t('common.wednesday')}
               td Birmingham East Food Bank
               td 45 Coventry Road, B10 0TP
               td 12:00 – 14:00
               td Soup, Main, Dessert
-              td.badge-available Available
+              td.badge-available #{t('common.available')}
             tr
-              td Thursday
+              td #{t('common.thursday')}
               td St Anne's Community Hub
               td 12 College Road, B6 6JT
               td 13:00 – 15:00
               td Main Course, Dessert, Drink
-              td.badge-full Full
+              td.badge-full #{t('common.full')}
             tr
-              td Friday
+              td #{t('common.friday')}
               td Birmingham Central Food Bank
               td 123 Broad Street, B1 2AA
               td 11:00 – 13:00
               td Soup, Main, Dessert
-              td.badge-available Available
+              td.badge-available #{t('common.available')}
             tr
-              td Saturday
+              td #{t('common.saturday')}
               td Feeding Hands, Sparkhill
               td 78 Sparkhill Road, B11 4EJ
               td 10:00 – 12:00
               td Brunch, Drink
-              td.badge-available Available
+              td.badge-available #{t('common.available')}
             tr
-              td Sunday
+              td #{t('common.sunday')}
               td –
               td –
               td –
@@ -82,8 +82,4 @@ block content
 
       .meals-note
         i.fa-solid.fa-circle-info
-        p
-          | Spaces are allocated on a first-come, first-served basis.
-          | No referral needed — just turn up. Spaces marked
-          strong  Full
-          |  cannot accommodate new arrivals on that day.
+        p #{t('hotmeals.note')}
