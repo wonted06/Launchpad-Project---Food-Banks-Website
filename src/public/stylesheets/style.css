@@ -292,9 +292,9 @@ button { cursor: pointer; font-family: inherit; }
 .search-bar-wrap { margin-bottom: 2rem; }
 .search-bar { display: flex; align-items: center; background: white; border: 2px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color var(--transition); }
 .search-bar:focus-within { border-color: var(--green); }
-.search-bar i { padding: 0 0.75rem; color: var(--text-muted); font-size: 1rem; }
-.search-bar input { flex: 1; border: none; padding: 0.75rem 0; font-size: 0.95rem; background: transparent; outline: none; }
-.search-bar .btn { margin: 0.3rem; border-radius: 6px; }
+.search-bar > i { padding: 0 0.75rem; color: var(--text-muted); font-size: 1rem; }
+.search-bar input { flex: 1; border: none; padding: 0.75rem 0.75rem; font-size: 0.95rem; background: transparent; outline: none; }
+.search-bar .btn { margin: 0.3rem; border-radius: 6px; flex-shrink: 0; justify-content: center; padding-left: 1.25rem; padding-right: 1.25rem; }
 .search-bar-wrap--small { margin-bottom: 0; max-width: 400px; }
 
 /* ── Locations ─────────────────────────────────────────────── */
@@ -382,7 +382,7 @@ button { cursor: pointer; font-family: inherit; }
 .card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 2rem; }
 .card h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
 .card-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-.delivery-status { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.delivery-status { margin-top: 2rem; padding: 1.5rem 0 1rem; border-top: 1px solid var(--border); display: flex; gap: 0; }
 .delivery-status h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1.25rem; }
 .status-steps { display: flex; gap: 0; }
 .status-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
@@ -1073,6 +1073,156 @@ body.colour-blind .site-footer { filter: url('#deuteranopia'); }
 #tts-btn:hover { background: var(--green-dark); transform: scale(1.08); }
 #tts-btn.tts-active { background: var(--red); }
 
+/* ── Delivery bank search results ─────────────────────── */
+.bank-results-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+.delivery-bank-card { display: flex; justify-content: space-between; align-items: center; background: white; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; gap: 1rem; }
+.delivery-bank-info h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+.delivery-bank-info p { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem; }
+.delivery-bank-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; flex-shrink: 0; }
+.form-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+.results-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem; }
+.selected-bank-banner { display: flex; align-items: center; gap: 0.6rem; background: var(--green-light); color: var(--green); border-radius: var(--radius); padding: 0.75rem 1rem; margin-bottom: 1rem; font-weight: 600; font-size: 0.95rem; }
+.form-section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem; }
+
+/* ── Track page ───────────────────────────────────────── */
+.track-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem; }
+.track-ref-block { display: flex; flex-direction: column; }
+.track-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+.track-ref-value { font-size: 1.1rem; font-weight: 700; }
+.badge-preparing { background: #fef3c7; color: #92400e; }
+.track-info { margin: 1.5rem 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.map-section-title { font-size: 1rem; font-weight: 700; margin: 1.5rem 0 0.25rem; display: flex; align-items: center; gap: 0.4rem; }
+
+/* ── Delivery map ─────────────────────────────────────── */
+#delivery-map { width: 100%; height: 350px; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-top: 1rem; z-index: 0; }
+
+/* Dark mode */
+[data-theme="dark"] .delivery-bank-card { background: #1e1e1e; border-color: var(--border); }
+[data-theme="dark"] .selected-bank-banner { background: rgba(44,122,58,0.15); }
+[data-theme="dark"] #delivery-map { filter: invert(1) hue-rotate(180deg); }
+
+/* ── Food Education Page ──────────────────────────────────── */
+.edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }
+.edu-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 2rem; }
+.edu-card-icon { width: 3rem; height: 3rem; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+.edu-card-icon i { color: var(--green); font-size: 1.3rem; }
+.edu-card h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; }
+.edu-card > p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem; }
+
+/* Stats strip */
+.edu-stat-strip { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+.edu-stat { flex: 1; background: #f0fdf4; border-radius: var(--radius); padding: 0.75rem 0.5rem; text-align: center; }
+.edu-stat-number { display: block; font-size: 1.3rem; font-weight: 800; color: var(--green); }
+.edu-stat-label { display: block; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+/* Meal rows (Five a Day) */
+.meal-rows { display: flex; flex-direction: column; gap: 0.6rem; margin: 1rem 0; }
+.meal-row { display: flex; gap: 0.75rem; align-items: center; background: #f9fafb; border-radius: var(--radius); padding: 0.6rem 0.75rem; }
+.meal-icon { width: 2rem; height: 2rem; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.meal-icon i { color: var(--green); font-size: 0.85rem; }
+.meal-info strong { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text); }
+.meal-info p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+.edu-tip { display: flex; gap: 0.6rem; align-items: flex-start; background: #fefce8; border-radius: var(--radius); padding: 0.75rem; margin-top: 0.75rem; }
+.edu-tip i { color: #ca8a04; font-size: 0.9rem; margin-top: 0.15rem; flex-shrink: 0; }
+.edu-tip p { font-size: 0.82rem; margin: 0; color: #713f12; }
+
+/* Food group badges */
+.food-groups-list { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
+.food-group-badge { display: flex; gap: 0.75rem; align-items: center; border-radius: var(--radius); padding: 0.65rem 0.75rem; }
+.food-group-badge > i { font-size: 1rem; flex-shrink: 0; }
+.food-group-badge strong { display: block; font-size: 0.82rem; font-weight: 700; }
+.food-group-badge p { font-size: 0.78rem; margin: 0; }
+.badge--green { background: #dcfce7; }
+.badge--green > i { color: #16a34a; }
+.badge--green strong { color: #14532d; }
+.badge--green p { color: #166534; }
+.badge--amber { background: #fef3c7; }
+.badge--amber > i { color: #d97706; }
+.badge--amber strong { color: #78350f; }
+.badge--amber p { color: #92400e; }
+.badge--red { background: #fee2e2; }
+.badge--red > i { color: #dc2626; }
+.badge--red strong { color: #7f1d1d; }
+.badge--red p { color: #991b1b; }
+.badge--blue { background: #dbeafe; }
+.badge--blue > i { color: #2563eb; }
+.badge--blue strong { color: #1e3a5f; }
+.badge--blue p { color: #1d4ed8; }
+.badge--purple { background: #f3e8ff; }
+.badge--purple > i { color: #a855f7; }
+.badge--purple strong { color: #4a044e; }
+.badge--purple p { color: #6b21a8; }
+.edu-note { display: flex; gap: 0.6rem; align-items: flex-start; background: #f0fdf4; border-radius: var(--radius); padding: 0.75rem; margin-top: 0.75rem; }
+.edu-note i { color: var(--green); font-size: 0.9rem; margin-top: 0.1rem; flex-shrink: 0; }
+.edu-note p { font-size: 0.82rem; margin: 0; color: #15803d; }
+
+/* Bottom section */
+.section--light-green { background: #f0fdf4; }
+.edu-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.grow-card, .links-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 2rem; }
+.grow-card-header, .links-card-header { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; }
+.grow-card-header i, .links-card-header i { font-size: 1.5rem; color: var(--green); }
+.grow-card-header h2, .links-card-header h2 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+.grow-card p, .links-card > p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem; }
+.grow-benefits { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+.grow-benefit { display: flex; gap: 0.6rem; align-items: center; font-size: 0.875rem; }
+.grow-benefit i { color: var(--green); font-size: 0.85rem; }
+.useful-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+.useful-link-item { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem; background: #f9fafb; border-radius: var(--radius); border: 1px solid var(--border); }
+.useful-link-info strong { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+.useful-link-info p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+
+/* Food Education dark mode */
+[data-theme="dark"] .edu-card { background: #1e1e1e; }
+[data-theme="dark"] .edu-card h2 { color: var(--text); }
+[data-theme="dark"] .edu-card > p { color: var(--text-muted); }
+[data-theme="dark"] .meal-row { background: #2a2a2a; }
+[data-theme="dark"] .meal-info strong { color: var(--text); }
+[data-theme="dark"] .edu-stat { background: #1a2e1e; }
+[data-theme="dark"] .section--light-green { background: #0f1f12; }
+[data-theme="dark"] .grow-card, [data-theme="dark"] .links-card { background: #1e1e1e; }
+[data-theme="dark"] .grow-card-header h2, [data-theme="dark"] .links-card-header h2 { color: var(--text); }
+[data-theme="dark"] .grow-card p, [data-theme="dark"] .links-card > p { color: var(--text-muted); }
+[data-theme="dark"] .grow-benefit { color: var(--text); }
+[data-theme="dark"] .useful-link-item { background: #2a2a2a; border-color: var(--border); }
+[data-theme="dark"] .useful-link-info strong { color: var(--text); }
+
+/* Plate section dark mode */
+[data-theme="dark"] .plate-section { background: #111; }
+[data-theme="dark"] .plate-info h2 { color: var(--text); }
+[data-theme="dark"] .plate-info > p { color: var(--text-muted); }
+[data-theme="dark"] .plate-segment strong { color: var(--text); }
+[data-theme="dark"] .plate-segment p { color: var(--text-muted); }
+[data-theme="dark"] .plate-cta { background: #1a2e1e; border-left-color: var(--green); }
+[data-theme="dark"] .plate-cta p { color: #6fcf80; }
+
+/* Plate Guide Section */
+.plate-section { background: #fafafa; }
+.plate-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.plate-image-wrap { display: flex; justify-content: center; }
+.plate-image-ring { width: 420px; height: 420px; border-radius: 50%; padding: 8px; background: linear-gradient(135deg, #f97316 0%, #4caf50 35%, #84cc16 55%, #ef4444 75%, #38bdf8 100%); box-shadow: 0 20px 60px rgba(0,0,0,0.12); flex-shrink: 0; }
+.plate-image-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; background: white; }
+.plate-eyebrow { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.plate-eyebrow i { color: var(--green); font-size: 0.9rem; }
+.plate-eyebrow span { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); }
+.plate-info h2 { font-size: 1.9rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+.plate-info > p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+.plate-segments { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+.plate-segment { display: flex; gap: 0.85rem; align-items: flex-start; }
+.plate-segment-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 0.25rem; }
+.plate-segment strong { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+.plate-segment p { font-size: 0.83rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+.plate-cta { display: flex; gap: 0.6rem; align-items: flex-start; background: #f0fdf4; border-radius: var(--radius); padding: 0.85rem 1rem; border-left: 3px solid var(--green); }
+.plate-cta i { color: var(--green); font-size: 0.9rem; margin-top: 0.15rem; flex-shrink: 0; }
+.plate-cta p { font-size: 0.83rem; margin: 0; color: #15803d; line-height: 1.5; }
+
+/* Food Education responsive */
+@media (max-width: 1024px) {
+  .edu-grid { grid-template-columns: 1fr 1fr; }
+  .plate-layout { gap: 2.5rem; }
+  .plate-image-ring { width: 340px; height: 340px; }
+}
+
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .about-strip-inner, .about-layout, .contact-layout, .donate-layout,
@@ -1084,6 +1234,12 @@ body.colour-blind .site-footer { filter: url('#deuteranopia'); }
   .team-modal-photo-wrap { min-height: 200px; }
   .team-modal-photo-wrap img { min-height: 200px; max-height: 220px; }
   #locations-map { position: static; height: 400px; }
+  .edu-grid { grid-template-columns: 1fr; }
+  .edu-bottom-grid { grid-template-columns: 1fr; }
+  .useful-link-item { flex-direction: column; align-items: flex-start; }
+  .plate-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .plate-image-ring { width: 280px; height: 280px; }
+  .plate-info h2 { font-size: 1.5rem; }
 }
 
 @media (max-width: 640px) {
@@ -1098,7 +1254,7 @@ body.colour-blind .site-footer { filter: url('#deuteranopia'); }
   .form-row { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
   .section { padding: 2.5rem 0; }
-  .status-steps { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .status-steps, .delivery-status { flex-direction: column; align-items: flex-start; gap: 1rem; }
   .status-step + .status-step::before { display: none; }
   .profile-hero-inner { flex-direction: column; text-align: center; }
   .profile-avatar-large { width: 72px; height: 72px; font-size: 1.8rem; }

@@ -1,8 +1,24 @@
 require('dotenv').config();
 const express = require('express');
-const path = require('path');
+const path    = require('path');
 const session = require('express-session');
-const app = express();
+const helmet  = require('helmet');
+const app     = express();
+
+// ── Security headers (Helmet) ─────────────────────────────────
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      'script-src':      ["'self'", "'unsafe-inline'", 'https://unpkg.com', 'https://cdnjs.cloudflare.com'],
+      'script-src-attr': ["'unsafe-inline'"],
+      'style-src':       ["'self'", "'unsafe-inline'", 'https://unpkg.com', 'https://cdnjs.cloudflare.com', 'https://fonts.googleapis.com'],
+      'font-src':        ["'self'", 'https://cdnjs.cloudflare.com', 'https://fonts.gstatic.com'],
+      'img-src':         ["'self'", 'data:', 'https://*.tile.openstreetmap.org'],
+      'connect-src':     ["'self'", 'https://api.postcodes.io', 'https://router.project-osrm.org'],
+    }
+  }
+}));
 
 // ── Body parsers ──────────────────────────────────────────────
 app.use(express.json());

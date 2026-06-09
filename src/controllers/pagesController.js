@@ -41,6 +41,7 @@ exports.getSettings = async (req, res) => {
     res.render('settings', { pageTitle: 'Settings – Feed Birmingham', pageId: 'settings', settings });
 };
 
+const { body, validationResult } = require('express-validator');
 const ContactSubmission = require('../models/ContactSubmission');
 const Feedback          = require('../models/Feedback');
 
@@ -57,34 +58,38 @@ exports.getContact = (req, res) => {
 };
 
 // ── POST /contact ──────────────────────────────────────────
-exports.postContact = async (req, res) => {
-  const { name, email, subject, message } = req.body;
+exports.postContact = [
+  body('name').notEmpty().trim().isLength({ min: 2, max: 100 }).withMessage('Please enter your full name.'),
+  body('email').isEmail().normalizeEmail().withMessage('Please enter a valid email address.'),
+  body('message').notEmpty().trim().isLength({ min: 10 }).withMessage('Message must be at least 10 characters.'),
+  async (req, res) => {
+    const { name, email, subject, message } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('contact', {
+        pageTitle: 'Contact Us – Feed Birmingham',
+        pageId:    'contact',
+        success:   false,
+        error:     errors.array()[0].msg,
+        form:      { name, email, subject, message },
+      });
+    }
 
-  // Validation
-  if (!name || !email || !message) {
-    return res.render('contact', {
-      pageTitle: 'Contact Us – Feed Birmingham',
-      pageId:    'contact',
-      success:   false,
-      error:     'Please fill in all required fields.',
-      form:      { name, email, subject, message },
-    });
+    try {
+      await ContactSubmission.create({ name, email, subject, message });
+      res.redirect('/contact?success=true');
+    } catch (err) {
+      console.error('postContact error:', err);
+      res.render('contact', {
+        pageTitle: 'Contact Us – Feed Birmingham',
+        pageId:    'contact',
+        success:   false,
+        error:     'Something went wrong. Please try again.',
+        form:      { name, email, subject, message },
+      });
+    }
   }
-
-  try {
-    await ContactSubmission.create({ name, email, subject, message });
-    res.redirect('/contact?success=true');   // PRG — prevents resubmit on refresh
-  } catch (err) {
-    console.error('postContact error:', err);
-    res.render('contact', {
-      pageTitle: 'Contact Us – Feed Birmingham',
-      pageId:    'contact',
-      success:   false,
-      error:     'Something went wrong. Please try again.',
-      form:      { name, email, subject, message },
-    });
-  }
-};
+];
 
 
 exports.postSettings = async (req, res) => {
@@ -125,31 +130,38 @@ exports.getFeedback = (req, res) => {
 };
 
 // ── POST /feedback ─────────────────────────────────────────
-exports.postFeedback = async (req, res) => {
-  const { rating, service, comment, email } = req.body;
-
-  // Validation — rating is required
-  if (!rating || rating < 1 || rating > 5) {
-    return res.render('feedback', {
-      pageTitle: 'Feedback – Feed Birmingham',
-      pageId:    'feedback',
-      success:   false,
-      error:     'Please select a star rating before submitting.',
-      form:      { rating, service, comment, email },
-    });
-  }
-
-  try {
-    await Feedback.create({ rating, service, comment, email });
-    res.redirect('/feedback?success=true');
-  } catch (err) {
-    console.error('postFeedback error:', err);
-    res.render('feedback', {
-      pageTitle: 'Feedback – Feed Birmingham',
-      pageId:    'feedback',
-      success:   false,
-      error:     'Something went wrong. Please try again.',
-      form:      { rating, service, comment, email },
-    });
-  }
+exports.getFoodEducation = (req, res) => {
+    res.render('food-education', { pageTitle: 'Food Education – Feed Birmingham', pageId: 'food-education' });
 };
+
+exports.postFeedback = [
+  body('rating').isInt({ min: 1, max: 5 }).withMessage('Please select a star rating before submitting.'),
+  body('email').optional({ checkFalsy: true }).isEmail().normalizeEmail().withMessage('Please enter a valid email address.'),
+  async (req, res) => {
+    const { rating, service, comment, email } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('feedback', {
+        pageTitle: 'Feedback – Feed Birmingham',
+        pageId:    'feedback',
+        success:   false,
+        error:     errors.array()[0].msg,
+        form:      { rating, service, comment, email },
+      });
+    }
+
+    try {
+      await Feedback.create({ rating, service, comment, email });
+      res.redirect('/feedback?success=true');
+    } catch (err) {
+      console.error('postFeedback error:', err);
+      res.render('feedback', {
+        pageTitle: 'Feedback – Feed Birmingham',
+        pageId:    'feedback',
+        success:   false,
+        error:     'Something went wrong. Please try again.',
+        form:      { rating, service, comment, email },
+      });
+    }
+  }
+];

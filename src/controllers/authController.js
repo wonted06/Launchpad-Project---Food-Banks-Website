@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { body, validationResult } = require('express-validator');
 const User   = require('../models/User');
 const pool   = require('../../db');
 
@@ -13,7 +14,19 @@ exports.getLogin = (req, res) => {
 };
 
 // ── POST /login ───────────────────────────────────────────────
-exports.postLogin = async (req, res) => {
+exports.postLogin = [
+  body('email').isEmail().normalizeEmail().withMessage('Please enter a valid email address.'),
+  body('password').notEmpty().withMessage('Password is required.'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('login', {
+            pageTitle: 'Login – Feed Birmingham',
+            pageId:    'login',
+            error:     errors.array()[0].msg,
+        });
+    }
+
     const { email, password } = req.body;
 
     try {
@@ -23,7 +36,7 @@ exports.postLogin = async (req, res) => {
             return res.render('login', {
                 pageTitle: 'Login – Feed Birmingham',
                 pageId:    'login',
-                error:     'No account found with that email address.',
+                error:     'Incorrect email or password.',
             });
         }
 
@@ -32,7 +45,7 @@ exports.postLogin = async (req, res) => {
             return res.render('login', {
                 pageTitle: 'Login – Feed Birmingham',
                 pageId:    'login',
-                error:     'Incorrect password. Please try again.',
+                error:     'Incorrect email or password.',
             });
         }
 
@@ -68,7 +81,8 @@ exports.postLogin = async (req, res) => {
             error:     'Something went wrong. Please try again.',
         });
     }
-};
+  }
+];
 
 // ── GET /register ─────────────────────────────────────────────
 exports.getRegister = (req, res) => {
@@ -81,33 +95,30 @@ exports.getRegister = (req, res) => {
 };
 
 // ── POST /register ────────────────────────────────────────────
-exports.postRegister = async (req, res) => {
-    const { username, email, password, password2 } = req.body;
-
-    // Basic validation
-    if (!username || !email || !password || !password2) {
+exports.postRegister = [
+  body('username')
+    .notEmpty().withMessage('Username is required.')
+    .isAlphanumeric().withMessage('Username must contain only letters and numbers.')
+    .isLength({ min: 3, max: 30 }).withMessage('Username must be between 3 and 30 characters.'),
+  body('email')
+    .isEmail().withMessage('Please enter a valid email address.')
+    .normalizeEmail(),
+  body('password')
+    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters.'),
+  body('password2')
+    .custom((val, { req }) => val === req.body.password)
+    .withMessage('Passwords do not match.'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
         return res.render('register', {
             pageTitle: 'Register – Feed Birmingham',
             pageId:    'register',
-            error:     'Please fill in all fields.',
+            error:     errors.array()[0].msg,
         });
     }
 
-    if (password !== password2) {
-        return res.render('register', {
-            pageTitle: 'Register – Feed Birmingham',
-            pageId:    'register',
-            error:     'Passwords do not match.',
-        });
-    }
-
-    if (password.length < 6) {
-        return res.render('register', {
-            pageTitle: 'Register – Feed Birmingham',
-            pageId:    'register',
-            error:     'Password must be at least 6 characters.',
-        });
-    }
+    const { username, email, password } = req.body;
 
     try {
         // Check for existing username / email
@@ -154,7 +165,8 @@ exports.postRegister = async (req, res) => {
             error:     'Something went wrong. Please try again.',
         });
     }
-};
+  }
+];
 
 // ── GET /logout ───────────────────────────────────────────────
 exports.getLogout = (req, res) => {

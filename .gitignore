@@ -1,1 +1,4 @@
 /.claude
+.env
+config.js
+node_modules/

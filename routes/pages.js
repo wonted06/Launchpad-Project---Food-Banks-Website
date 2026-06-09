@@ -12,5 +12,6 @@ router.get('/feedback', pages.getFeedback);
 router.post('/feedback', pages.postFeedback);
 router.get('/news', pages.getNews);
 router.get('/hot-meals', pages.getHotMeals);
+router.get('/food-education', pages.getFoodEducation);
 
 module.exports = router;

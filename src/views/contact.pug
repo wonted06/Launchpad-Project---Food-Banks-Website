@@ -39,41 +39,41 @@ block content
 
         .contact-form-wrap
           h2 #{t('contact.form.title')}
+
           if success
             .success-box
               i.fa-solid.fa-circle-check
               |  #{t('contact.form.success')}
+
+          if error
+            .error-box
+              i.fa-solid.fa-circle-exclamation
+              |  #{error}
+
           form.form(action='/contact', method='POST')
             .form-row
               .form-group
                 label(for='c-name') #{t('contact.form.name')}
-                input#c-name(type='text', name='name', placeholder='Your name', required)
+                input#c-name(type='text', name='name', value=form && form.name ? form.name : '', placeholder='Your name', required)
               .form-group
                 label(for='c-email') #{t('contact.form.email')}
-                input#c-email(type='email', name='email', placeholder='your@email.com', required)
+                input#c-email(type='email', name='email', value=form && form.email ? form.email : '', placeholder='your@email.com', required)
 
             .form-group
               label(for='c-subject') #{t('contact.form.subject')}
               select#c-subject(name='subject')
                 option(value='') Select a subject
-                option #{t('contact.subject.general')}
-                option #{t('contact.subject.support')}
-                option #{t('contact.subject.delivery')}
-                option #{t('contact.subject.volunteer')}
-                option #{t('contact.subject.feedback')}
-                option #{t('contact.subject.other')}
+                option(value='General Enquiry', selected=form && form.subject==='General Enquiry') #{t('contact.subject.general')}
+                option(value='Food Bank Support', selected=form && form.subject==='Food Bank Support') #{t('contact.subject.support')}
+                option(value='Delivery Request', selected=form && form.subject==='Delivery Request') #{t('contact.subject.delivery')}
+                option(value='Volunteer', selected=form && form.subject==='Volunteer') #{t('contact.subject.volunteer')}
+                option(value='Feedback', selected=form && form.subject==='Feedback') #{t('contact.subject.feedback')}
+                option(value='Other', selected=form && form.subject==='Other') #{t('contact.subject.other')}
 
             .form-group
               label(for='c-message') #{t('contact.form.message')}
-              textarea#c-message(name='message', rows='5', placeholder='Write your message here...', required)
+              textarea#c-message(name='message', rows='5', placeholder='Write your message here...', required)= form && form.message ? form.message : ''
 
             button.btn.btn-green(type='submit')
               i.fa-solid.fa-paper-plane
               |  #{t('contact.form.send')}
-              if error
-                .error-box
-                  i.fa-solid.fa-circle-exclamation
-                  |  #{error}
-                  input#c-name(type='text', name='name', value=form.name || '', placeholder='Your name', required)
-                  input#c-email(type='email', name='email', value=form.email || '', placeholder='your@email.com', required)
-                  textarea#c-message(name='message', rows='5', placeholder='Write your message here...', required)= form.message || ''
