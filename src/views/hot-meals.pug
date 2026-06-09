@@ -19,6 +19,9 @@ block content
           i.fa-solid.fa-users
           p #{t('hotmeals.info3')}
 
+      .meals-intro
+        p Hot meals are available several days per week depending on food availability, and are prepared by our partner organisations. All meals are free and open to anyone in the Birmingham community — no referral needed, just turn up.
+
       .meals-table-wrap
         table.meals-table.meals-table--full
           thead
@@ -28,7 +31,6 @@ block content
               th Address
               th #{t('common.time')}
               th #{t('hotmeals.table.menu')}
-              th #{t('common.spaces')}
           tbody
             tr
               td #{t('common.monday')}
@@ -36,50 +38,133 @@ block content
               td 123 Broad Street, B1 2AA
               td 12:00 – 14:00
               td Soup, Bread, Main, Dessert
-              td.badge-available #{t('common.available')}
             tr
               td #{t('common.tuesday')}
               td Feeding Hands, Sparkhill
               td 78 Sparkhill Road, B11 4EJ
               td 11:30 – 13:30
               td Main Course, Drink
-              td.badge-limited #{t('common.limited')}
             tr
               td #{t('common.wednesday')}
               td Birmingham East Food Bank
               td 45 Coventry Road, B10 0TP
               td 12:00 – 14:00
               td Soup, Main, Dessert
-              td.badge-available #{t('common.available')}
             tr
               td #{t('common.thursday')}
               td St Anne's Community Hub
               td 12 College Road, B6 6JT
               td 13:00 – 15:00
               td Main Course, Dessert, Drink
-              td.badge-full #{t('common.full')}
             tr
               td #{t('common.friday')}
               td Birmingham Central Food Bank
               td 123 Broad Street, B1 2AA
               td 11:00 – 13:00
               td Soup, Main, Dessert
-              td.badge-available #{t('common.available')}
             tr
               td #{t('common.saturday')}
               td Feeding Hands, Sparkhill
               td 78 Sparkhill Road, B11 4EJ
               td 10:00 – 12:00
               td Brunch, Drink
-              td.badge-available #{t('common.available')}
             tr
               td #{t('common.sunday')}
               td –
               td –
               td –
               td No service
-              td –
 
       .meals-note
         i.fa-solid.fa-circle-info
         p #{t('hotmeals.note')}
+
+  //- ── Opening Times · Partners · Charity Collaboration ────────
+  section.section.section--light-green
+    .container
+      .meals-info-grid
+
+        .meals-info-card
+          .meals-info-card-icon
+            i.fa-regular.fa-clock
+          h3 Opening Times
+          .meals-times
+            .meals-time-row
+              strong Lunch Service
+              span 12:00 – 14:00
+            .meals-time-row
+              strong Dinner Service
+              span 17:00 – 19:00
+          p.meals-info-card-sub Times may vary by location. Check the schedule above for specific food bank hours.
+
+        .meals-info-card
+          .meals-info-card-icon
+            i.fa-solid.fa-people-group
+          h3 Partnered Organisations
+          p Hot meals at our food banks are provided in partnership with trusted local organisations:
+          ul.meals-partners-list
+            li
+              i.fa-solid.fa-circle-check
+              |  Salvation Army
+            li
+              i.fa-solid.fa-circle-check
+              |  SIFA Fireside
+            li
+              i.fa-solid.fa-circle-check
+              |  Birmingham City Mission
+            li
+              i.fa-solid.fa-circle-check
+              |  Midland Langar Seva Society
+
+        .meals-info-card
+          .meals-info-card-icon
+            i.fa-solid.fa-handshake
+          h3 Charity Collaboration
+          p We collaborate with our partner charities by giving donations to them monthly to support their ongoing food services.
+          p Together we ensure that no one in Birmingham goes without a warm, nutritious meal.
+
+  //- ── Community Cooking · Communal Facilities ─────────────────
+  section.section
+    .container
+      .meals-bottom-grid
+
+        .meals-community-card
+          .meals-info-card-icon
+            i.fa-solid.fa-fire-burner
+          h3 Community Cooking Events
+          p
+            | Bring your own ingredients and prepare a hot meal on site alongside other members of the community.
+          p
+            | Community cooking sessions help reduce food waste, encourage social interaction, and provide freshly prepared meals for those in need.
+          .meals-community-benefits
+            .meals-benefit
+              i.fa-solid.fa-check
+              span  Reduces household food waste
+            .meals-benefit
+              i.fa-solid.fa-check
+              span  Builds community connections
+            .meals-benefit
+              i.fa-solid.fa-check
+              span  Provides fresh, nutritious meals
+
+        .meals-facilities-card
+          .meals-info-card-icon
+            i.fa-solid.fa-kitchen-set
+          h3 Communal Facilities
+          p The following communal cooking equipment is available on site for community cooking events:
+          .meals-facilities-list
+            .meals-facility-item
+              i.fa-solid.fa-square-caret-up
+              div
+                strong Communal Microwave
+                p Available at all participating sites
+            .meals-facility-item
+              i.fa-solid.fa-square-caret-up
+              div
+                strong Communal Oven
+                p Available at selected sites
+            .meals-facility-item
+              i.fa-solid.fa-fire
+              div
+                strong Communal Stove
+                p Available at selected sites

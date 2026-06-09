@@ -251,6 +251,39 @@ block content
       if (e.key === 'Enter') { e.preventDefault(); findNearestBanks(); }
     });
 
+    // ── PRE-SELECT BANK FROM URL PARAM (coming from food bank detail page) ───
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var preId  = params.get('bank_id');
+      if (!preId) return;
+      var pre = allBanks.find(function(b) { return String(b.id) === preId; });
+      if (!pre) return;
+
+      document.getElementById('hidden-bank-id').value = pre.id;
+      document.getElementById('selected-bank-label').textContent = 'Delivering from: ' + pre.name;
+
+      // Render a "selected" card in the results list
+      var list = document.getElementById('bank-list');
+      list.innerHTML =
+        '<div class="delivery-bank-card">' +
+          '<div class="delivery-bank-info">' +
+            '<h4>' + pre.name + '</h4>' +
+            '<p><i class="fa-solid fa-map-pin"></i> ' + pre.address + ', ' + pre.postcode + '</p>' +
+            '<p><i class="fa-regular fa-clock"></i> ' + (pre.hours || 'Hours not available') + '</p>' +
+          '</div>' +
+          '<div class="delivery-bank-meta">' +
+            '<span class="badge badge-verified"><i class="fa-solid fa-circle-check"></i> Selected</span>' +
+          '</div>' +
+        '</div>';
+
+      document.getElementById('bank-results').style.display = '';
+      document.getElementById('delivery-form-wrap').style.display = '';
+
+      setTimeout(function() {
+        document.getElementById('delivery-form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    })();
+
     // ── DELIVERY ROUTE MAP (Track tab) ────────────────────────
     var deliveryMapEl = document.getElementById('delivery-map');
     if (deliveryMapEl) {

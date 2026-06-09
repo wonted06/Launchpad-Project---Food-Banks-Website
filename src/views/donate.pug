@@ -53,13 +53,29 @@ block content
                   option(value='monthly') #{t('donate.money.monthly')}
                   option(value='annual') #{t('donate.money.annual')}
 
+              .form-group
+                label(for='card-name') Cardholder Name
+                input#card-name(type='text', name='card_name', placeholder='Name as it appears on card', autocomplete='cc-name')
+                span.field-error#card-name-error
+
+              .form-group
+                label(for='card-number') Card Number
+                .card-number-wrap
+                  i.fa-regular.fa-credit-card.card-input-icon
+                  input#card-number(type='text', name='card_number', placeholder='1234 5678 9012 3456', maxlength='19', autocomplete='cc-number', inputmode='numeric')
+                span.field-error#card-number-error
+
               .form-row
                 .form-group
-                  label(for='don-name') #{t('donate.volunteer.name')}
-                  input#don-name(type='text', name='name', placeholder='Your name', required)
+                  label(for='card-expiry') Expiry Date
+                  input#card-expiry(type='text', name='card_expiry', placeholder='MM/YY', maxlength='5', autocomplete='cc-exp', inputmode='numeric')
+                  span.field-error#card-expiry-error
                 .form-group
-                  label(for='don-email') #{t('donate.volunteer.email')}
-                  input#don-email(type='email', name='email', placeholder='your@email.com', required)
+                  label(for='card-cvv') CVV
+                  .card-number-wrap
+                    i.fa-solid.fa-lock.card-input-icon
+                    input#card-cvv(type='text', name='card_cvv', placeholder='•••', maxlength='4', autocomplete='cc-csc', inputmode='numeric')
+                  span.field-error#card-cvv-error
 
               button.btn.btn-green.btn-full(type='submit')
                 i.fa-solid.fa-heart
@@ -111,6 +127,20 @@ block content
 
               button.btn.btn-green(type='submit') #{t('donate.volunteer.btn')}
 
+            .vol-success-msg#volSuccessMsg(style='display:none')
+              i.fa-solid.fa-circle-check
+              p Thank you for applying as a volunteer! We will get back to you shortly.
+
+  //- ── Donation Success Modal ────────────────────────────────────
+  .donation-modal-backdrop#donationModalBackdrop
+    .donation-modal
+      .donation-modal-icon
+        i.fa-solid.fa-circle-check
+      h2 Donation Successful!
+      p#donationModalMsg Thank you for your generous donation. Your contribution helps feed Birmingham families in need.
+      button.btn.btn-green#donationModalClose
+        | Done
+
   script.
     document.querySelectorAll('.donate-type-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -128,4 +158,156 @@ block content
         btn.classList.add('active');
         document.getElementById('custom-amount').value = btn.dataset.amount;
       });
+    });
+
+    // ── Donation success modal ──────────────────────────────────
+    const backdrop  = document.getElementById('donationModalBackdrop');
+    const closeBtn  = document.getElementById('donationModalClose');
+    const modalMsg  = document.getElementById('donationModalMsg');
+
+    function showDonationSuccess(msg) {
+      modalMsg.textContent = msg;
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDonationModal() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Card form validation helpers ───────────────────────────
+    function showFieldError(inputId, errorId, msg) {
+      const el = document.getElementById(inputId);
+      const err = document.getElementById(errorId);
+      if (el) el.classList.add('field-invalid');
+      if (err) err.textContent = msg;
+    }
+    function clearFieldError(inputId, errorId) {
+      const el = document.getElementById(inputId);
+      const err = document.getElementById(errorId);
+      if (el) el.classList.remove('field-invalid');
+      if (err) err.textContent = '';
+    }
+
+    // Cardholder name — letters, spaces, hyphens, apostrophes only
+    const cardName = document.getElementById('card-name');
+    if (cardName) {
+      cardName.addEventListener('blur', () => {
+        const v = cardName.value.trim();
+        if (!v || !/^[a-zA-Z\s'\-]+$/.test(v))
+          showFieldError('card-name', 'card-name-error', 'Please enter a valid name (letters and spaces only)');
+        else clearFieldError('card-name', 'card-name-error');
+      });
+      cardName.addEventListener('input', () => clearFieldError('card-name', 'card-name-error'));
+    }
+
+    // Card number — digits only, auto-format as XXXX XXXX XXXX XXXX
+    const cardNumber = document.getElementById('card-number');
+    if (cardNumber) {
+      cardNumber.addEventListener('input', () => {
+        let v = cardNumber.value.replace(/\D/g, '').slice(0, 16);
+        cardNumber.value = v.replace(/(.{4})/g, '$1 ').trim();
+        clearFieldError('card-number', 'card-number-error');
+      });
+      cardNumber.addEventListener('blur', () => {
+        const digits = cardNumber.value.replace(/\s/g, '');
+        if (digits.length !== 16)
+          showFieldError('card-number', 'card-number-error', 'Invalid card number — must be 16 digits');
+      });
+    }
+
+    // Expiry — auto-format MM/YY, validate month + not expired
+    const cardExpiry = document.getElementById('card-expiry');
+    if (cardExpiry) {
+      cardExpiry.addEventListener('input', () => {
+        let v = cardExpiry.value.replace(/\D/g, '').slice(0, 4);
+        if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+        cardExpiry.value = v;
+        clearFieldError('card-expiry', 'card-expiry-error');
+      });
+      cardExpiry.addEventListener('blur', () => {
+        const parts = cardExpiry.value.split('/');
+        const now = new Date();
+        const month = parseInt(parts[0], 10);
+        const year  = parseInt('20' + parts[1], 10);
+        const ok = parts.length === 2 && month >= 1 && month <= 12
+          && (year > now.getFullYear() || (year === now.getFullYear() && month >= now.getMonth() + 1));
+        if (!ok) showFieldError('card-expiry', 'card-expiry-error', 'Invalid expiry date');
+      });
+    }
+
+    // CVV — digits only, 3–4 characters
+    const cardCvv = document.getElementById('card-cvv');
+    if (cardCvv) {
+      cardCvv.addEventListener('input', () => {
+        cardCvv.value = cardCvv.value.replace(/\D/g, '').slice(0, 4);
+        clearFieldError('card-cvv', 'card-cvv-error');
+      });
+      cardCvv.addEventListener('blur', () => {
+        if (!/^\d{3,4}$/.test(cardCvv.value))
+          showFieldError('card-cvv', 'card-cvv-error', 'Invalid CVV');
+      });
+    }
+
+    // Submit — validate all card fields before showing modal
+    const moneyForm = document.querySelector('#donate-money form');
+    if (moneyForm) {
+      moneyForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let valid = true;
+
+        const name = cardName ? cardName.value.trim() : '';
+        if (!name || !/^[a-zA-Z\s'\-]+$/.test(name)) {
+          showFieldError('card-name', 'card-name-error', 'Please enter a valid name (letters and spaces only)');
+          valid = false;
+        }
+        const digits = cardNumber ? cardNumber.value.replace(/\s/g, '') : '';
+        if (digits.length !== 16) {
+          showFieldError('card-number', 'card-number-error', 'Invalid card number — must be 16 digits');
+          valid = false;
+        }
+        if (cardExpiry) {
+          const parts = cardExpiry.value.split('/');
+          const now   = new Date();
+          const month = parseInt(parts[0], 10);
+          const year  = parseInt('20' + parts[1], 10);
+          const ok = parts.length === 2 && month >= 1 && month <= 12
+            && (year > now.getFullYear() || (year === now.getFullYear() && month >= now.getMonth() + 1));
+          if (!ok) { showFieldError('card-expiry', 'card-expiry-error', 'Invalid expiry date'); valid = false; }
+        }
+        if (cardCvv && !/^\d{3,4}$/.test(cardCvv.value)) {
+          showFieldError('card-cvv', 'card-cvv-error', 'Invalid CVV');
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        const amount = document.getElementById('custom-amount').value || '5';
+        showDonationSuccess(
+          'Thank you for your generous donation of £' + parseFloat(amount).toFixed(2) + '. Your contribution helps feed Birmingham families in need.'
+        );
+        moneyForm.reset();
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('.amount-btn[data-amount="5"]').classList.add('active');
+      });
+    }
+
+    // Intercept volunteer form
+    const volForm = document.querySelector('#donate-time form');
+    const volSuccess = document.getElementById('volSuccessMsg');
+    if (volForm) {
+      volForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        volForm.style.display = 'none';
+        volSuccess.style.display = 'flex';
+      });
+    }
+
+    closeBtn.addEventListener('click', closeDonationModal);
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeDonationModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDonationModal();
     });

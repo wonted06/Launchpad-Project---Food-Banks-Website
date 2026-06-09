@@ -7,6 +7,7 @@ const app     = express();
 
 // ── Security headers (Helmet) ─────────────────────────────────
 app.use(helmet({
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   contentSecurityPolicy: {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),

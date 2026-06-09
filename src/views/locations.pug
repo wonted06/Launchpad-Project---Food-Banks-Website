@@ -95,30 +95,88 @@ block content
       });
     });
 
-    // Live search — filter cards + markers
+    // ── SEARCH — text filter + postcode radius ──────────────────
     const searchInput = document.getElementById('search-input');
     const allCards    = document.querySelectorAll('.foodbank-card');
+    let   searchTimer = null;
 
-    function filterResults(query) {
+    function haversine(lat1, lng1, lat2, lng2) {
+      const R    = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a    = Math.sin(dLat/2)**2 +
+                   Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+                   Math.sin(dLng/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function setCardVisible(card, visible) {
+      card.style.display = visible ? '' : 'none';
+      const id = card.dataset.id;
+      if (markers[id]) {
+        if (visible) { if (!map.hasLayer(markers[id])) markers[id].addTo(map); }
+        else         { if (map.hasLayer(markers[id]))  map.removeLayer(markers[id]); }
+      }
+    }
+
+    function filterByText(query) {
       const q = query.trim().toLowerCase();
-      let anyVisible = false;
       allCards.forEach(card => {
         const name     = card.dataset.name.toLowerCase();
         const postcode = card.dataset.postcode.toLowerCase();
         const visible  = !q || name.includes(q) || postcode.includes(q);
-        card.style.display = visible ? '' : 'none';
-        const id = card.dataset.id;
-        if (markers[id]) {
-          if (visible) {
-            if (!map.hasLayer(markers[id])) markers[id].addTo(map);
-          } else {
-            if (map.hasLayer(markers[id])) map.removeLayer(markers[id]);
-          }
-        }
-        if (visible) anyVisible = true;
+        setCardVisible(card, visible);
+        // Restore badge to postcode text
+        const badge = card.querySelector('.distance-badge');
+        if (badge) badge.innerHTML = '<i class="fa-solid fa-location-dot"></i>  ' + card.dataset.postcode;
       });
     }
 
-    searchInput.addEventListener('input', () => filterResults(searchInput.value));
+    function filterByRadius(uLat, uLng) {
+      const results = [];
+      allCards.forEach(card => {
+        const lat  = parseFloat(card.dataset.lat);
+        const lng  = parseFloat(card.dataset.lng);
+        const dist = haversine(uLat, uLng, lat, lng);
+        card._dist = dist;
+        results.push({ card, dist });
+      });
+      results.sort((a, b) => a.dist - b.dist);
+      results.forEach(({ card, dist }) => {
+        const visible = dist <= 5;
+        setCardVisible(card, visible);
+        const badge = card.querySelector('.distance-badge');
+        if (badge) {
+          badge.innerHTML = visible
+            ? '<i class="fa-solid fa-location-dot"></i>  ' + dist.toFixed(1) + ' km'
+            : '<i class="fa-solid fa-location-dot"></i>  ' + card.dataset.postcode;
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      const val = searchInput.value.trim();
+      if (!val) { filterByText(''); return; }
+
+      if (/\d/.test(val)) {
+        // Looks like a postcode — debounce then geocode
+        searchTimer = setTimeout(() => {
+          fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(val.replace(/\s+/g, '')))
+            .then(r => r.json())
+            .then(geo => {
+              if (geo.status === 200) {
+                filterByRadius(geo.result.latitude, geo.result.longitude);
+              } else {
+                filterByText(val);
+              }
+            })
+            .catch(() => filterByText(val));
+        }, 600);
+      } else {
+        filterByText(val);
+      }
+    });
+
     // Apply on load if a query param was pre-filled
-    if (searchInput.value) filterResults(searchInput.value);
+    if (searchInput.value) filterByText(searchInput.value);

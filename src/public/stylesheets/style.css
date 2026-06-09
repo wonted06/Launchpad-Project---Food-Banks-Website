@@ -154,6 +154,7 @@ button { cursor: pointer; font-family: inherit; }
 /* ── Footer ────────────────────────────────────────────────── */
 .site-footer { background: #1a2e1d; color: rgba(255,255,255,0.85); margin-top: auto; }
 .footer-inner { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem 1.5rem; display: grid; grid-template-columns: 1.5fr repeat(3,1fr); gap: 2rem; }
+.footer-links { display: contents; }
 .footer-brand img { margin-bottom: 0.75rem; }
 .footer-brand p { font-size: 0.9rem; opacity: 0.8; line-height: 1.5; }
 .footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -719,6 +720,67 @@ button { cursor: pointer; font-family: inherit; }
 .meals-note { display: flex; align-items: flex-start; gap: 0.75rem; background: #fef3c7; border: 1px solid #fde68a; border-radius: var(--radius); padding: 0.875rem 1rem; margin-top: 1.5rem; font-size: 0.875rem; }
 .meals-note i { color: var(--yellow); margin-top: 0.1rem; flex-shrink: 0; }
 
+/* ── Hot Meals — extra info sections ─────────────────────────── */
+.meals-intro { background: var(--green-light); border-left: 4px solid var(--green); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.7; color: var(--text); }
+.meals-info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.meals-info-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 1.75rem; }
+.meals-info-card-icon { width: 2.75rem; height: 2.75rem; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 0.875rem; }
+.meals-info-card-icon i { color: var(--green); font-size: 1.15rem; }
+.meals-info-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+.meals-info-card p, .meals-info-card-sub { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.5rem; }
+.meals-times { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.75rem; }
+.meals-time-row { display: flex; justify-content: space-between; align-items: center; background: #f0fdf4; border-radius: var(--radius); padding: 0.45rem 0.75rem; font-size: 0.875rem; }
+.meals-time-row strong { font-weight: 600; color: var(--text); }
+.meals-time-row span { color: var(--green); font-weight: 700; }
+.meals-partners-list { list-style: none; padding: 0; margin: 0.5rem 0 0; display: flex; flex-direction: column; gap: 0.35rem; }
+.meals-partners-list li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text); }
+.meals-partners-list li i { color: var(--green); font-size: 0.75rem; flex-shrink: 0; }
+.meals-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.meals-community-card, .meals-facilities-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 1.75rem; }
+.meals-community-card h3, .meals-facilities-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+.meals-community-card p, .meals-facilities-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.5rem; }
+.meals-community-benefits { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.75rem; }
+.meals-benefit { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; }
+.meals-benefit i { color: var(--green); font-size: 0.8rem; }
+.meals-facilities-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem; }
+.meals-facility-item { display: flex; align-items: flex-start; gap: 0.75rem; background: #f9fafb; border-radius: var(--radius); padding: 0.65rem 0.875rem; }
+.meals-facility-item > i { color: var(--green); font-size: 1.1rem; margin-top: 0.15rem; flex-shrink: 0; }
+.meals-facility-item strong { display: block; font-size: 0.875rem; font-weight: 700; margin-bottom: 0.15rem; }
+.meals-facility-item p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+@media (max-width: 900px) { .meals-info-grid { grid-template-columns: 1fr 1fr; } .meals-bottom-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .meals-info-grid { grid-template-columns: 1fr; } }
+[data-theme="dark"] .meals-info-card, [data-theme="dark"] .meals-community-card, [data-theme="dark"] .meals-facilities-card { background: #1e1e1e; }
+[data-theme="dark"] .meals-facility-item { background: #2a2a2a; }
+[data-theme="dark"] .meals-time-row { background: #1a2e1e; }
+[data-theme="dark"] .meals-intro { background: #1a2e1e; border-color: var(--green); }
+
+/* ── FAQ Section ──────────────────────────────────────────────── */
+.section--faq { background: #f9fafb; }
+.faq-section { max-width: 780px; margin: 0 auto; }
+.faq-header { text-align: center; margin-bottom: 2rem; }
+.faq-header h2 { font-size: 1.6rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.faq-header h2 i { color: var(--green); }
+.faq-subhead { color: var(--text-muted); font-size: 0.9rem; }
+.faq-search-wrap { position: relative; margin-bottom: 1.5rem; }
+.faq-search-wrap > i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+#faq-search { width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-lg); font-size: 0.95rem; background: white; color: var(--text); }
+#faq-search:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
+.faq-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.faq-item { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.faq-question { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: none; border: none; cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text); text-align: left; gap: 1rem; }
+.faq-question i { flex-shrink: 0; color: var(--green); transition: transform 0.25s; font-size: 0.85rem; }
+.faq-item.open .faq-question i { transform: rotate(180deg); }
+.faq-item.open .faq-question { color: var(--green); }
+.faq-answer { display: none; padding: 0 1.25rem 1rem; border-top: 1px solid var(--border); }
+.faq-item.open .faq-answer { display: block; }
+.faq-answer p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin-top: 0.875rem; }
+[data-theme="dark"] .section--faq { background: #111; }
+[data-theme="dark"] .faq-item { background: #1e1e1e; border-color: var(--border); }
+[data-theme="dark"] .faq-question { color: var(--text); }
+[data-theme="dark"] .faq-item.open .faq-question { color: #4ade80; }
+[data-theme="dark"] .faq-answer { border-color: var(--border); }
+[data-theme="dark"] #faq-search { background: #1e1e1e; color: var(--text); border-color: var(--border); }
+
 /* ── Nav Auth Area ─────────────────────────────────────────── */
 .nav-auth {
   display: flex;
@@ -1100,6 +1162,35 @@ body.colour-blind .site-footer { filter: url('#deuteranopia'); }
 [data-theme="dark"] .delivery-bank-card { background: #1e1e1e; border-color: var(--border); }
 [data-theme="dark"] .selected-bank-banner { background: rgba(44,122,58,0.15); }
 [data-theme="dark"] #delivery-map { filter: invert(1) hue-rotate(180deg); }
+
+/* ── Donation Success Modal ───────────────────────────────── */
+.donation-modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+.donation-modal-backdrop.open { display: flex; }
+.donation-modal { background: white; border-radius: var(--radius-lg); box-shadow: 0 24px 64px rgba(0,0,0,0.18); padding: 2.5rem 2rem; max-width: 420px; width: 90%; text-align: center; animation: donationPop 0.28s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes donationPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.donation-modal-icon { width: 5rem; height: 5rem; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+.donation-modal-icon i { font-size: 2.4rem; color: var(--green); }
+.donation-modal h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+.donation-modal p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.75rem; }
+.donation-modal .btn { min-width: 130px; justify-content: center; }
+[data-theme="dark"] .donation-modal { background: #1e1e1e; }
+[data-theme="dark"] .donation-modal h2 { color: var(--text); }
+[data-theme="dark"] .donation-modal-icon { background: #1a2e1e; }
+
+/* Card payment form */
+.card-number-wrap { position: relative; }
+.card-input-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+.card-number-wrap input { padding-left: 2.25rem; width: 100%; }
+.field-error { display: block; font-size: 0.8rem; color: #dc2626; margin-top: 0.3rem; min-height: 1.1rem; }
+.field-invalid { border-color: #dc2626 !important; background: #fff5f5 !important; }
+[data-theme="dark"] .field-invalid { background: #2d1515 !important; border-color: #dc2626 !important; }
+
+/* Volunteer inline success */
+.vol-success-msg { display: flex; align-items: center; gap: 0.85rem; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-top: 1rem; }
+.vol-success-msg i { font-size: 1.6rem; color: var(--green); flex-shrink: 0; }
+.vol-success-msg p { font-size: 0.95rem; color: #15803d; font-weight: 500; margin: 0; line-height: 1.5; }
+[data-theme="dark"] .vol-success-msg { background: #1a2e1e; border-color: #166534; }
+[data-theme="dark"] .vol-success-msg p { color: #6fcf80; }
 
 /* ── Food Education Page ──────────────────────────────────── */
 .edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }

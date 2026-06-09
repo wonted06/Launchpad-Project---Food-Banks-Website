@@ -77,3 +77,112 @@ block content
             button.btn.btn-green(type='submit')
               i.fa-solid.fa-paper-plane
               |  #{t('contact.form.send')}
+
+  //- ── FAQ Section ──────────────────────────────────────────────
+  section.section.section--faq
+    .container
+      .faq-section
+        .faq-header
+          h2
+            i.fa-solid.fa-circle-question
+            |  Frequently Asked Questions
+          p.faq-subhead Find quick answers to common questions about our services. Can't find what you're looking for? Use the contact form above.
+
+        .faq-search-wrap
+          i.fa-solid.fa-magnifying-glass
+          input#faq-search(type='text', placeholder='Search FAQs…', autocomplete='off')
+
+        .faq-list#faq-list
+
+          .faq-item
+            button.faq-question(type='button')
+              span How do I get help from a food bank?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p You'll usually need a referral from a frontline professional such as a GP, social worker, or school. Some of our food banks also accept self-referrals. Contact us or visit the Locations page to find your nearest food bank and get started.
+
+          .faq-item
+            button.faq-question(type='button')
+              span What items will I receive in a food parcel?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Food parcels typically contain non-perishable items such as tinned vegetables, pasta, rice, cereal, tinned meat or fish, and soup. We also include tea, coffee, and toiletries where possible, and try to accommodate dietary requirements.
+
+          .faq-item
+            button.faq-question(type='button')
+              span How often can I use a food bank?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Food bank vouchers typically cover a 3-day emergency supply. Most people can use the service up to three times per referral, though this varies by organisation. Speak to the referring professional or contact us for guidance specific to your situation.
+
+          .faq-item
+            button.faq-question(type='button')
+              span What are the food bank opening times?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Opening times vary by location. Please visit the Locations page and click "Details" on your nearest food bank to see its specific opening hours.
+
+          .faq-item
+            button.faq-question(type='button')
+              span Can I donate food to Feed Birmingham?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Yes — we welcome donations of non-perishable, in-date food items with at least 3 months until their use-by date. Visit the Donate page for a list of most-needed items and local drop-off points across Birmingham.
+
+          .faq-item
+            button.faq-question(type='button')
+              span Is there a food delivery service?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Yes! We offer a free delivery service for Birmingham residents who have difficulty travelling due to mobility issues, disability, or other accessibility needs. Visit the Delivery page to submit a request.
+
+          .faq-item
+            button.faq-question(type='button')
+              span What if I have dietary requirements or allergies?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Please let us know about any allergies or dietary needs when you visit or when your referral is made. We will do our best to tailor your food parcel and exclude any items that are not suitable for you.
+
+          .faq-item
+            button.faq-question(type='button')
+              span Are there free hot meals available?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Yes — free hot meals are served at several food banks across Birmingham each week. Check the Hot Meal Schedule page for this week's locations, times, and menus. No referral is needed — just turn up.
+
+          .faq-item
+            button.faq-question(type='button')
+              span How can I volunteer with Feed Birmingham?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p We'd love to have you! Visit the Donate page and select "Volunteer" to complete a short application. We have roles in sorting and packing food, delivering parcels, and supporting community events across Birmingham.
+
+          .faq-item
+            button.faq-question(type='button')
+              span Is my personal information kept private?
+              i.fa-solid.fa-chevron-down
+            .faq-answer
+              p Yes. Any information you share with us is handled in strict confidence and used solely to provide the support you need. We do not share your details with third parties without your explicit consent.
+
+  script.
+    // ── FAQ accordion ──────────────────────────────────────────
+    document.querySelectorAll('.faq-question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item   = btn.closest('.faq-item');
+        var isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // ── FAQ search ─────────────────────────────────────────────
+    var faqSearch = document.getElementById('faq-search');
+    if (faqSearch) {
+      faqSearch.addEventListener('input', function() {
+        var q = faqSearch.value.trim().toLowerCase();
+        document.querySelectorAll('.faq-item').forEach(function(item) {
+          var text = item.textContent.toLowerCase();
+          item.style.display = (!q || text.includes(q)) ? '' : 'none';
+        });
+      });
+    }
