@@ -90,4 +90,7 @@ INSERT INTO food_banks (name, address, postcode, phone, email, lat, lng, hours, 
 
 
 -- PostgreSQL SERIAL columns use sequence generators.
--- Sequence values are consumed when requested and are not reused if a transaction fails or rows are deleted. Therefore gaps in identifier values are expected behaviour and do not indicate missing data.
+
+-- Sequence values are consumed when requested and are not reused if a transaction 
+-- fails or rows are deleted. Therefore gaps in identifier values are expected 
+-- behaviour and do not indicate missing data.

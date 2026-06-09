@@ -1,31 +1,38 @@
 const db = require('../../db');
 
-// Schema (PostgreSQL):
-// CREATE TABLE inventory (
-//   id            SERIAL PRIMARY KEY,
-//   food_bank_id  INTEGER REFERENCES food_banks(id),
-//   item_name     VARCHAR(150) NOT NULL,
-//   category      VARCHAR(50),      -- tinned | dried | fresh | dairy | bakery | hygiene
-//   quantity      INTEGER DEFAULT 0,
-//   max_quantity  INTEGER DEFAULT 100,
-//   unit          VARCHAR(20),      -- cans | kg | loaves | bars etc.
-//   updated_at    TIMESTAMP DEFAULT NOW()
-// );
-
 class Inventory {
-  static async findAll({ category, query } = {}) {
-    // const result = await db.query('SELECT i.*, f.name AS bank_name FROM inventory i JOIN food_banks f ON i.food_bank_id = f.id ...');
-    // return result.rows;
+  static async getAll({ category, query } = {}) {
+    const params = [
+      category || null,
+      query ? `%${query}%` : null
+    ];
+
+    const sql = `
+      SELECT
+        p.product_name,
+        p.weight_grams,
+        c.category_name,
+        l.location_name,
+        i.quantity,
+        i.expiry_date
+      FROM inventory i
+      JOIN products p ON i.product_id = p.product_id
+      JOIN categories c ON p.category_id = c.category_id
+      JOIN locations l ON i.location_id = l.location_id
+      WHERE ($1::text IS NULL OR LOWER(c.category_name) = LOWER($1))
+        AND ($2::text IS NULL OR p.product_name ILIKE $2)
+      ORDER BY p.product_name
+    `;
+
+    const result = await db.query(sql, params);
+    return result.rows;
   }
 
-  static async findByFoodBank(foodBankId) {
-    // const result = await db.query('SELECT * FROM inventory WHERE food_bank_id = $1', [foodBankId]);
-    // return result.rows;
-  }
-
-  static async updateQuantity(id, quantity) {
-    // const result = await db.query('UPDATE inventory SET quantity = $1, updated_at = NOW() WHERE id = $2 RETURNING *', [quantity, id]);
-    // return result.rows[0];
+  static async getCategories() {
+    const result = await db.query(
+      'SELECT category_id, category_name FROM categories ORDER BY category_name'
+    );
+    return result.rows;
   }
 }
 

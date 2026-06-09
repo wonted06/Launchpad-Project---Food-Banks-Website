@@ -29,3 +29,4 @@ JOIN categories c
     ON p.category_id = c.category_id
 JOIN locations l
     ON i.location_id = l.location_id;
+    
