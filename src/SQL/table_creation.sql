@@ -2,7 +2,7 @@
 
 
 -- Ensure schema exists and is selected
--- Prevents other schemas on the system from being 
+-- Prevents other schemas on the system from being
 CREATE SCHEMA IF NOT EXISTS foodbank;
 SET search_path TO foodbank;
 
@@ -11,7 +11,6 @@ SET search_path TO foodbank;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS products CASCADE;
-DROP TABLE IF EXISTS locations CASCADE;
 DROP TABLE IF EXISTS inventory CASCADE;
 DROP TABLE IF EXISTS food_banks CASCADE;
 DROP TABLE IF EXISTS deliveries CASCADE;
@@ -53,33 +52,7 @@ CREATE TABLE IF NOT EXISTS  products (
     is_vegan BOOLEAN DEFAULT FALSE
 );
 
--- Locations table
-CREATE TABLE IF NOT EXISTS  locations (
-    location_id SERIAL PRIMARY KEY,
-    location_name VARCHAR(100) NOT NULL UNIQUE,
-    location_type VARCHAR(50) NOT NULL
-);
-
--- Inventory table
-CREATE TABLE IF NOT EXISTS  inventory (
-    inventory_id SERIAL PRIMARY KEY,
-    product_id INT NOT NULL REFERENCES products(product_id),
-    location_id INT NOT NULL REFERENCES locations(location_id),
-    quantity INT  NOT NULL CHECK (quantity >= 0),
-    received_date DATE,
-    expiry_date DATE NOT NULL,
-    batch_number VARCHAR(50) NOT NULL
-
-    --check if expired
-    CHECK (
-    expiry_date IS NULL OR
-    received_date IS NULL OR
-    expiry_date >= received_date),
-
-    UNIQUE (product_id, location_id, batch_number)
-);
-
--- Food Banks table
+-- Food Banks table (must be defined before inventory due to FK dependency)
 CREATE TABLE IF NOT EXISTS food_banks (
   id          SERIAL PRIMARY KEY,
   name        VARCHAR(150) NOT NULL,
@@ -92,6 +65,25 @@ CREATE TABLE IF NOT EXISTS food_banks (
   hours       TEXT,
   description TEXT,
   created_at  TIMESTAMP DEFAULT NOW()
+);
+
+-- Inventory table
+CREATE TABLE IF NOT EXISTS  inventory (
+    inventory_id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL REFERENCES products(product_id),
+    food_bank_id INT NOT NULL REFERENCES food_banks(id),
+    quantity INT  NOT NULL CHECK (quantity >= 0),
+    received_date DATE,
+    expiry_date DATE NOT NULL,
+    batch_number VARCHAR(50) NOT NULL,
+
+    --check if expired
+    CHECK (
+    expiry_date IS NULL OR
+    received_date IS NULL OR
+    expiry_date >= received_date),
+
+    UNIQUE (product_id, food_bank_id, batch_number)
 );
 
 -- Deliveries table

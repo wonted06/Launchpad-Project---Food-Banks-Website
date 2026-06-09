@@ -7,7 +7,8 @@ block content
       p.page-subtitle Current stock levels across Birmingham food banks.
 
   section.section
-    .container
+    .container.container--wide
+
       form.inventory-toolbar(action='/inventory', method='GET')
         .search-bar-wrap.search-bar-wrap--small
           .search-bar
@@ -25,33 +26,98 @@ block content
       if error
         p.error-message= error
 
-      .inventory-table-wrap
-        table.inventory-table
-          thead
-            tr
-              th Item
-              th Category
-              th Location
-              th Stock Level
-              th Expiry Date
-          tbody
-            if !inventory || inventory.length === 0
-              tr
-                td(colspan='5') No inventory items found.
-            else
-              each item in inventory
-                - const pct = Math.min(item.quantity, 100)
-                - const level = item.quantity < 20 ? 'low' : item.quantity < 60 ? 'medium' : 'high'
-                - const fillClass = level === 'low' ? 'stock-bar-fill--low' : level === 'medium' ? 'stock-bar-fill--medium' : null
-                - const label = level.charAt(0).toUpperCase() + level.slice(1)
-                - const expiryStr = item.expiry_date ? new Date(item.expiry_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
-                - const itemLabel = item.product_name + (item.weight_grams ? ` (${item.weight_grams}g)` : '')
+      .inventory-panels
+
+        //- ── Panel 1: Food Bank Branches ──────────────────────────
+        .inventory-panel
+          .inventory-panel-header Food Bank Branches
+          .inventory-panel-scroll
+            - var branches = [...(foodBanks || [])]
+            table.inventory-table
+              thead
                 tr
-                  td= itemLabel
-                  td= item.category_name
-                  td= item.location_name
-                  td
-                    .stock-bar
-                      .stock-bar-fill(class=fillClass, style=`width:${pct}%`)
-                    span.stock-label= label
-                  td= expiryStr
+                  th Name
+                  th Address
+                  th Hours 
+              tbody
+                each b in branches
+                  tr.placeholder-row
+                    td= b.name
+                    td= b.address
+                    td= b.hours
+            //- console.log('[pug branches]', (branches||[]).length, branches?.[0])
+
+
+        //- ── Panel 2: Inventory (sorted low stock first) ──────────
+        .inventory-panel
+          .inventory-panel-header Inventory — what we need donating now 
+          - const sorted = [...(inventory || [])].sort((a, b) => a.quantity - b.quantity)
+          .inventory-table-wrap
+            table.inventory-table
+              thead
+                tr
+                  th Item
+                  th Category
+                  th Location
+                  th Stock Level
+                  th Expiry Date
+              tbody
+                if !sorted || sorted.length === 0
+                  tr
+                    td(colspan='5') No inventory items found.
+                else
+                  each item in sorted
+                    - const pct = Math.min(item.quantity, 100)
+                    - const level = item.quantity < 20 ? 'low' : item.quantity < 60 ? 'medium' : 'high'
+                    - const fillClass = level === 'low' ? 'stock-bar-fill--low' : level === 'medium' ? 'stock-bar-fill--medium' : null
+                    - const label = level.charAt(0).toUpperCase() + level.slice(1)
+                    - const expiryStr = item.expiry_date ? new Date(item.expiry_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+                    - const itemLabel = item.product_name + (item.weight_grams ? ` (${item.weight_grams}g)` : '')
+                    tr
+                      td= itemLabel
+                      td= item.category_name
+                      td= item.location_name
+                      td
+                        .stock-bar
+                          .stock-bar-fill(class=fillClass, style=`width:${pct}%`)
+                        span.stock-label= label
+                      td= expiryStr
+
+        //- ── Panel 3: Donation Locations ──────────────────────────
+        .inventory-panel
+          .inventory-panel-header Donation Locations
+          .inventory-panel-scroll
+            - var donationSites = [...(foodBanks || [])]
+            table.inventory-table
+              thead
+                tr
+                  th Location
+                  th Address
+                  th Hours
+              tbody
+                each d in donationSites
+                  tr.placeholder-row
+                    td= d.name
+                    td= d.address
+                    td= d.hours
+
+        //- ── Panel 4: Request an Item form ────────────────────────
+        .inventory-request-panel
+          h2 Request an Item
+          form(action='/inventory/request', method='POST')
+            .form-group
+              label(for='req-item') Item Name
+              input#req-item(type='text', name='item_name', placeholder='e.g. Baked Beans', required)
+            .form-group
+              label(for='req-qty') Quantity
+              input#req-qty(type='number', name='quantity', min='1', placeholder='1', required)
+            .form-group
+              label(for='req-urgency') Urgency
+              select#req-urgency(name='urgency')
+                option(value='Low') Low
+                option(value='Medium') Medium
+                option(value='High') High
+            .form-group
+              label(for='req-notes') Notes
+              textarea#req-notes(name='notes', rows='3', placeholder='Any additional details...')
+            button.btn.btn-green(type='submit', style='width:100%;justify-content:center') Submit Request

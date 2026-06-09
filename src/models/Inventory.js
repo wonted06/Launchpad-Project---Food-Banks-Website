@@ -12,13 +12,13 @@ class Inventory {
         p.product_name,
         p.weight_grams,
         c.category_name,
-        l.location_name,
+        fb.name AS location_name,
         i.quantity,
         i.expiry_date
       FROM inventory i
       JOIN products p ON i.product_id = p.product_id
       JOIN categories c ON p.category_id = c.category_id
-      JOIN locations l ON i.location_id = l.location_id
+      JOIN food_banks fb ON i.food_bank_id = fb.id
       WHERE ($1::text IS NULL OR LOWER(c.category_name) = LOWER($1))
         AND ($2::text IS NULL OR p.product_name ILIKE $2)
       ORDER BY p.product_name
