@@ -1,3 +1,8 @@
+-- Show saved users' login details,
+-- hashed password and account creation date
+-- SELECT * FROM users;
+
+
 -- Show inventory with product names
 
 SELECT
