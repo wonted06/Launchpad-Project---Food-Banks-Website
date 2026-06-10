@@ -50,6 +50,11 @@ block content
                 |  Account Details
               p.profile-tab-sub Update your username and email address.
 
+              if accountUpdated
+                .alert.alert-success
+                  i.fa-solid.fa-circle-check
+                  |  Account updated successfully.
+
             form.form(action='/profile/update', method='POST')
               .form-row
                 .form-group
@@ -78,7 +83,7 @@ block content
                 |  Health Details
               p.profile-tab-sub This information helps us tailor deliveries to your needs.
 
-            if updated === 'health'
+            if healthUpdated
               .alert.alert-success
                 i.fa-solid.fa-circle-check
                 |  Health details saved successfully.

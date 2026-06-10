@@ -9,7 +9,7 @@ exports.getProfile = async (req, res) => {
             pageTitle:       'My Profile – Feed Birmingham',
             pageId:          'profile',
             user,
-            updated:         req.query.updated,
+            accountUpdated:  req.query.accountUpdated,
             passwordUpdated: req.query.passwordUpdated,
             passwordError:   req.query.passwordError
         });
@@ -34,7 +34,14 @@ exports.postUpdateAccount = async (req, res) => {
             email
         );
 
-        res.direct('/profile?updated=1');
+        // Refresh session so the nav bar reflects the new username/email on all pages immediately
+        req.session.user = {
+            ...req.session.user,
+            username,
+            email,
+        };
+
+        res.redirect('/profile?accountUpdated=1&tab=account');
     } catch (err) {
         console.error('Account update error:', err);
         res.redirect('/profile?error=1');

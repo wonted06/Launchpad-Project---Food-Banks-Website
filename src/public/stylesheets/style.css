@@ -1053,6 +1053,15 @@ body { font-size: var(--base-font-size); }
 [data-theme="dark"] .auth-card,
 [data-theme="dark"] .detail-card,
 [data-theme="dark"] .team-card { background: #1e1e1e; border-color: var(--border); }
+
+/* Team modal — dark mode */
+[data-theme="dark"] .team-modal {
+  background: #1e1e1e;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+}
+[data-theme="dark"] .team-modal-contribution {
+  border-top-color: var(--border);
+}
 [data-theme="dark"] .card h2,[data-theme="dark"] .card h3 { color: var(--text); }
 [data-theme="dark"] .card-subtitle { color: var(--text-muted); }
 [data-theme="dark"] .settings-card h2 { color: #6fcf80; border-bottom-color: var(--border); }
