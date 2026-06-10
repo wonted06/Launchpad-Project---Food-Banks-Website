@@ -20,16 +20,19 @@ DROP TABLE IF EXISTS feedback CASCADE;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    theme           VARCHAR(10)  NOT NULL DEFAULT 'light',
-    text_size       SMALLINT     NOT NULL DEFAULT 15,
-    colour_blind    BOOLEAN      NOT NULL DEFAULT FALSE,
-    text_to_speech  BOOLEAN      NOT NULL DEFAULT FALSE,
-    language VARCHAR(20) NOT NULL DEFAULT 'en'
+    id              SERIAL       PRIMARY KEY,
+    username        VARCHAR(50)  UNIQUE NOT NULL,
+    email           VARCHAR(255) UNIQUE NOT NULL,
+    password_hash   TEXT         NOT NULL,
+    created_at      TIMESTAMP    DEFAULT          CURRENT_TIMESTAMP,
+    theme           VARCHAR(10)  NOT NULL         DEFAULT 'light',
+    text_size       SMALLINT     NOT NULL         DEFAULT 15,
+    colour_blind    BOOLEAN      NOT NULL         DEFAULT FALSE,
+    text_to_speech  BOOLEAN      NOT NULL         DEFAULT FALSE,
+    language        VARCHAR(20)  NOT NULL         DEFAULT 'en',
+    diet            TEXT,
+    allergies       TEXT,
+    mobility        TEXT
 );
 
 -- Categories table
