@@ -406,6 +406,59 @@ button { cursor: pointer; font-family: inherit; }
 .stock-bar-fill--low { background: var(--red); }
 .stock-label { font-size: 0.75rem; font-weight: 600; vertical-align: middle; }
 
+/* ── Inventory Multi-Panel Layout ──────────────────────────── */
+.container--wide { max-width: 1440px; }
+
+.inventory-panels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  align-items: start;
+  margin-top: 1.5rem;
+}
+
+.inventory-panel { display: flex; flex-direction: column; }
+
+.inventory-panel-header {
+  background: var(--green);
+  color: white;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.inventory-panel-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 65vh;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow);
+  background: white;
+}
+
+.inventory-table-wrap {
+  overflow-y: auto;
+  max-height: 65vh;
+}
+
+.inventory-request-panel {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+.inventory-request-panel h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--green);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.6rem;
+}
+
+.placeholder-row td { color: var(--text-muted); font-style: italic; font-size: 0.85rem; }
+
 /* ── Profile ───────────────────────────────────────────────── */
 .profile-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; align-items: start; }
 .profile-sidebar { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; }
