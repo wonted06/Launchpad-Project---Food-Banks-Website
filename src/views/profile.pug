@@ -78,40 +78,45 @@ block content
                 |  Health Details
               p.profile-tab-sub This information helps us tailor deliveries to your needs.
 
+            if updated === 'health'
+              .alert.alert-success
+                i.fa-solid.fa-circle-check
+                |  Health details saved successfully.
+
             form.form(action='/profile/health', method='POST')
               .form-group
                 label Dietary Requirements
                 .checkbox-group
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='vegetarian')
+                    input(type='checkbox', name='diet', value='vegetarian', checked=user && user.diet && user.diet.includes('vegetarian'))
                     span Vegetarian
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='vegan')
+                    input(type='checkbox', name='diet', value='vegan', checked=user && user.diet && user.diet.includes('vegan'))
                     span Vegan
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='gluten-free')
+                    input(type='checkbox', name='diet', value='gluten-free', checked=user && user.diet && user.diet.includes('gluten-free'))
                     span Gluten Free
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='dairy-free')
+                    input(type='checkbox', name='diet', value='dairy-free', checked=user && user.diet && user.diet.includes('dairy-free'))
                     span Dairy Free
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='halal')
+                    input(type='checkbox', name='diet', value='halal', checked=user && user.diet && user.diet.includes('halal'))
                     span Halal
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='kosher')
+                    input(type='checkbox', name='diet', value='kosher', checked=user && user.diet && user.diet.includes('kosher'))
                     span Kosher
 
               .form-group
                 label(for='allergies')
                   i.fa-solid.fa-triangle-exclamation
                   |  Allergies / Intolerances
-                textarea#allergies(name='allergies', rows='3', placeholder='List any allergies or food intolerances...')
+                textarea#allergies(name='allergies', rows='3', placeholder='List any allergies or food intolerances...')= user && user.allergies ? user.allergies : ''
 
               .form-group
                 label(for='mobility')
                   i.fa-solid.fa-wheelchair
                   |  Mobility / Accessibility Notes
-                textarea#mobility(name='mobility', rows='3', placeholder='Any notes to help with delivery...')
+                textarea#mobility(name='mobility', rows='3', placeholder='Any notes to help with delivery...')= user && user.mobility ? user.mobility : ''
 
               .form-actions
                 button.btn.btn-green(type='submit')
@@ -156,6 +161,32 @@ block content
                 |  Security
               p.profile-tab-sub Change your password.
 
+            //- Feedback messages
+            if passwordUpdated
+              .alert.alert-success
+                i.fa-solid.fa-circle-check
+                |  Password updated successfully.
+            if passwordError === 'incorrect'
+              .alert.alert-danger
+                i.fa-solid.fa-circle-exclamation
+                |  Current password is incorrect.
+            if passwordError === 'nomatch'
+              .alert.alert-danger
+                i.fa-solid.fa-circle-exclamation
+                |  New passwords do not match.
+            if passwordError === 'short'
+              .alert.alert-danger
+                i.fa-solid.fa-circle-exclamation
+                |  Password must be at least 6 characters.
+            if passwordError === 'same'
+              .alert.alert-danger
+                i.fa-solid.fa-circle-exclamation
+                |  New password cannot be the same as your current password.
+            if passwordError === 'server'
+              .alert.alert-danger
+                i.fa-solid.fa-circle-exclamation
+                |  Something went wrong. Please try again.
+
             form.form(action='/profile/password', method='POST')
               .form-group
                 label(for='current-password')
@@ -181,12 +212,25 @@ block content
                   |  Update Password
 
   script.
-    // Tab switching
-    document.querySelectorAll('.profile-nav-btn[data-tab]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.profile-nav-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+    // ── Tab switching ──────────────────────────────────────────
+    document.querySelectorAll('.profile-nav-btn[data-tab]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.profile-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.profile-tab').forEach(function(t) { t.classList.remove('active'); });
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
       });
     });
+
+    // ── Restore active tab from URL param (e.g. ?tab=health, ?tab=security) ──
+    (function() {
+      var params  = new URLSearchParams(window.location.search);
+      var tabName = params.get('tab');
+      if (tabName && document.getElementById(tabName)) {
+        document.querySelectorAll('.profile-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.profile-tab').forEach(function(t) { t.classList.remove('active'); });
+        var btn = document.querySelector('.profile-nav-btn[data-tab="' + tabName + '"]');
+        if (btn) btn.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+      }
+    })();

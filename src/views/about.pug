@@ -65,7 +65,7 @@ block content
             img.team-photo(src='/images/team/kurt-canillas.png', alt='Kurt Canillas', onerror="this.src='/images/team/placeholder.png'")
           .team-info
             h3.team-name Kurt Canillas
-            p.team-role Developer
+            p.team-role Developer and Designer 
           .team-hover
             h4 Kurt Canillas
             p.team-hover-hint
@@ -78,9 +78,12 @@ block content
             img.team-photo(src='/images/team/harshita-chavali.png', alt='Harshita Chavali', onerror="this.src='/images/team/placeholder.png'")
           .team-info
             h3.team-name Harshita Chavali
-            p.team-role Developer
+            p.team-role Documentation and Security Developer
           .team-hover
             h4 Harshita Chavali
+            p.team-hover-hint
+              i.fa-solid.fa-up-right-and-down-left-from-center
+              |  Click to read more
 
         //- Card 3 — Kimi Tang
         .team-card(data-index='2')
@@ -91,6 +94,9 @@ block content
             p.team-role Developer
           .team-hover
             h4 Kimi Tang
+            p.team-hover-hint
+              i.fa-solid.fa-up-right-and-down-left-from-center
+              |  Click to read more
 
         //- Card 4 — Eldridge Pacifico
         .team-card(data-index='3')
@@ -101,6 +107,9 @@ block content
             p.team-role Developer
           .team-hover
             h4 Eldridge Pacifico
+            p.team-hover-hint
+              i.fa-solid.fa-up-right-and-down-left-from-center
+              |  Click to read more
 
         //- Card 5 — Saira Abedi
         .team-card(data-index='4')
@@ -108,9 +117,12 @@ block content
             img.team-photo(src='/images/team/saira-abedi.png', alt='Saira Abedi', onerror="this.src='/images/team/placeholder.png'")
           .team-info
             h3.team-name Saira Abedi
-            p.team-role Developer
+            p.team-role Documentation and Security Developer
           .team-hover
             h4 Saira Abedi
+            p.team-hover-hint
+              i.fa-solid.fa-up-right-and-down-left-from-center
+              |  Click to read more
 
         //- Card 6 — Sienna Casule
         .team-card(data-index='5')
@@ -118,9 +130,12 @@ block content
             img.team-photo(src='/images/team/sienna-casule.png', alt='Sienna Casule', onerror="this.src='/images/team/placeholder.png'")
           .team-info
             h3.team-name Sienna Casule
-            p.team-role Developer
+            p.team-role Documentation and Security Developer
           .team-hover
             h4 Sienna Casule
+            p.team-hover-hint
+              i.fa-solid.fa-up-right-and-down-left-from-center
+              |  Click to read more
 
   //- ── TEAM MODAL ─────────────────────────────────────────────
   .team-modal-backdrop#teamModalBackdrop
@@ -171,45 +186,45 @@ block content
     const teamMembers = [
       {
         name: 'Kurt Canillas',
-        role: 'Developer',
+        role: 'Developer & Designer',
         photo: '/images/team/kurt-canillas.png',
-        intro: 'Computer Science student at the University of East Anglia. Passionate about full-stack web development and building applications that make a real difference in the community.',
-        contribution: 'Led the overall architecture and development of the Feed Birmingham platform. Built the Locations page with interactive Leaflet map, implemented the postcode search with live radius filtering, and set up the Express/Pug project structure.'
+        intro: 'Computer Science student at the University of East Anglia with a passion for web development and user-centred design. I enjoy creating intuitive, accessible digital experiences that solve real-world problems and make a positive impact on communities.',
+        contribution: 'Led the overall architecture and development of the Feed Birmingham platform. Created the overall frontend structure of the whole wbesite. Built the Locations page with interactive Leaflet map, implemented the postcode search with live radius filtering, and set up the Express/Pug project structure.'
       },
       {
         name: 'Harshita Chavali',
-        role: 'Developer',
+        role: 'Documentation & Security Developer',
         photo: '/images/team/harshita-chavali.png',
-        intro: 'Computer Science student at the University of East Anglia. Interested in UI/UX design and creating accessible, user-friendly web experiences.',
-        contribution: 'Designed and implemented the Contact Us page including the FAQ accordion section and form validation. Contributed to the overall site styling and responsive layout across multiple pages.'
+        intro: 'Harshita Chavali is a second year computing science student . Within the project team, she was responsible for supporting both the design and the security aspects of the website , while ensuring that the application was user- friendly, accessible and aligned with the project requirements. Her role was a security developer with Saira and Sienna and documentation as well as maintaining user experience.',
+        contribution: 'Harshita contributed to the development and palnning of the project by designing several key wireframes including  the : Login,Register,About Us, Feedback, Settings, and Locations pages. She was responsible for  iplementing security features to improve the safety and reliability of the application such as .gitignore,express rate limit express validator and helmet. In addition, she created user personas, user stories, project risk assessments, and user testing parameters to support the design and evaluation process. Harshita also developed the project mission statement and contributed to the overall design and structure of the final presentation, helping to communicate the projects objectives, development process, and outcomes effectively.'
       },
       {
         name: 'Kimi Tang',
         role: 'Developer',
         photo: '/images/team/kimi-tang.png',
         intro: 'Computer Science student at the University of East Anglia. Enthusiastic about database design and back-end development for data-driven applications.',
-        contribution: 'Worked on the database schema and PostgreSQL migrations. Implemented the food bank data models and contributed to the delivery request and tracking functionality.'
+        contribution: 'Worked on the database schema and PostgreSQL for the Inventory management system, including designing tables, writing SQL queries, and integrating with the Express backend. Also contributed to the creation '
       },
       {
         name: 'Eldridge Pacifico',
         role: 'Developer',
         photo: '/images/team/eldridge-pacifico.png',
         intro: 'Computer Science student at the University of East Anglia. Focused on building robust and scalable web applications with clean, maintainable code.',
-        contribution: 'Developed the Hot Meals Schedule page and Delivery Service pages. Implemented the delivery request form with postcode-based food bank search and the order tracking view with route mapping.'
+        contribution: 'Developed the log in and registration system, including password hashing wiht bcrypt, session management with express-session, and input validation. Also contributed to the implementation of the user profile page and account management features.'
       },
       {
         name: 'Saira Abedi',
-        role: 'Developer',
+        role: 'Documentation & Security Developer',
         photo: '/images/team/saira-abedi.png',
-        intro: 'Computer Science student at the University of East Anglia. Passionate about inclusive design and making technology accessible to diverse communities.',
-        contribution: 'Built the Donate page including the card payment form with client-side validation and the donation success modal. Contributed to the multilingual support feature with Polish and Punjabi translations.'
+        intro: 'Responsible for creating project documentation, designing website wireframes, helping to organise and track project tasks throughout the Agile development process, contributing to the final presentation, assisting with user testing and feedback, and implementing security measures to improve the websites security, reliability and user experience. ',
+        contribution: 'Designed and created a large portion of the project documentation, including the Mission Statement, Stakeholders, Critical Success Factors, Sprint Plan, Gantt Chart, Agile Methodology, Use Case List and Use Case Diagram. Created wireframes for the Home, Donation, Sidebar Dropdown, Contact Us, Delivery, Profile, Inventory and Food Education pages, helping to define the structure and functionality of the website. Contributed to the design of the final presentation, ensuring the content was clear, visually appealing and easy to understand. Also took part in user testing, identifying issues, suggesting improvements and helping to ensure the website met the project requirements. In addition, implemented key security measures including Helmet for secure HTTP headers, Express Rate Limit to help protect against brute-force and DoS attacks, Express Validator for input validation, and .gitignore to prevent sensitive files from being exposed in the repository. '
       },
       {
         name: 'Sienna Casule',
-        role: 'Developer',
+        role: 'Documentation & Security Developer',
         photo: '/images/team/sienna-casule.png',
-        intro: 'Computer Science student at the University of East Anglia. Interested in the intersection of technology and social impact, particularly in community-focused applications.',
-        contribution: 'Implemented the Food Education page and the About Us team section. Contributed to the settings page with language selection, theme toggling, and accessibility features including colour-blind mode and text-to-speech.'
+        intro: 'Responsible for developing and maintaining key project documentation, including the Moscow analysis and the functional and non-functional requirements specification. I collaborated with team members on system design activities, assisting with the creation of Entity Relationship Diagrams (ERDs) and contributing to the design and formatting of project presentations. Additionally, I worked alongside Saira and Harshita to implement security measures within the website.',
+        contribution: 'My primary contribution was producing comprehensive project documentation that defined the systems requirements and prioritised features using the MoSCoW framework, providing a clear foundation for development. I supported the database design process by assisting Kimi with Entity Relationship Diagrams, helping to model the relationships between system entities and ensure data integrity. Furthermore, I contributed to the preparation of professional PowerPoint presentations used to communicate project progress and design decisions. On the technical side, I helped strengthen the websites security by implementing middleware and validation tools such as Helmet for securing HTTP headers, Express Rate Limit to protect against abuse and excessive requests, Express Validator for input validation and sanitisation, and configuring a .gitignore file to prevent sensitive or unnecessary files from being committed to version control. These contributions improved the projects security, maintainability, and overall quality.'
       }
     ];
 

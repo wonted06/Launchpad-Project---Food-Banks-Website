@@ -29,7 +29,10 @@ CREATE TABLE IF NOT EXISTS users (
     text_size       SMALLINT     NOT NULL DEFAULT 15,
     colour_blind    BOOLEAN      NOT NULL DEFAULT FALSE,
     text_to_speech  BOOLEAN      NOT NULL DEFAULT FALSE,
-    language VARCHAR(20) NOT NULL DEFAULT 'en'
+    language VARCHAR(20) NOT NULL DEFAULT 'en',
+    diet            TEXT,
+    allergies       TEXT,
+    mobility        TEXT
 );
 
 -- Categories table

@@ -8,6 +8,7 @@ router.use(requireLogin);
 
 router.get('/',        profile.getProfile);
 router.post('/update', profile.postUpdateAccount);
-router.post('/health', profile.postUpdateHealth);
+router.post('/health',    profile.postUpdateHealth);
+router.post('/password',  profile.postUpdatePassword);
 
 module.exports = router;
