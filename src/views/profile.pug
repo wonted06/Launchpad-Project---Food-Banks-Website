@@ -83,35 +83,35 @@ block content
                 label Dietary Requirements
                 .checkbox-group
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='vegetarian')
+                    input(type='checkbox', name='diet[]', value='vegetarian', checked=user && user.diet && user.diet.includes('vegetarian'))
                     span Vegetarian
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='vegan')
+                    input(type='checkbox', name='diet[]', value='vegan', checked=user && user.diet && user.diet.includes('vegan'))
                     span Vegan
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='gluten-free')
+                    input(type='checkbox', name='diet[]', value='gluten-free', checked=user && user.diet && user.diet.includes('gluten-free'))
                     span Gluten Free
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='dairy-free')
+                    input(type='checkbox', name='diet[]', value='dairy-free', checked=user && user.diet && user.diet.includes('dairy-free'))
                     span Dairy Free
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='halal')
+                    input(type='checkbox', name='diet[]', value='halal', checked=user && user.diet && user.diet.includes('halal'))
                     span Halal
                   label.checkbox-label
-                    input(type='checkbox', name='diet[]', value='kosher')
+                    input(type='checkbox', name='diet[]', value='kosher', checked=user && user.diet && user.diet.includes('kosher'))
                     span Kosher
 
               .form-group
                 label(for='allergies')
                   i.fa-solid.fa-triangle-exclamation
                   |  Allergies / Intolerances
-                textarea#allergies(name='allergies', rows='3', placeholder='List any allergies or food intolerances...')
+                textarea#allergies(name='allergies', rows='3', placeholder='List any allergies or food intolerances...')= user ? user.allergies : ''
 
               .form-group
                 label(for='mobility')
                   i.fa-solid.fa-wheelchair
                   |  Mobility / Accessibility Notes
-                textarea#mobility(name='mobility', rows='3', placeholder='Any notes to help with delivery...')
+                textarea#mobility(name='mobility', rows='3', placeholder='Any notes to help with delivery...')= user ? user.mobility : ''
 
               .form-actions
                 button.btn.btn-green(type='submit')
@@ -155,6 +155,20 @@ block content
                 i.fa-solid.fa-shield-halved
                 |  Security
               p.profile-tab-sub Change your password.
+
+            // Possible invalid messages
+            if passwordUpdated
+              .alert.alert-success
+                | Password updated successfully.
+            if passwordError === 'incorrect'
+              .alert.alert-danger
+                | Current password is incorrect.
+            if passwordError === 'nomatch'
+              .alert.alert-danger
+                | New passwords do not match.
+            if passwordError === 'short'
+              .alert.alert-danger
+                | Password must be at least 6 characters.
 
             form.form(action='/profile/password', method='POST')
               .form-group
