@@ -78,6 +78,34 @@ class User {
     );
     return result.rows.length > 0;
   }
+
+  // Updates health details into the 'users' table
+  static async updateHealth(userId, diet, allergies, mobility) {
+    const query = 
+        `UPDATE foodbank.users
+          SET diet = $1, allergies = $2, mobility = $3 WHERE id = $4`;
+
+    await db.query(query, [
+        diet,
+        allergies,
+        mobility,
+        userId
+    ]);
+  }
+
+  // Updates hashed password into the 'users' table
+  static async updatePassword(userId, hashedPassword) {
+    const query = `
+        UPDATE foodbank.users
+        SET password_hash = $1
+        WHERE id = $2`;
+
+    await db.query(query, [
+        hashedPassword,
+        userId
+    ]);
+  }
+
 }
 
 module.exports = User;
