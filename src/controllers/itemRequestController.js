@@ -22,5 +22,5 @@ exports.createRequest = async (req, res) => {
   //   req.flash('success', 'Your request has been submitted.');
   //   res.redirect('/inventory?requested=1');
 
-  res.redirect('/inventory');
+  res.json({ success: true });
 };

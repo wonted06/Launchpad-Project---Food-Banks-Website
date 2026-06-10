@@ -411,7 +411,7 @@ button { cursor: pointer; font-family: inherit; }
 
 .inventory-panels {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   align-items: start;
   margin-top: 1.5rem;
@@ -443,10 +443,12 @@ button { cursor: pointer; font-family: inherit; }
 }
 
 .inventory-request-panel {
+  width: 60vw;
+  margin: 1.5rem auto 0;
   background: white;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  padding: 1.25rem;
+  padding: 1.5rem 2rem;
 }
 .inventory-request-panel h2 {
   font-size: 1rem;
@@ -456,8 +458,17 @@ button { cursor: pointer; font-family: inherit; }
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.6rem;
 }
+.inventory-request-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+.inventory-request-form .form-group { flex: 1; min-width: 140px; margin-bottom: 0; }
+.inventory-request-form .form-group--submit { flex: 0 0 auto; }
 
 .placeholder-row td { color: var(--text-muted); font-style: italic; font-size: 0.85rem; }
+
 
 /* ── Profile ───────────────────────────────────────────────── */
 .profile-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; align-items: start; }

@@ -28,30 +28,10 @@ block content
 
       .inventory-panels
 
-        //- ── Panel 1: Food Bank Branches ──────────────────────────
+        //- ── Panel 1: What Food Banks Have ──────────────────────────
         .inventory-panel
-          .inventory-panel-header Food Bank Branches
-          .inventory-panel-scroll
-            - var branches = [...(foodBanks || [])]
-            table.inventory-table
-              thead
-                tr
-                  th Name
-                  th Address
-                  th Hours 
-              tbody
-                each b in branches
-                  tr.placeholder-row
-                    td= b.name
-                    td= b.address
-                    td= b.hours
-            //- console.log('[pug branches]', (branches||[]).length, branches?.[0])
-
-
-        //- ── Panel 2: Inventory (sorted low stock first) ──────────
-        .inventory-panel
-          .inventory-panel-header Inventory — what we need donating now 
-          - const sorted = [...(inventory || [])].sort((a, b) => a.quantity - b.quantity)
+          .inventory-panel-header Inventory — What Food Banks Have 
+          - var highStock = [...(inventory || [])].filter(item => item.quantity >= 60).sort((a, b) => a.quantity - b.quantity)
           .inventory-table-wrap
             table.inventory-table
               thead
@@ -62,11 +42,48 @@ block content
                   th Stock Level
                   th Expiry Date
               tbody
-                if !sorted || sorted.length === 0
+                if !highStock || highStock.length === 0
                   tr
                     td(colspan='5') No inventory items found.
                 else
-                  each item in sorted
+                  each item in highStock
+                    - const pct = Math.min(item.quantity, 100)
+                    - const level = item.quantity < 20 ? 'low' : item.quantity < 60 ? 'medium' : 'high'
+                    - const fillClass = level === 'low' ? 'stock-bar-fill--low' : level === 'medium' ? 'stock-bar-fill--medium' : null
+                    - const label = level.charAt(0).toUpperCase() + level.slice(1)
+                    - const expiryStr = item.expiry_date ? new Date(item.expiry_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+                    - const itemLabel = item.product_name + (item.weight_grams ? ` (${item.weight_grams}g)` : '')
+                    tr
+                      td= itemLabel
+                      td= item.category_name
+                      td= item.location_name
+                      td
+                        .stock-bar
+                          .stock-bar-fill(class=fillClass, style=`width:${pct}%`)
+                        span.stock-label= label
+                      td= expiryStr
+            //- console.log('[pug branches]', (branches||[]).length, branches?.[0])
+
+
+        //- ── Panel 2: Inventory (sorted low stock first) ──────────
+        .inventory-panel
+          .inventory-panel-header Inventory — What Food Banks Need
+          - var lowStock = [...(inventory || [])].filter(item => item.quantity <= 60).sort((a, b) => a.quantity - b.quantity)
+          .inventory-table-wrap
+            table.inventory-table
+              thead
+                tr
+                  th Item
+                  th Category
+                  th Location
+                  th Stock Level
+                  th Expiry Date
+              tbody
+                if !lowStock || lowStock.length === 0
+                  tr
+                    td(colspan='5') No inventory items found.
+                else
+                  each item in lowStock
                     - const pct = Math.min(item.quantity, 100)
                     - const level = item.quantity < 20 ? 'low' : item.quantity < 60 ? 'medium' : 'high'
                     - const fillClass = level === 'low' ? 'stock-bar-fill--low' : level === 'medium' ? 'stock-bar-fill--medium' : null
@@ -100,24 +117,76 @@ block content
                     td= d.name
                     td= d.address
                     td= d.hours
+            //- console.log('[pug branches]', (branches||[]).length, branches?.[0])
 
-        //- ── Panel 4: Request an Item form ────────────────────────
-        .inventory-request-panel
-          h2 Request an Item
-          form(action='/inventory/request', method='POST')
-            .form-group
-              label(for='req-item') Item Name
-              input#req-item(type='text', name='item_name', placeholder='e.g. Baked Beans', required)
-            .form-group
-              label(for='req-qty') Quantity
-              input#req-qty(type='number', name='quantity', min='1', placeholder='1', required)
-            .form-group
-              label(for='req-urgency') Urgency
-              select#req-urgency(name='urgency')
-                option(value='Low') Low
-                option(value='Medium') Medium
-                option(value='High') High
-            .form-group
-              label(for='req-notes') Notes
-              textarea#req-notes(name='notes', rows='3', placeholder='Any additional details...')
-            button.btn.btn-green(type='submit', style='width:100%;justify-content:center') Submit Request
+      //- ── Request an Item form (row below panels) ─────────────
+      .inventory-request-panel
+        h2 Request an Item
+        form#item-request-form.inventory-request-form(action='/inventory/request', method='POST')
+          .form-group
+            label(for='req-item') Item Name
+            input#req-item(type='text', name='item_name', placeholder='e.g. Baked Beans', required)
+          .form-group
+            label(for='req-qty') Quantity
+            input#req-qty(type='number', name='quantity', min='1', placeholder='1', required)
+          .form-group
+            label(for='req-urgency') Urgency
+            select#req-urgency(name='urgency')
+              option(value='Low') Low
+              option(value='Medium') Medium
+              option(value='High') High
+          .form-group
+            label(for='req-notes') Notes
+            textarea#req-notes(name='notes', rows='2', placeholder='Any additional details...')
+          .form-group.form-group--submit
+            button.btn.btn-green(type='submit') Submit Request
+
+  //- ── Request confirmation modal (matches donation modal style) ──
+  .donation-modal-backdrop#requestConfirmBackdrop
+    .donation-modal
+      .donation-modal-icon
+        i.fa-solid.fa-circle-check
+      h2 Request Submitted!
+      p#requestConfirmMsg
+      button.btn.btn-green#requestConfirmClose Done
+
+  script.
+    var reqForm     = document.getElementById('item-request-form');
+    var reqBackdrop = document.getElementById('requestConfirmBackdrop');
+    var reqMsg      = document.getElementById('requestConfirmMsg');
+    var reqClose    = document.getElementById('requestConfirmClose');
+
+    reqForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var data = new FormData(reqForm);
+      var item     = data.get('item_name');
+      var qty      = data.get('quantity');
+      var urgency  = data.get('urgency');
+      var notes    = data.get('notes');
+
+      reqMsg.textContent = qty + '× ' + item + ' — ' + urgency + ' urgency.' +
+        (notes ? ' Notes: ' + notes : '');
+
+      fetch('/inventory/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data)
+      }).catch(function() {});
+
+      reqForm.reset();
+      reqBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+
+    function closeReqModal() {
+      reqBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    reqClose.addEventListener('click', closeReqModal);
+    reqBackdrop.addEventListener('click', function(e) {
+      if (e.target === reqBackdrop) closeReqModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeReqModal();
+    });
