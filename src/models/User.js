@@ -4,10 +4,18 @@ const bcrypt = require('bcrypt');
 // PostgreSQL schema (foodbank.users):
 // CREATE TABLE users (
 //   id            SERIAL PRIMARY KEY,
-//   username      VARCHAR(50)  UNIQUE NOT NULL,
-//   email         VARCHAR(255) UNIQUE NOT NULL,
-//   password_hash TEXT         NOT NULL,
-//   created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+//   username      VARCHAR(50)   UNIQUE NOT NULL,
+//   email         VARCHAR(255)  UNIQUE NOT NULL,
+//   password_hash TEXT          NOT NULL,
+//   created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+//   theme         VARCHAR(10)   DEFAULT 'light',
+//   text_size     INTEGER       DEFAULT 15,
+//   colour_blind  BOOLEAN       DEFAULT FALSE,
+//   text_to_speech BOOLEAN      DEFAULT FALSE,
+//   language      VARCHAR(20)   DEFAULT 'en',
+//   diet          TEXT,
+//   allergies     TEXT,
+//   mobility      TEXT
 // );
 
 class User {
@@ -18,7 +26,7 @@ class User {
    */
   static async findByEmail(email) {
     const result = await db.query(
-      'SELECT * FROM users WHERE email = $1',
+      'SELECT * FROM foodbank.users WHERE email = $1',
       [email]
     );
     return result.rows[0] || null;
@@ -31,7 +39,7 @@ class User {
    */
   static async findById(id) {
     const result = await db.query(
-      'SELECT * FROM users WHERE id = $1',
+      'SELECT * FROM foodbank.users WHERE id = $1',
       [id]
     );
     return result.rows[0] || null;
@@ -45,7 +53,7 @@ class User {
   static async create({ username, email, password }) {
     const hash = await bcrypt.hash(password, 10);
     const result = await db.query(
-      `INSERT INTO users (username, email, password_hash)
+      `INSERT INTO foodbank.users (username, email, password_hash)
        VALUES ($1, $2, $3)
        RETURNING *`,
       [username, email, hash]
@@ -60,7 +68,7 @@ class User {
    */
   static async usernameExists(username) {
     const result = await db.query(
-      'SELECT id FROM users WHERE username = $1',
+      'SELECT id FROM foodbank.users WHERE username = $1',
       [username]
     );
     return result.rows.length > 0;
@@ -73,7 +81,7 @@ class User {
    */
   static async emailExists(email) {
     const result = await db.query(
-      'SELECT id FROM users WHERE email = $1',
+      'SELECT id FROM foodbank.users WHERE email = $1',
       [email]
     );
     return result.rows.length > 0;

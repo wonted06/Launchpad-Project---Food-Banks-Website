@@ -32,7 +32,7 @@ exports.getProfile = async (req, res) => {
 // so the nav bar shows the updated name without requiring a re-login.
 exports.postUpdateAccount = async (req, res) => {
     try {
-        const {username, email} = req.body;
+        const { username, email } = req.body;
 
         await User.updateAccount(
             req.session.userId,

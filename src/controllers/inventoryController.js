@@ -42,7 +42,7 @@ exports.getInventory = async (req, res) => {
       category: category || '',
       inventory: [],
       categories: [],
-      foodBanks:[],
+      foodBanks: [],
       error: 'Could not load inventory data.'
     });
   }

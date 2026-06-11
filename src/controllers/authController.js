@@ -68,13 +68,13 @@ exports.postLogin = [
         // Load saved preferences (theme, language, etc.) into the session
         // so they apply immediately without visiting settings first
         try {
-            const sr = await pool.query(
+            const settingsResult = await pool.query(
                 'SELECT theme, text_size, colour_blind, text_to_speech, language FROM foodbank.users WHERE id = $1',
                 [user.id]
             );
-            if (sr.rows.length) {
-                const r = sr.rows[0];
-                req.session.settings = { theme: r.theme, textSize: r.text_size, colourBlind: r.colour_blind, textToSpeech: r.text_to_speech, language: r.language };
+            if (settingsResult.rows.length) {
+                const row = settingsResult.rows[0];
+                req.session.settings = { theme: row.theme, textSize: row.text_size, colourBlind: row.colour_blind, textToSpeech: row.text_to_speech, language: row.language };
             }
         } catch (_) {}
 

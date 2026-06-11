@@ -25,6 +25,7 @@ class HotMeal {
     //   'SELECT hm.*, f.name AS bank_name, f.address FROM hot_meals hm JOIN food_banks f ON hm.food_bank_id = f.id WHERE hm.active = TRUE ORDER BY CASE day_of_week WHEN \'monday\' THEN 1 WHEN \'tuesday\' THEN 2 ...'
     // );
     // return result.rows;
+    return []; // stub — schedule is currently static HTML in hot-meals.pug
   }
 }
 

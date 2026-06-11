@@ -1,6 +1,7 @@
 const { body, validationResult } = require('express-validator');
 const ContactSubmission = require('../models/ContactSubmission');
 const Feedback          = require('../models/Feedback');
+const pool              = require('../../db');
 
 // ── Static page renders ───────────────────────────────────────
 // These pages have no DB calls — content is static HTML/Pug.
@@ -33,7 +34,6 @@ exports.getSettings = async (req, res) => {
     let settings = { theme: 'light', textSize: 15, colourBlind: false, textToSpeech: false };
     if (req.session.userId) {
         try {
-            const pool = require('../../db');
             const result = await pool.query(
                 'SELECT theme, text_size, colour_blind, text_to_speech, language FROM foodbank.users WHERE id = $1',
                 [req.session.userId]
@@ -63,7 +63,7 @@ exports.postSettings = async (req, res) => {
     const { theme, textSize, colourBlind, textToSpeech, language } = req.body;
 
     // Sanitise and clamp values before saving
-    const s = {
+    const settings = {
         theme:        theme === 'dark' ? 'dark' : 'light',
         textSize:     Math.min(20, Math.max(12, parseInt(textSize) || 15)),
         colourBlind:  colourBlind  === 'on',
@@ -72,19 +72,18 @@ exports.postSettings = async (req, res) => {
     };
     if (req.session.userId) {
         try {
-            const pool = require('../../db');
             await pool.query(
                 'UPDATE foodbank.users SET theme=$1, text_size=$2, colour_blind=$3, text_to_speech=$4, language=$5 WHERE id=$6',
-                [s.theme, s.textSize, s.colourBlind, s.textToSpeech, s.language, req.session.userId]
+                [settings.theme, settings.textSize, settings.colourBlind, settings.textToSpeech, settings.language, req.session.userId]
             );
             // Update session so changes take effect immediately without re-logging in
-            req.session.settings = s;
+            req.session.settings = settings;
         } catch (err) {
             console.error('postSettings DB error:', err);
         }
     } else {
         // Guests: store language in session so it applies sitewide for this visit
-        req.session.guestLang = s.language;
+        req.session.guestLang = settings.language;
     }
     res.redirect('/settings');
 };

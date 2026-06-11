@@ -17,11 +17,14 @@ pool.on('connect', (client) => {
 });
 
 // Test the connection on startup and log the result.
-pool.connect((err) => {
+// The client must be released back to the pool after the test, otherwise
+// that connection is leaked and unavailable for future queries.
+pool.connect((err, client, release) => {
 	if (err) {
 		console.error("Database connection failed:", err);
 	} else {
 		console.log("Connected Successfully!");
+		release();
 	}
 });
 
