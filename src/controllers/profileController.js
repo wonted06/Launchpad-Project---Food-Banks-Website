@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
 // ── GET /profile ──────────────────────────────────────────────
+// Loads the full user record from DB (includes diet, allergies, mobility).
+// Query params (accountUpdated, passwordUpdated, passwordError) are passed through
+// so the template can show success/error banners on the correct tab.
 exports.getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.session.userId);
@@ -15,6 +18,7 @@ exports.getProfile = async (req, res) => {
         });
     } catch (err) {
         console.error('Profile load error:', err);
+        // Fall back to session data if the DB query fails
         res.render('profile', {
             pageTitle: 'My Profile – Feed Birmingham',
             pageId:    'profile',
@@ -24,6 +28,8 @@ exports.getProfile = async (req, res) => {
 };
 
 // ── POST /profile/update ──────────────────────────────────────
+// Saves new username/email, then refreshes the session user object
+// so the nav bar shows the updated name without requiring a re-login.
 exports.postUpdateAccount = async (req, res) => {
     try {
         const {username, email} = req.body;
@@ -48,8 +54,9 @@ exports.postUpdateAccount = async (req, res) => {
      }
 };
 
-
 // ── POST /profile/health ──────────────────────────────────────
+// Saves dietary requirements, allergies, and mobility notes.
+// &tab=health in the redirect keeps the user on the Health tab after saving.
 exports.postUpdateHealth = async (req, res) => {
     try {
         const { diet, allergies, mobility } = req.body;
@@ -74,6 +81,12 @@ exports.postUpdateHealth = async (req, res) => {
 };
 
 // ── POST /profile/password ────────────────────────────────────
+// Full password change validation chain:
+// 1. New passwords match
+// 2. Minimum length (6 chars)
+// 3. Current password is correct (bcrypt compare against DB hash)
+// 4. New password is different from the current one
+// Each failure redirects with a specific error code so the template shows the right message.
 exports.postUpdatePassword = async (req, res) => {
     try {
         const { currentPassword, newPassword, confirmNewPassword } = req.body;
@@ -88,7 +101,7 @@ exports.postUpdatePassword = async (req, res) => {
             return res.redirect('/profile?passwordError=short&tab=security');
         }
 
-        // Get current user record
+        // Get current user record to access the stored hash
         const user = await User.findById(req.session.userId);
 
         // Verify the supplied current password is correct
@@ -103,7 +116,7 @@ exports.postUpdatePassword = async (req, res) => {
             return res.redirect('/profile?passwordError=same&tab=security');
         }
 
-        // Hash and save the new password
+        // Hash and save the new password (10 salt rounds matches registration)
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await User.updatePassword(req.session.userId, hashedPassword);
 

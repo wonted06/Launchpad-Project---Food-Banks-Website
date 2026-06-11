@@ -79,20 +79,20 @@ class User {
     return result.rows.length > 0;
   }
 
-   // Updates health details into the 'users' table
-    static async updateAccount(userId, username, email) {
-      const query =
-          `UPDATE foodbank.users
-            SET username = $1, email = $2 WHERE id = $3`;
- 
-      await db.query(query, [
-          username,
-          email,
-          userId
-      ]);
-    }
+  // Updates username and email for the given user
+  static async updateAccount(userId, username, email) {
+    const query =
+        `UPDATE foodbank.users
+          SET username = $1, email = $2 WHERE id = $3`;
 
-  // Updates health details into the 'users' table
+    await db.query(query, [
+        username,
+        email,
+        userId
+    ]);
+  }
+
+  // Updates dietary requirements, allergies, and mobility notes
   static async updateHealth(userId, diet, allergies, mobility) {
     await db.query(
       `UPDATE foodbank.users
@@ -102,7 +102,7 @@ class User {
     );
   }
 
-  // Updates hashed password into the 'users' table
+  // Stores a pre-hashed password — hashing is done in the controller before calling this
   static async updatePassword(userId, hashedPassword) {
     await db.query(
       `UPDATE foodbank.users

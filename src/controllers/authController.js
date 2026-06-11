@@ -4,6 +4,7 @@ const User   = require('../models/User');
 const pool   = require('../../db');
 
 // ── GET /login ────────────────────────────────────────────────
+// If already logged in, skip to home. Otherwise render the login page.
 exports.getLogin = (req, res) => {
     if (req.session.userId) return res.redirect('/');
     res.render('login', {
@@ -14,10 +15,14 @@ exports.getLogin = (req, res) => {
 };
 
 // ── POST /login ───────────────────────────────────────────────
+// Validates the submitted email and password using express-validator,
+// looks up the user in the DB, and compares the password with bcrypt.
+// On success, stores user ID and info in the session and redirects home.
 exports.postLogin = [
   body('email').isEmail().normalizeEmail().withMessage('Please enter a valid email address.'),
   body('password').notEmpty().withMessage('Password is required.'),
   async (req, res) => {
+    // Return early if validation failed (e.g. empty fields, invalid email format)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.render('login', {
@@ -32,6 +37,7 @@ exports.postLogin = [
     try {
         const user = await User.findByEmail(email);
 
+        // Use a generic error message to avoid revealing whether the email exists
         if (!user) {
             return res.render('login', {
                 pageTitle: 'Login – Feed Birmingham',
@@ -40,6 +46,7 @@ exports.postLogin = [
             });
         }
 
+        // bcrypt.compare rehashes the entered password and checks it against the stored hash
         const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
             return res.render('login', {
@@ -49,7 +56,7 @@ exports.postLogin = [
             });
         }
 
-        // Store session
+        // Store minimal user data in the session (used by nav bar and profile page)
         req.session.userId = user.id;
         req.session.user   = {
             id:         user.id,
@@ -58,7 +65,8 @@ exports.postLogin = [
             created_at: user.created_at,
         };
 
-        // Load user settings into session
+        // Load saved preferences (theme, language, etc.) into the session
+        // so they apply immediately without visiting settings first
         try {
             const sr = await pool.query(
                 'SELECT theme, text_size, colour_blind, text_to_speech, language FROM foodbank.users WHERE id = $1',
@@ -70,6 +78,7 @@ exports.postLogin = [
             }
         } catch (_) {}
 
+        // Redirect to the page the user originally tried to visit (if any)
         const next = req.query.next || '/';
         res.redirect(next);
 
@@ -85,6 +94,7 @@ exports.postLogin = [
 ];
 
 // ── GET /register ─────────────────────────────────────────────
+// If already logged in, skip to home. Otherwise render the register page.
 exports.getRegister = (req, res) => {
     if (req.session.userId) return res.redirect('/');
     res.render('register', {
@@ -95,6 +105,9 @@ exports.getRegister = (req, res) => {
 };
 
 // ── POST /register ────────────────────────────────────────────
+// Validates input fields, checks for duplicate username/email,
+// creates the user (password is hashed inside User.create),
+// and auto-logs them in after successful registration.
 exports.postRegister = [
   body('username')
     .notEmpty().withMessage('Username is required.')
@@ -121,7 +134,7 @@ exports.postRegister = [
     const { username, email, password } = req.body;
 
     try {
-        // Check for existing username / email
+        // Check uniqueness before inserting to give a helpful error message
         const usernameTaken = await User.usernameExists(username);
         if (usernameTaken) {
             return res.render('register', {
@@ -140,10 +153,10 @@ exports.postRegister = [
             });
         }
 
-        // Create user
+        // User.create hashes the password with bcrypt before inserting
         const newUser = await User.create({ username, email, password });
 
-        // Auto-login after registration
+        // Auto-login: set session so the user lands on their profile straight away
         req.session.userId = newUser.id;
         req.session.user   = {
             id:         newUser.id,
@@ -152,7 +165,7 @@ exports.postRegister = [
             created_at: newUser.created_at,
         };
 
-        // New users get default settings in session
+        // New users start with default settings
         req.session.settings = { theme: 'light', textSize: 15, colourBlind: false, textToSpeech: false };
 
         res.redirect('/profile');
@@ -169,6 +182,7 @@ exports.postRegister = [
 ];
 
 // ── GET /logout ───────────────────────────────────────────────
+// Destroys the server-side session (clears login state) and redirects home.
 exports.getLogout = (req, res) => {
     req.session.destroy((err) => {
         if (err) console.error('Logout error:', err);

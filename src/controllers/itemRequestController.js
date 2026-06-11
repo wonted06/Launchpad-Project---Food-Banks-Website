@@ -1,3 +1,7 @@
+// ── Item Request Controller ───────────────────────────────────
+// Handles POST /inventory/request — allows users to request a specific item.
+// This feature is a stub; full implementation is tracked via the TODOs below.
+
 // TODO: const ItemRequest = require('../models/ItemRequest');
 
 exports.createRequest = async (req, res) => {
@@ -22,5 +26,6 @@ exports.createRequest = async (req, res) => {
   //   req.flash('success', 'Your request has been submitted.');
   //   res.redirect('/inventory?requested=1');
 
+  // Placeholder response until the above is implemented
   res.json({ success: true });
 };

@@ -1,7 +1,9 @@
 const Delivery  = require('../models/Delivery');
 const FoodBank  = require('../models/FoodBank');
 
-// GET /delivery
+// ── GET /delivery ─────────────────────────────────────────────
+// Loads all food banks and passes them as JSON so the client-side
+// postcode search can calculate distances with the Haversine formula.
 exports.getDelivery = async (req, res) => {
   try {
     const foodBanks = await FoodBank.findAll();
@@ -19,10 +21,13 @@ exports.getDelivery = async (req, res) => {
   }
 };
 
-// POST /delivery/request
+// ── POST /delivery/request ────────────────────────────────────
+// Validates required fields, creates the delivery record, and redirects
+// to the tracking page with the generated reference number (PRG pattern).
 exports.postDeliveryRequest = async (req, res) => {
   const { name, phone, address, postcode, notes, food_bank_id } = req.body;
 
+  // Basic server-side check before hitting the DB
   if (!name || !phone || !address || !postcode) {
     const foodBanks = await FoodBank.findAll().catch(() => []);
     return res.render('delivery', {
@@ -35,11 +40,13 @@ exports.postDeliveryRequest = async (req, res) => {
   }
 
   try {
+    // userId is optional — guests can also request deliveries
     const delivery = await Delivery.create({
       name, phone, address, postcode, notes,
       foodBankId: food_bank_id || null,
       userId:     req.session.userId || null,
     });
+    // Redirect to tracking page so the user immediately sees their reference number
     res.redirect(`/delivery/track?ref=${delivery.reference}`);
   } catch (err) {
     console.error('postDeliveryRequest error:', err);
@@ -54,12 +61,15 @@ exports.postDeliveryRequest = async (req, res) => {
   }
 };
 
-// GET /delivery/track?ref=FB-2026-0001
+// ── GET /delivery/track?ref=FB-2026-0001 ─────────────────────
+// Looks up a delivery by its reference number and passes it to the template.
+// The template uses the food bank's lat/lng to draw a route map via OSRM.
 exports.getTrackDelivery = async (req, res) => {
   const { ref } = req.query;
   let delivery = null;
 
   if (ref) {
+    // Silently ignore DB errors — the error message is handled via the null check below
     try { delivery = await Delivery.findByReference(ref); } catch (_) {}
   }
 
@@ -70,6 +80,7 @@ exports.getTrackDelivery = async (req, res) => {
     foodBanksJson: JSON.stringify(foodBanks),
     delivery,
     activeTab:     'track',
+    // Show an error only if a ref was supplied but nothing was found
     error:         delivery === null && ref ? 'No delivery found with that reference number.' : null,
   });
 };

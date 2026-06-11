@@ -1,5 +1,9 @@
 const db = require('../../db');
 
+// Model for the hot_meals table.
+// The hot meal schedule on the page is currently static HTML — this model
+// is a stub for a future dynamic implementation.
+//
 // Schema (PostgreSQL):
 // CREATE TABLE hot_meals (
 //   id            SERIAL PRIMARY KEY,
@@ -14,6 +18,8 @@ const db = require('../../db');
 // );
 
 class HotMeal {
+  // TODO: Implement to fetch this week's active schedule, ordered by day.
+  // Would join hot_meals → food_banks to get name and address for each slot.
   static async getWeeklySchedule() {
     // const result = await db.query(
     //   'SELECT hm.*, f.name AS bank_name, f.address FROM hot_meals hm JOIN food_banks f ON hm.food_bank_id = f.id WHERE hm.active = TRUE ORDER BY CASE day_of_week WHEN \'monday\' THEN 1 WHEN \'tuesday\' THEN 2 ...'

@@ -1,6 +1,10 @@
 const db = require('../../db');
 
+// Model for the inventory table, which links products to food banks with quantity and expiry data.
 class Inventory {
+  // Returns inventory items with optional category and name filters.
+  // Joins across inventory → products → categories → food_banks to build the full display row.
+  // Passing null for a filter param disables that filter (handled by the $1::text IS NULL check).
   static async getAll({ category, query } = {}) {
     const params = [
       category || null,
@@ -28,6 +32,7 @@ class Inventory {
     return result.rows;
   }
 
+  // Returns all category names — used to populate the category filter dropdown
   static async getCategories() {
     const result = await db.query(
       'SELECT category_id, category_name FROM categories ORDER BY category_name'

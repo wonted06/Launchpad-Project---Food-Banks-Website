@@ -1,6 +1,9 @@
 const db = require('../../db');
 
+// Model for the foodbank.deliveries table.
 class Delivery {
+  // Creates a new delivery record and generates a unique reference number (e.g. FB-2026-0001).
+  // The sequence number is based on total row count + 1, zero-padded to 4 digits.
   static async create({ name, phone, address, postcode, notes, foodBankId, userId }) {
     // Generate sequential reference number: FB-YYYY-NNNN
     const year   = new Date().getFullYear();
@@ -8,6 +11,7 @@ class Delivery {
     const seq    = String(parseInt(count.rows[0].count) + 1).padStart(4, '0');
     const reference = `FB-${year}-${seq}`;
 
+    // Status defaults to 'preparing' — updated manually via pgAdmin
     const result = await db.query(
       `INSERT INTO foodbank.deliveries
          (reference, user_id, food_bank_id, name, phone, address, postcode, notes, status)
@@ -17,6 +21,8 @@ class Delivery {
     return result.rows[0];
   }
 
+  // Looks up a delivery by reference number, joining food bank details
+  // so the tracking page can display the food bank name and draw a route map.
   static async findByReference(ref) {
     const result = await db.query(
       `SELECT d.*,
@@ -32,6 +38,7 @@ class Delivery {
     return result.rows[0] || null;
   }
 
+  // Returns all deliveries for a logged-in user, newest first
   static async findByUserId(userId) {
     const result = await db.query(
       'SELECT * FROM foodbank.deliveries WHERE user_id = $1 ORDER BY created_at DESC',
